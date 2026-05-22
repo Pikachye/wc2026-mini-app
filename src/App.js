@@ -16,7 +16,7 @@ import {
 } from '@vkontakte/vkui';
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbzi_lQw6xsZ2b1-hAzsMsnjtgnQHi2b_2zaL_ViKKK6FONNysHLhszApSZW3Gpm-bT4/exec';
+  'https://script.google.com/macros/s/AKfycbyCO0iwlKRUr6BcPf7TPw6-3WtcL1ayDLSGqPcAhuQo96O9cQEY_4ZOw3a4Uh48XOA/exec';
 
 export const App = () => {
   const [matches, setMatches] =
@@ -68,19 +68,19 @@ export const App = () => {
         method: 'POST',
 
         body: JSON.stringify({
-          action:
-            'savePrediction',
 
-          vk_id: 999999,
+  vk_id:
+    user.id,
 
-          match_id: matchId,
+  user_name:
+    user.first_name,
 
-          pred1:
-            prediction.pred1,
+  match_id:
+    match[0],
 
-          pred2:
-            prediction.pred2
-        })
+  pred1,
+  pred2
+})
       });
 
       alert(
