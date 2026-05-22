@@ -18,7 +18,7 @@ import {
 import bridge from '@vkontakte/vk-bridge';
 
 const API_URL =
-  'ТВОЙ_APPS_SCRIPT_URL';
+  'https://script.google.com/macros/s/AKfycbyCO0iwlKRUr6BcPf7TPw6-3WtcL1ayDLSGqPcAhuQo96O9cQEY_4ZOw3a4Uh48XOA/exec';
 
 export function App() {
 
