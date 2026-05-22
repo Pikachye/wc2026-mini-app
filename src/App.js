@@ -17,8 +17,6 @@ import {
 
 import bridge from '@vkontakte/vk-bridge';
 
-const API_URL =
-'https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec';
 
 export function App() {
 
@@ -92,7 +90,7 @@ export function App() {
         const matchesResponse =
           await fetch(
             API_URL +
-            '?action=matches'
+            '/api/data?action=matches'
           );
 
         console.log(
@@ -134,7 +132,7 @@ export function App() {
         const leaderboardResponse =
           await fetch(
             API_URL +
-            '?action=leaderboard'
+            '/api/data?action=leaderboard'
           );
 
         const leaderboardData =
