@@ -1,204 +1,351 @@
-import React, {
+import {
   useEffect,
   useState
 } from 'react';
 
 import {
-  AdaptivityProvider,
   AppRoot,
   Panel,
   PanelHeader,
   Group,
-  Card,
-  Div,
+  Cell,
   Button,
-  Input
+  Div,
+  Input,
+  Header
 } from '@vkontakte/vkui';
+
+import bridge from '@vkontakte/vk-bridge';
 
 const API_URL =
   'https://script.google.com/macros/s/AKfycbyCO0iwlKRUr6BcPf7TPw6-3WtcL1ayDLSGqPcAhuQo96O9cQEY_4ZOw3a4Uh48XOA/exec';
 
-export const App = () => {
+export default function App() {
+
   const [matches, setMatches] =
     useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [leaders, setLeaders] =
+    useState([]);
+
+  const [user, setUser] =
+    useState(null);
 
   const [predictions, setPredictions] =
     useState({});
 
   useEffect(() => {
-    async function loadMatches() {
+
+    async function init() {
+
+      // VK USER
       try {
-        const response = await fetch(
-          API_URL + '?action=matches'
+
+        const vkUser =
+          await bridge.send(
+            'VKWebAppGetUserInfo'
+          );
+
+        setUser(vkUser);
+
+      } catch (e) {
+
+        console.log(e);
+
+        // fallback
+        setUser({
+          id: 999999,
+          first_name: 'Player'
+        });
+      }
+
+      // MATCHES
+      const matchesResponse =
+        await fetch(
+          API_URL +
+          '?action=matches'
         );
 
-        const data =
-          await response.json();
+      const matchesData =
+        await matchesResponse.json();
 
-        setMatches(data.slice(1));
-
-        setLoading(false);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    loadMatches();
-  }, []);
-
-  async function savePrediction(
-    matchId
-  ) {
-    const prediction =
-      predictions[matchId];
-
-    if (!prediction) {
-      alert(
-        'Введите прогноз'
+      setMatches(
+        matchesData.slice(1)
       );
 
+      // LEADERBOARD
+      const leaderboardResponse =
+        await fetch(
+          API_URL +
+          '?action=leaderboard'
+        );
+
+      const leaderboardData =
+        await leaderboardResponse.json();
+
+      setLeaders(
+        leaderboardData.slice(1)
+      );
+    }
+
+    init();
+
+  }, []);
+
+  async function savePrediction(match) {
+
+    if (!user) {
+      return;
+    }
+
+    const pred =
+      predictions[match[0]];
+
+    if (!pred) {
       return;
     }
 
     try {
-      await fetch(API_URL, {
-        method: 'POST',
 
-        body: JSON.stringify({
+      const response =
+        await fetch(
+          API_URL,
+          {
+            method: 'POST',
 
-  vk_id:
-    user.id,
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
 
-  user_name:
-    user.first_name,
+            body: JSON.stringify({
 
-  match_id:
-    match[0],
+              vk_id:
+                user.id,
 
-  pred1,
-  pred2
-})
-      });
+              user_name:
+                user.first_name,
+
+              match_id:
+                match[0],
+
+              pred1:
+                Number(pred.pred1),
+
+              pred2:
+                Number(pred.pred2)
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      console.log(data);
+
+      if (data.error) {
+
+        alert(data.error);
+
+        return;
+      }
 
       alert(
-        'Прогноз сохранён'
+        data.updated
+          ? 'Прогноз обновлен'
+          : 'Прогноз сохранен'
       );
-    } catch (e) {
-      console.error(e);
 
-      alert('Ошибка');
+    } catch (e) {
+
+      console.log(e);
+
+      alert(
+        'Ошибка сохранения'
+      );
     }
   }
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          padding: 20
-        }}
-      >
-        Загрузка...
-      </div>
-    );
-  }
-
   return (
-    <AdaptivityProvider>
-      <AppRoot>
-        <Panel>
-          <PanelHeader>
-            Прогнозы ЧМ-2026
-          </PanelHeader>
 
-          {matches.map((match) => (
-            <Group key={match[0]}>
-              <Card mode="shadow">
-                <Div>
-                  <h3>
-                    {match[4]} vs {match[5]}
-                  </h3>
+    <AppRoot>
 
-                  <p>
-                    {new Date(
-                      match[3]
-                    ).toLocaleString()}
-                  </p>
+      <Panel>
 
-                  <div
-                    style={{
-                      display:
-                        'flex',
+        <PanelHeader>
+          Прогнозы ЧМ-2026
+        </PanelHeader>
 
-                      gap: 10,
+        {/* LEADERBOARD */}
 
-                      marginBottom: 12
-                    }}
-                  >
-                    <Input
-                      type="number"
+        <Group
+          header={
+            <Header mode="secondary">
+              🏆 Лидеры
+            </Header>
+          }
+        >
 
-                      placeholder="0"
+          {leaders.map(
+            (leader, index) => {
 
-                      onChange={(e) => {
-                        setPredictions({
-                          ...predictions,
+              const medals = [
+                '🥇',
+                '🥈',
+                '🥉'
+              ];
 
-                          [match[0]]: {
-                            ...predictions[
-                              match[0]
-                            ],
+              return (
 
-                            pred1:
-                              e.target
-                                .value
-                          }
-                        });
-                      }}
-                    />
+                <Cell
+                  key={index}
+                  subtitle={
+                    leader[2] +
+                    ' очков'
+                  }
+                >
 
-                    <Input
-                      type="number"
+                  {
+                    medals[index] ||
+                    `#${index + 1}`
+                  }
 
-                      placeholder="0"
+                  {' '}
 
-                      onChange={(e) => {
-                        setPredictions({
-                          ...predictions,
+                  {leader[1]}
 
-                          [match[0]]: {
-                            ...predictions[
-                              match[0]
-                            ],
+                </Cell>
+              );
+            }
+          )}
 
-                            pred2:
-                              e.target
-                                .value
-                          }
-                        });
-                      }}
-                    />
-                  </div>
+        </Group>
 
-                  <Button
-                    stretched
+        {/* MATCHES */}
 
-                    onClick={() =>
-                      savePrediction(
-                        match[0]
-                      )
+        <Group
+          header={
+            <Header mode="secondary">
+              Матчи
+            </Header>
+          }
+        >
+
+          {matches.map(
+            (match) => (
+
+              <Div
+                key={match[0]}
+                style={{
+                  borderBottom:
+                    '1px solid #eee'
+                }}
+              >
+
+                <div
+                  style={{
+                    marginBottom: 8,
+                    fontWeight: 600
+                  }}
+                >
+                  {match[4]}
+                  {' vs '}
+                  {match[5]}
+                </div>
+
+                <div
+                  style={{
+                    marginBottom: 8,
+                    color: '#777'
+                  }}
+                >
+                  {match[3]}
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 8,
+                    marginBottom: 8
+                  }}
+                >
+
+                  <Input
+                    type="number"
+                    placeholder="0"
+
+                    value={
+                      predictions[match[0]]
+                        ?.pred1 || ''
                     }
-                  >
-                    Сохранить прогноз
-                  </Button>
-                </Div>
-              </Card>
-            </Group>
-          ))}
-        </Panel>
-      </AppRoot>
-    </AdaptivityProvider>
+
+                    onChange={(e) => {
+
+                      setPredictions({
+
+                        ...predictions,
+
+                        [match[0]]: {
+
+                          ...predictions[
+                            match[0]
+                          ],
+
+                          pred1:
+                            e.target.value
+                        }
+                      });
+                    }}
+                  />
+
+                  <Input
+                    type="number"
+                    placeholder="0"
+
+                    value={
+                      predictions[match[0]]
+                        ?.pred2 || ''
+                    }
+
+                    onChange={(e) => {
+
+                      setPredictions({
+
+                        ...predictions,
+
+                        [match[0]]: {
+
+                          ...predictions[
+                            match[0]
+                          ],
+
+                          pred2:
+                            e.target.value
+                        }
+                      });
+                    }}
+                  />
+
+                </div>
+
+                <Button
+                  size="m"
+                  stretched
+                  onClick={() =>
+                    savePrediction(match)
+                  }
+                >
+                  Сохранить прогноз
+                </Button>
+
+              </Div>
+            )
+          )}
+
+        </Group>
+
+      </Panel>
+
+    </AppRoot>
   );
-};
+}
