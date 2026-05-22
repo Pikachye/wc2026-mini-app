@@ -34,45 +34,61 @@ const API_URL =
   const [predictions, setPredictions] =
     useState({});
 
-  useEffect(() => {
+useEffect(() => {
 
   async function init() {
 
+    console.log(
+      'INIT START'
+    );
+
+    // USER
+
     try {
 
+      const vkUser =
+        await Promise.race([
+
+          bridge.send(
+            'VKWebAppGetUserInfo'
+          ),
+
+          new Promise(
+            (_, reject) =>
+              setTimeout(
+                () =>
+                  reject(
+                    'VK TIMEOUT'
+                  ),
+                2000
+              )
+          )
+        ]);
+
       console.log(
-        'INIT START'
+        'USER:',
+        vkUser
       );
 
-      // USER
-      try {
+      setUser(vkUser);
 
-        const vkUser =
-          await bridge.send(
-            'VKWebAppGetUserInfo'
-          );
+    } catch (e) {
 
-        console.log(
-          'USER:',
-          vkUser
-        );
+      console.log(
+        'USER FALLBACK:',
+        e
+      );
 
-        setUser(vkUser);
+      setUser({
+        id: 999999,
+        first_name: 'Player'
+      });
+    }
 
-      } catch (e) {
+    // MATCHES
 
-        console.log(
-          'USER ERROR:',
-          e
-        );
+    try {
 
-        setUser({
-          id: 999999,
-          first_name: 'Player'
-        });
-      }
-
-      // MATCHES
       const matchesResponse =
         await fetch(
           API_URL +
@@ -103,7 +119,18 @@ const API_URL =
         );
       }
 
-      // LEADERBOARD
+    } catch (e) {
+
+      console.log(
+        'MATCHES ERROR:',
+        e
+      );
+    }
+
+    // LEADERBOARD
+
+    try {
+
       const leaderboardResponse =
         await fetch(
           API_URL +
@@ -132,7 +159,7 @@ const API_URL =
     } catch (e) {
 
       console.log(
-        'GLOBAL ERROR:',
+        'LEADERBOARD ERROR:',
         e
       );
     }
