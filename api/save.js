@@ -20,7 +20,7 @@ export default async function handler(
     const response =
       await fetch(
 
-      'https://script.google.com/macros/s/AKfycbyCO0iwlKRUr6BcPf7TPw6-3WtcL1ayDLSGqPcAhuQo96O9cQEY_4ZOw3a4Uh48XOA/exec',
+        'https://script.google.com/macros/s/AKfycbyCO0iwlKRUr6BcPf7TPw6-3WtcL1ayDLSGqPcAhuQo96O9cQEY_4ZOw3a4Uh48XOA/exec',
 
         {
           method: 'POST',
@@ -33,16 +33,38 @@ export default async function handler(
           body:
             new URLSearchParams(
               req.body
-            )
+            ),
+
+          redirect: 'follow'
         }
       );
 
-    const data =
-      await response.json();
+    const text =
+      await response.text();
 
-    return res
-      .status(200)
-      .json(data);
+    console.log(
+      text
+    );
+
+    try {
+
+      const data =
+        JSON.parse(text);
+
+      return res
+        .status(200)
+        .json(data);
+
+    } catch {
+
+      return res
+        .status(500)
+        .json({
+
+          error:
+            text
+        });
+    }
 
   } catch (e) {
 
