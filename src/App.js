@@ -238,10 +238,12 @@ export function App() {
         await response.json();
 
       console.log(
-        'POST DATA:',
-        data
-      );
-
+  'POST DATA STRING:',
+  JSON.stringify(data)
+);
+alert(
+  JSON.stringify(data)
+);
       if (data.error) {
 
         alert(
