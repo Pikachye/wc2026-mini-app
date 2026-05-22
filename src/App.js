@@ -215,8 +215,18 @@ useEffect(() => {
           }
         );
 
+console.log(
+  'POST RESPONSE:',
+  response
+);
+
       const data =
         await response.json();
+
+console.log(
+  'POST DATA:',
+  data
+);
 
       console.log(data);
 
@@ -237,9 +247,9 @@ useEffect(() => {
 
       console.log(e);
 
-      alert(
-        'Ошибка сохранения'
-      );
+alert(
+  JSON.stringify(e)
+);
     }
   }
 
