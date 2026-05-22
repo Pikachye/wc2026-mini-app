@@ -184,36 +184,43 @@ useEffect(() => {
 
     try {
 
-      const response =
-        await fetch(
-          API_URL,
-          {
-            method: 'POST',
+      const formData =
+  new URLSearchParams();
 
-            headers: {
-              'Content-Type':
-                'application/json'
-            },
+formData.append(
+  'vk_id',
+  user.id
+);
 
-            body: JSON.stringify({
+formData.append(
+  'user_name',
+  user.first_name
+);
 
-              vk_id:
-                user.id,
+formData.append(
+  'match_id',
+  match[0]
+);
 
-              user_name:
-                user.first_name,
+formData.append(
+  'pred1',
+  Number(pred.pred1)
+);
 
-              match_id:
-                match[0],
+formData.append(
+  'pred2',
+  Number(pred.pred2)
+);
 
-              pred1:
-                Number(pred.pred1),
+const response =
+  await fetch(
+    API_URL,
+    {
+      method: 'POST',
 
-              pred2:
-                Number(pred.pred2)
-            })
-          }
-        );
+      body: formData
+    }
+  );
 
 console.log(
   'POST RESPONSE:',
