@@ -20,7 +20,7 @@ import bridge from '@vkontakte/vk-bridge';
 const API_URL =
   'https://script.google.com/macros/s/AKfycbyCO0iwlKRUr6BcPf7TPw6-3WtcL1ayDLSGqPcAhuQo96O9cQEY_4ZOw3a4Uh48XOA/exec';
 
-export default function App() {
+ export function App() {
 
   const [matches, setMatches] =
     useState([]);
