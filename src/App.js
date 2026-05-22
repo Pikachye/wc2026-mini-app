@@ -36,9 +36,15 @@ const API_URL =
 
   useEffect(() => {
 
-    async function init() {
+  async function init() {
 
-      // VK USER
+    try {
+
+      console.log(
+        'INIT START'
+      );
+
+      // USER
       try {
 
         const vkUser =
@@ -46,13 +52,20 @@ const API_URL =
             'VKWebAppGetUserInfo'
           );
 
+        console.log(
+          'USER:',
+          vkUser
+        );
+
         setUser(vkUser);
 
       } catch (e) {
 
-        console.log(e);
+        console.log(
+          'USER ERROR:',
+          e
+        );
 
-        // fallback
         setUser({
           id: 999999,
           first_name: 'Player'
@@ -66,12 +79,29 @@ const API_URL =
           '?action=matches'
         );
 
+      console.log(
+        'MATCHES RESPONSE:',
+        matchesResponse
+      );
+
       const matchesData =
         await matchesResponse.json();
 
-      setMatches(
-        matchesData.slice(1)
+      console.log(
+        'MATCHES DATA:',
+        matchesData
       );
+
+      if (
+        Array.isArray(
+          matchesData
+        )
+      ) {
+
+        setMatches(
+          matchesData.slice(1)
+        );
+      }
 
       // LEADERBOARD
       const leaderboardResponse =
@@ -83,14 +113,34 @@ const API_URL =
       const leaderboardData =
         await leaderboardResponse.json();
 
-      setLeaders(
-        leaderboardData.slice(1)
+      console.log(
+        'LEADERBOARD:',
+        leaderboardData
+      );
+
+      if (
+        Array.isArray(
+          leaderboardData
+        )
+      ) {
+
+        setLeaders(
+          leaderboardData.slice(1)
+        );
+      }
+
+    } catch (e) {
+
+      console.log(
+        'GLOBAL ERROR:',
+        e
       );
     }
+  }
 
-    init();
+  init();
 
-  }, []);
+}, []);
 
   async function savePrediction(match) {
 
