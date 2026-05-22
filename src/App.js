@@ -18,9 +18,9 @@ import {
 import bridge from '@vkontakte/vk-bridge';
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbyCO0iwlKRUr6BcPf7TPw6-3WtcL1ayDLSGqPcAhuQo96O9cQEY_4ZOw3a4Uh48XOA/exec';
+  'ТВОЙ_APPS_SCRIPT_URL';
 
- export function App() {
+export function App() {
 
   const [matches, setMatches] =
     useState([]);
@@ -34,142 +34,144 @@ const API_URL =
   const [predictions, setPredictions] =
     useState({});
 
-useEffect(() => {
+  useEffect(() => {
 
-  async function init() {
-
-    console.log(
-      'INIT START'
-    );
-
-    // USER
-
-    try {
-
-      const vkUser =
-        await Promise.race([
-
-          bridge.send(
-            'VKWebAppGetUserInfo'
-          ),
-
-          new Promise(
-            (_, reject) =>
-              setTimeout(
-                () =>
-                  reject(
-                    'VK TIMEOUT'
-                  ),
-                2000
-              )
-          )
-        ]);
+    async function init() {
 
       console.log(
-        'USER:',
-        vkUser
+        'INIT START'
       );
 
-      setUser(vkUser);
+      // USER
 
-    } catch (e) {
+      try {
 
-      console.log(
-        'USER FALLBACK:',
-        e
-      );
+        const vkUser =
+          await Promise.race([
 
-      setUser({
-        id: 999999,
-        first_name: 'Player'
-      });
-    }
+            bridge.send(
+              'VKWebAppGetUserInfo'
+            ),
 
-    // MATCHES
+            new Promise(
+              (_, reject) =>
+                setTimeout(
+                  () =>
+                    reject(
+                      'VK TIMEOUT'
+                    ),
+                  2000
+                )
+            )
+          ]);
 
-    try {
-
-      const matchesResponse =
-        await fetch(
-          API_URL +
-          '?action=matches'
+        console.log(
+          'USER:',
+          vkUser
         );
 
-      console.log(
-        'MATCHES RESPONSE:',
-        matchesResponse
-      );
+        setUser(vkUser);
 
-      const matchesData =
-        await matchesResponse.json();
+      } catch (e) {
 
-      console.log(
-        'MATCHES DATA:',
-        matchesData
-      );
+        console.log(
+          'USER FALLBACK:',
+          e
+        );
 
-      if (
-        Array.isArray(
+        setUser({
+          id: 999999,
+          first_name: 'Player'
+        });
+      }
+
+      // MATCHES
+
+      try {
+
+        const matchesResponse =
+          await fetch(
+            API_URL +
+            '?action=matches'
+          );
+
+        console.log(
+          'MATCHES RESPONSE:',
+          matchesResponse
+        );
+
+        const matchesData =
+          await matchesResponse.json();
+
+        console.log(
+          'MATCHES DATA:',
           matchesData
-        )
-      ) {
+        );
 
-        setMatches(
-          matchesData.slice(1)
+        if (
+          Array.isArray(
+            matchesData
+          )
+        ) {
+
+          setMatches(
+            matchesData.slice(1)
+          );
+        }
+
+      } catch (e) {
+
+        console.log(
+          'MATCHES ERROR:',
+          e
         );
       }
 
-    } catch (e) {
+      // LEADERBOARD
 
-      console.log(
-        'MATCHES ERROR:',
-        e
-      );
-    }
+      try {
 
-    // LEADERBOARD
+        const leaderboardResponse =
+          await fetch(
+            API_URL +
+            '?action=leaderboard'
+          );
 
-    try {
+        const leaderboardData =
+          await leaderboardResponse.json();
 
-      const leaderboardResponse =
-        await fetch(
-          API_URL +
-          '?action=leaderboard'
-        );
-
-      const leaderboardData =
-        await leaderboardResponse.json();
-
-      console.log(
-        'LEADERBOARD:',
-        leaderboardData
-      );
-
-      if (
-        Array.isArray(
+        console.log(
+          'LEADERBOARD:',
           leaderboardData
-        )
-      ) {
+        );
 
-        setLeaders(
-          leaderboardData.slice(1)
+        if (
+          Array.isArray(
+            leaderboardData
+          )
+        ) {
+
+          setLeaders(
+            leaderboardData.slice(1)
+          );
+        }
+
+      } catch (e) {
+
+        console.log(
+          'LEADERBOARD ERROR:',
+          e
         );
       }
-
-    } catch (e) {
-
-      console.log(
-        'LEADERBOARD ERROR:',
-        e
-      );
     }
-  }
 
-  init();
+    init();
 
-}, []);
+  }, []);
 
-  async function savePrediction(match) {
+  async function savePrediction(
+    match
+  ) {
 
     if (!user) {
       return;
@@ -179,67 +181,72 @@ useEffect(() => {
       predictions[match[0]];
 
     if (!pred) {
+
+      alert(
+        'Введите прогноз'
+      );
+
       return;
     }
 
     try {
 
       const formData =
-  new URLSearchParams();
+        new URLSearchParams();
 
-formData.append(
-  'vk_id',
-  user.id
-);
+      formData.append(
+        'vk_id',
+        user.id
+      );
 
-formData.append(
-  'user_name',
-  user.first_name
-);
+      formData.append(
+        'user_name',
+        user.first_name
+      );
 
-formData.append(
-  'match_id',
-  match[0]
-);
+      formData.append(
+        'match_id',
+        match[0]
+      );
 
-formData.append(
-  'pred1',
-  Number(pred.pred1)
-);
+      formData.append(
+        'pred1',
+        Number(pred.pred1)
+      );
 
-formData.append(
-  'pred2',
-  Number(pred.pred2)
-);
+      formData.append(
+        'pred2',
+        Number(pred.pred2)
+      );
 
-const response =
-  await fetch(
-    API_URL,
-    {
-      method: 'POST',
+      const response =
+        await fetch(
+          '/api/save',
+          {
+            method: 'POST',
 
-      body: formData
-    }
-  );
+            body: formData
+          }
+        );
 
-console.log(
-  'POST RESPONSE:',
-  response
-);
+      console.log(
+        'POST RESPONSE:',
+        response
+      );
 
       const data =
         await response.json();
 
-console.log(
-  'POST DATA:',
-  data
-);
-
-      console.log(data);
+      console.log(
+        'POST DATA:',
+        data
+      );
 
       if (data.error) {
 
-        alert(data.error);
+        alert(
+          data.error
+        );
 
         return;
       }
@@ -254,9 +261,9 @@ console.log(
 
       console.log(e);
 
-alert(
-  JSON.stringify(e)
-);
+      alert(
+        'Ошибка сохранения'
+      );
     }
   }
 
@@ -369,8 +376,9 @@ alert(
                     placeholder="0"
 
                     value={
-                      predictions[match[0]]
-                        ?.pred1 || ''
+                      predictions[
+                        match[0]
+                      ]?.pred1 || ''
                     }
 
                     onChange={(e) => {
@@ -397,8 +405,9 @@ alert(
                     placeholder="0"
 
                     value={
-                      predictions[match[0]]
-                        ?.pred2 || ''
+                      predictions[
+                        match[0]
+                      ]?.pred2 || ''
                     }
 
                     onChange={(e) => {
@@ -426,7 +435,9 @@ alert(
                   size="m"
                   stretched
                   onClick={() =>
-                    savePrediction(match)
+                    savePrediction(
+                      match
+                    )
                   }
                 >
                   Сохранить прогноз
