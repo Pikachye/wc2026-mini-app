@@ -579,6 +579,43 @@ export function App() {
                       </div>
 
                       {
+  match[8] ===
+  'scheduled'
+  ? (
+
+    <>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: 8,
+          marginBottom: 8
+        }}
+      >
+
+        <Input
+          type="number"
+          placeholder="0"
+
+          value={
+            predictions[
+              match[0]
+            ]?.pred1 || ''
+          }
+
+          onChange={(e) => {
+
+            setPredictions({
+
+              ...predictions,
+
+              [match[0]]: {
+
+                ...predictions[
+                  match[0]
+                ],
+
+                pred1:
                   e.target.value
               }
             });
