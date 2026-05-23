@@ -1,118 +1,158 @@
-import {
+import React, {
   useEffect,
   useState
 } from 'react';
+
+import bridge from '@vkontakte/vk-bridge';
 
 import {
   AppRoot,
   Panel,
   PanelHeader,
   Group,
+  Header,
   Cell,
-  Button,
   Div,
   Input,
-  Header
+  Button,
+  Tabs,
+  TabsItem,
+  Select
 } from '@vkontakte/vkui';
 
-import bridge from '@vkontakte/vk-bridge';
+export default function App() {
 
+  const [
+    matches,
+    setMatches
+  ] = useState([]);
 
-export function App() {
+  const [
+    leaders,
+    setLeaders
+  ] = useState([]);
 
-  const [matches, setMatches] =
-    useState([]);
+  const [
+    predictions,
+    setPredictions
+  ] = useState({});
 
-  const [leaders, setLeaders] =
-    useState([]);
+  const [
+    user,
+    setUser
+  ] = useState(null);
 
-  const [user, setUser] =
-    useState(null);
+  const [
+    activeTab,
+    setActiveTab
+  ] = useState(
+    'leaderboard'
+  );
 
-  const [predictions, setPredictions] =
-    useState({});
+  const ADMIN_ID = 471037;
+
+  const isAdmin =
+    Number(user?.id) ===
+    ADMIN_ID;
 
   useEffect(() => {
 
-    async function init() {
+    init();
 
-      console.log(
-        'INIT START'
+  }, []);
+
+  const init = async () => {
+
+    console.log(
+      'INIT START'
+    );
+
+    try {
+
+      await bridge.send(
+        'VKWebAppInit'
       );
 
-      // USER
+      const timeout =
+        new Promise(
+          (_, reject) =>
 
-      try {
-
-        const vkUser =
-          await Promise.race([
-
-            bridge.send(
-              'VKWebAppGetUserInfo'
-            ),
-
-            new Promise(
-              (_, reject) =>
-                setTimeout(
-                  () =>
-                    reject(
-                      'VK TIMEOUT'
-                    ),
-                  2000
-                )
+            setTimeout(
+              () =>
+                reject(
+                  'VK TIMEOUT'
+                ),
+              3000
             )
-          ]);
-
-        console.log(
-          'USER:',
-          vkUser
         );
 
-        setUser(vkUser);
+      const vkUser =
+        await Promise.race([
 
-      } catch (e) {
+          bridge.send(
+            'VKWebAppGetUserInfo'
+          ),
 
-        console.log(
-          'USER FALLBACK:',
-          e
-        );
+          timeout
+        ]);
 
-        setUser({
-          id: 999999,
-          first_name: 'Player'
-        });
-      }
+      console.log(
+        'VK USER:',
+        vkUser
+      );
 
-      // MATCHES
+      setUser({
+        id: vkUser.id,
+        name:
+          vkUser.first_name
+      });
+
+    } catch (e) {
+
+      console.log(
+        'USER FALLBACK:',
+        e
+      );
+
+      setUser({
+        id: 999999,
+        name: 'Player'
+      });
+    }
+
+    loadMatches();
+    loadLeaderboard();
+  };
+
+  const loadMatches =
+    async () => {
 
       try {
 
-        const matchesResponse =
+        const response =
           await fetch(
             '/api/data?action=matches'
           );
 
         console.log(
           'MATCHES RESPONSE:',
-          matchesResponse
+          response
         );
 
-        const matchesData =
-          await matchesResponse.json();
+        const data =
+          await response.json();
 
         console.log(
           'MATCHES DATA:',
-          matchesData
+          data
         );
 
         if (
-          Array.isArray(
-            matchesData
-          )
+          Array.isArray(data)
         ) {
 
           setMatches(
-            matchesData.slice(1)
+            data.slice(1)
           );
         }
 
@@ -123,32 +163,32 @@ export function App() {
           e
         );
       }
+    };
 
-      // LEADERBOARD
+  const loadLeaderboard =
+    async () => {
 
       try {
 
-        const leaderboardResponse =
+        const response =
           await fetch(
             '/api/data?action=leaderboard'
           );
 
-        const leaderboardData =
-          await leaderboardResponse.json();
+        const data =
+          await response.json();
 
         console.log(
           'LEADERBOARD:',
-          leaderboardData
+          data
         );
 
         if (
-          Array.isArray(
-            leaderboardData
-          )
+          Array.isArray(data)
         ) {
 
           setLeaders(
-            leaderboardData.slice(1)
+            data.slice(1)
           );
         }
 
@@ -159,111 +199,163 @@ export function App() {
           e
         );
       }
-    }
+    };
 
-    init();
+  const savePrediction =
+    async (match) => {
 
-  }, []);
+      try {
 
-  async function savePrediction(
-    match
-  ) {
+        const prediction =
+          predictions[
+            match[0]
+          ];
 
-    if (!user) {
-      return;
-    }
+        if (
+          !prediction
+        ) {
 
-    const pred =
-      predictions[match[0]];
+          alert(
+            'Введите прогноз'
+          );
 
-    if (!pred) {
+          return;
+        }
 
-      alert(
-        'Введите прогноз'
-      );
+        const response =
+          await fetch(
+            '/api/save',
+            {
+              method: 'POST',
 
-      return;
-    }
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
 
-    try {
+              body:
+                JSON.stringify({
 
-      const formData =
-        new URLSearchParams();
+                  vk_id:
+                    user?.id,
 
-      formData.append(
-        'vk_id',
-        user.id
-      );
+                  user_name:
+                    user?.name,
 
-      formData.append(
-        'user_name',
-        user.first_name
-      );
+                  match_id:
+                    match[0],
 
-      formData.append(
-        'match_id',
-        match[0]
-      );
+                  pred1:
+                    prediction.pred1,
 
-      formData.append(
-        'pred1',
-        Number(pred.pred1)
-      );
+                  pred2:
+                    prediction.pred2
+                })
+            }
+          );
 
-      formData.append(
-        'pred2',
-        Number(pred.pred2)
-      );
-
-      const response =
-        await fetch(
-          '/api/save',
-          {
-            method: 'POST',
-
-            body: formData
-          }
+        console.log(
+          'POST RESPONSE:',
+          response
         );
 
-      console.log(
-        'POST RESPONSE:',
-        response
-      );
+        const data =
+          await response.json();
 
-      const data =
-        await response.json();
+        console.log(
+          'POST DATA:',
+          data
+        );
 
-      console.log(
-  'POST DATA STRING:',
-  JSON.stringify(data)
-);
-alert(
-  JSON.stringify(data)
-);
-      if (data.error) {
+        if (data.error) {
+
+          alert(
+            data.error
+          );
+
+          return;
+        }
 
         alert(
-          data.error
+          'Прогноз сохранён'
         );
 
-        return;
+        loadLeaderboard();
+
+      } catch (e) {
+
+        console.error(e);
+
+        alert(
+          'Ошибка сохранения'
+        );
       }
+    };
 
-      alert(
-        data.updated
-          ? 'Прогноз обновлен'
-          : 'Прогноз сохранен'
-      );
+  const updateMatch =
+    async (match) => {
 
-    } catch (e) {
+      try {
 
-      console.log(e);
+        const response =
+          await fetch(
+            '/api/admin',
+            {
+              method: 'POST',
 
-      alert(
-        'Ошибка сохранения'
-      );
-    }
-  }
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
+
+              body:
+                JSON.stringify({
+
+                  match_id:
+                    match[0],
+
+                  score1:
+                    match[6],
+
+                  score2:
+                    match[7],
+
+                  status:
+                    match[8]
+                })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        console.log(data);
+
+        if (data.error) {
+
+          alert(
+            data.error
+          );
+
+          return;
+        }
+
+        alert(
+          'Матч обновлён'
+        );
+
+        loadMatches();
+        loadLeaderboard();
+
+      } catch (e) {
+
+        console.error(e);
+
+        alert(
+          'Ошибка'
+        );
+      }
+    };
 
   return (
 
@@ -275,177 +367,405 @@ alert(
           Прогнозы ЧМ-2026
         </PanelHeader>
 
-        {/* LEADERBOARD */}
+        <Tabs>
 
-        <Group
-          header={
-            <Header mode="secondary">
-              🏆 Лидеры
-            </Header>
-          }
-        >
+          <TabsItem
 
-          {leaders.map(
-            (leader, index) => {
-
-              const medals = [
-                '🥇',
-                '🥈',
-                '🥉'
-              ];
-
-              return (
-
-                <Cell
-                  key={index}
-                  subtitle={
-                    leader[2] +
-                    ' очков'
-                  }
-                >
-
-                  {
-                    medals[index] ||
-                    `#${index + 1}`
-                  }
-
-                  {' '}
-
-                  {leader[1]}
-
-                </Cell>
-              );
+            selected={
+              activeTab ===
+              'leaderboard'
             }
-          )}
 
-        </Group>
+            onClick={() =>
+              setActiveTab(
+                'leaderboard'
+              )
+            }
+          >
+            🏆 Лидеры
+          </TabsItem>
 
-        {/* MATCHES */}
+          <TabsItem
 
-        <Group
-          header={
-            <Header mode="secondary">
-              Матчи
-            </Header>
-          }
-        >
+            selected={
+              activeTab ===
+              'matches'
+            }
 
-          {matches.map(
-            (match) => (
+            onClick={() =>
+              setActiveTab(
+                'matches'
+              )
+            }
+          >
+            Матчи
+          </TabsItem>
 
-              <Div
-                key={match[0]}
-                style={{
-                  borderBottom:
-                    '1px solid #eee'
-                }}
+          {
+            isAdmin && (
+
+              <TabsItem
+
+                selected={
+                  activeTab ===
+                  'admin'
+                }
+
+                onClick={() =>
+                  setActiveTab(
+                    'admin'
+                  )
+                }
               >
-
-                <div
-                  style={{
-                    marginBottom: 8,
-                    fontWeight: 600
-                  }}
-                >
-                  {match[4]}
-                  {' vs '}
-                  {match[5]}
-                </div>
-
-                <div
-                  style={{
-                    marginBottom: 8,
-                    color: '#777'
-                  }}
-                >
-                  {match[3]}
-                </div>
-
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: 8,
-                    marginBottom: 8
-                  }}
-                >
-
-                  <Input
-                    type="number"
-                    placeholder="0"
-
-                    value={
-                      predictions[
-                        match[0]
-                      ]?.pred1 || ''
-                    }
-
-                    onChange={(e) => {
-
-                      setPredictions({
-
-                        ...predictions,
-
-                        [match[0]]: {
-
-                          ...predictions[
-                            match[0]
-                          ],
-
-                          pred1:
-                            e.target.value
-                        }
-                      });
-                    }}
-                  />
-
-                  <Input
-                    type="number"
-                    placeholder="0"
-
-                    value={
-                      predictions[
-                        match[0]
-                      ]?.pred2 || ''
-                    }
-
-                    onChange={(e) => {
-
-                      setPredictions({
-
-                        ...predictions,
-
-                        [match[0]]: {
-
-                          ...predictions[
-                            match[0]
-                          ],
-
-                          pred2:
-                            e.target.value
-                        }
-                      });
-                    }}
-                  />
-
-                </div>
-
-                <Button
-                  size="m"
-                  stretched
-                  onClick={() =>
-                    savePrediction(
-                      match
-                    )
-                  }
-                >
-                  Сохранить прогноз
-                </Button>
-
-              </Div>
+                ⚙️ Админ
+              </TabsItem>
             )
-          )}
+          }
 
-        </Group>
+        </Tabs>
+
+        {
+          activeTab ===
+          'leaderboard'
+          &&
+          (
+
+            <Group
+              header={
+                <Header mode="secondary">
+                  🏆 Лидеры
+                </Header>
+              }
+            >
+
+              {
+                leaders.map(
+                  (
+                    leader,
+                    index
+                  ) => {
+
+                    const medals = [
+
+                      '🥇',
+                      '🥈',
+                      '🥉'
+                    ];
+
+                    return (
+
+                      <Cell
+                        key={index}
+
+                        subtitle={
+                          leader[2] +
+                          ' очков'
+                        }
+                      >
+
+                        {
+                          medals[index]
+                          ||
+                          `#${index + 1}`
+                        }
+
+                        {' '}
+
+                        {leader[1]}
+
+                      </Cell>
+                    );
+                  }
+                )
+              }
+
+            </Group>
+          )
+        }
+
+        {
+          activeTab ===
+          'matches'
+          &&
+          (
+
+            <Group
+              header={
+                <Header mode="secondary">
+                  Матчи
+                </Header>
+              }
+            >
+
+              {
+                matches.map(
+                  (match) => (
+
+                    <Div
+                      key={match[0]}
+
+                      style={{
+                        borderBottom:
+                          '1px solid #eee'
+                      }}
+                    >
+
+                      <div
+                        style={{
+                          marginBottom: 8,
+                          fontWeight: 600
+                        }}
+                      >
+                        {match[4]}
+                        {' vs '}
+                        {match[5]}
+                      </div>
+
+                      <div
+                        style={{
+                          marginBottom: 8,
+                          color: '#777'
+                        }}
+                      >
+                        {match[3]}
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: 8,
+                          marginBottom: 8
+                        }}
+                      >
+
+                        <Input
+                          type="number"
+                          placeholder="0"
+
+                          value={
+                            predictions[
+                              match[0]
+                            ]?.pred1 || ''
+                          }
+
+                          onChange={(e) => {
+
+                            setPredictions({
+
+                              ...predictions,
+
+                              [match[0]]: {
+
+                                ...predictions[
+                                  match[0]
+                                ],
+
+                                pred1:
+                                  e.target.value
+                              }
+                            });
+                          }}
+                        />
+
+                        <Input
+                          type="number"
+                          placeholder="0"
+
+                          value={
+                            predictions[
+                              match[0]
+                            ]?.pred2 || ''
+                          }
+
+                          onChange={(e) => {
+
+                            setPredictions({
+
+                              ...predictions,
+
+                              [match[0]]: {
+
+                                ...predictions[
+                                  match[0]
+                                ],
+
+                                pred2:
+                                  e.target.value
+                              }
+                            });
+                          }}
+                        />
+
+                      </div>
+
+                      <Button
+                        size="m"
+                        stretched
+
+                        onClick={() =>
+                          savePrediction(
+                            match
+                          )
+                        }
+                      >
+                        Сохранить прогноз
+                      </Button>
+
+                    </Div>
+                  )
+                )
+              }
+
+            </Group>
+          )
+        }
+
+        {
+          activeTab ===
+          'admin'
+          &&
+          isAdmin
+          &&
+          (
+
+            <Group
+              header={
+                <Header mode="secondary">
+                  ⚙️ Админ-панель
+                </Header>
+              }
+            >
+
+              {
+                matches.map(
+                  (match) => (
+
+                    <Div
+                      key={match[0]}
+
+                      style={{
+                        borderBottom:
+                          '1px solid #eee'
+                      }}
+                    >
+
+                      <div
+                        style={{
+                          marginBottom: 8,
+                          fontWeight: 600
+                        }}
+                      >
+                        {match[4]}
+                        {' vs '}
+                        {match[5]}
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: 8,
+                          marginBottom: 8
+                        }}
+                      >
+
+                        <Input
+                          type="number"
+
+                          defaultValue={
+                            match[6]
+                          }
+
+                          onChange={(e) => {
+
+                            match[6] =
+                              e.target.value;
+                          }}
+                        />
+
+                        <Input
+                          type="number"
+
+                          defaultValue={
+                            match[7]
+                          }
+
+                          onChange={(e) => {
+
+                            match[7] =
+                              e.target.value;
+                          }}
+                        />
+
+                      </div>
+
+                      <Select
+
+                        value={
+                          match[8]
+                        }
+
+                        options={[
+
+                          {
+                            label:
+                              'scheduled',
+
+                            value:
+                              'scheduled'
+                          },
+
+                          {
+                            label:
+                              'live',
+
+                            value:
+                              'live'
+                          },
+
+                          {
+                            label:
+                              'finished',
+
+                            value:
+                              'finished'
+                          }
+                        ]}
+
+                        onChange={(e) => {
+
+                          match[8] =
+                            e.target.value;
+                        }}
+                      />
+
+                      <div
+                        style={{
+                          marginTop: 12
+                        }}
+                      >
+
+                        <Button
+                          stretched
+
+                          onClick={() =>
+                            updateMatch(
+                              match
+                            )
+                          }
+                        >
+                          Сохранить матч
+                        </Button>
+
+                      </div>
+
+                    </Div>
+                  )
+                )
+              }
+
+            </Group>
+          )
+        }
 
       </Panel>
 
