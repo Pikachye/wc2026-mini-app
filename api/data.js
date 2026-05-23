@@ -3,55 +3,40 @@ export default async function handler(
   res
 ) {
 
+  const GOOGLE_SCRIPT_URL =
+    'https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec';
+
   try {
 
     const action =
       req.query.action;
 
-    const response =
-      await fetch(
+    const vkId =
+      req.query.vk_id;
 
-        `https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec?action=${action}`,
+    let url =
+      `${GOOGLE_SCRIPT_URL}?action=${action}`;
 
-        {
-          method: 'GET',
-          redirect: 'follow'
-        }
-      );
+    if (vkId) {
 
-    const text =
-      await response.text();
-
-    console.log(
-      'RAW RESPONSE:',
-      text
-    );
-
-    try {
-
-      const data =
-        JSON.parse(text);
-
-      return res
-        .status(200)
-        .json(data);
-
-    } catch {
-
-      return res
-        .status(500)
-        .json({
-          error: text
-        });
+      url +=
+        `&vk_id=${vkId}`;
     }
+
+    const response =
+      await fetch(url);
+
+    const data =
+      await response.json();
+
+    res.status(200).json(data);
 
   } catch (e) {
 
-    return res
-      .status(500)
-      .json({
-        error:
-          e.toString()
-      });
+    res.status(500).json({
+
+      error:
+        e.toString()
+    });
   }
 }
