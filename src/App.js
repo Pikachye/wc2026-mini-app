@@ -63,8 +63,8 @@ async function loadPredictions(
       (row) => {
 
         formatted[
-          row[3]
-        ] = {
+  String(row[3])
+] = {
 
           pred1:
             row[4],
@@ -271,8 +271,8 @@ loadPredictions(
 
         const prediction =
           predictions[
-            match[0]
-          ];
+  String(match[0])
+];
 
         if (
           !prediction
@@ -658,8 +658,8 @@ loadPredictions(
 
           value={
             predictions[
-              match[0]
-            ]?.pred1 || ''
+  String(match[0])
+]?.pred1 || ''
           }
 
           onChange={(e) => {
@@ -671,8 +671,8 @@ loadPredictions(
               [match[0]]: {
 
                 ...predictions[
-                  match[0]
-                ],
+  String(match[0])
+],
 
                 pred1:
                   e.target.value
@@ -687,8 +687,8 @@ loadPredictions(
 
           value={
             predictions[
-              match[0]
-            ]?.pred2 || ''
+  String(match[0])
+]?.pred2 || ''
           }
 
           onChange={(e) => {
@@ -700,8 +700,8 @@ loadPredictions(
               [match[0]]: {
 
                 ...predictions[
-                  match[0]
-                ],
+  String(match[0])
+],
 
                 pred2:
                   e.target.value
@@ -730,8 +730,8 @@ loadPredictions(
   ) : (
 
   predictions[
-    match[0]
-  ]
+  String(match[0])
+]
   ? (
 
     <div
@@ -747,16 +747,16 @@ loadPredictions(
 
       {
         predictions[
-          match[0]
-        ]?.pred1
+  String(match[0])
+]?.pred1
       }
 
       :
 
       {
         predictions[
-          match[0]
-        ]?.pred2
+  String(match[0])
+]?.pred2
       }
 
     </div>
