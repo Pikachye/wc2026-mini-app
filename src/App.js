@@ -670,7 +670,6 @@ export function App() {
 
   ) : (
 
-    {
   predictions[
     match[0]
   ]
@@ -704,8 +703,7 @@ export function App() {
     </div>
 
   ) : null
-}
-  )
+)
 }
 
                     </Div>
