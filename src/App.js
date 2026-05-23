@@ -120,8 +120,12 @@ export function App() {
       });
     }
 
-    loadMatches();
-    loadLeaderboard();
+    setTimeout(() => {
+
+  loadMatches();
+  loadLeaderboard();
+
+}, 1000);
   };
 
   const loadMatches =
