@@ -539,46 +539,46 @@ export function App() {
 
 </div>
 
-                      <div
-                        style={{
-                          marginBottom: 8,
-                          color: '#777'
-                        }}
-                      >
-                        {match[3]}
-
 <div
   style={{
-    marginTop: 4,
-    fontWeight: 600
+    marginBottom: 8,
+    color: '#777'
   }}
 >
+  {match[3]}
 
-  {
-    match[8] ===
-    'scheduled'
-    &&
-    '⏳ Скоро'
-  }
+  <div
+    style={{
+      marginTop: 4,
+      fontWeight: 600
+    }}
+  >
 
-  {
-    match[8] ===
-    'live'
-    &&
-    '🔴 LIVE'
-  }
+    {
+      match[8] ===
+      'scheduled'
+      &&
+      '⏳ Скоро'
+    }
 
-  {
-    match[8] ===
-    'finished'
-    &&
-    '✅ Завершён'
-  }
+    {
+      match[8] ===
+      'live'
+      &&
+      '🔴 LIVE'
+    }
 
+    {
+      match[8] ===
+      'finished'
+      &&
+      '✅ Завершён'
+    }
+
+  </div>
 </div>
-                      </div>
 
-                      {
+{
   match[8] ===
   'scheduled'
   ? (
