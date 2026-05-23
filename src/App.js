@@ -37,6 +37,57 @@ export function App() {
     setPredictions
   ] = useState({});
 
+async function loadPredictions(
+  vkId
+) {
+
+  try {
+
+    const response =
+      await fetch(
+
+        `/api/data?action=predictions&vk_id=${vkId}`
+      );
+
+    const data =
+      await response.json();
+
+    console.log(
+      'PREDICTIONS:',
+      data
+    );
+
+    const formatted = {};
+
+    data.forEach(
+      (row) => {
+
+        formatted[
+          row[3]
+        ] = {
+
+          pred1:
+            row[4],
+
+          pred2:
+            row[5]
+        };
+      }
+    );
+
+    setPredictions(
+      formatted
+    );
+
+  } catch (e) {
+
+    console.log(
+      'PREDICTIONS ERROR:',
+      e
+    );
+  }
+}
+
   const [
     user,
     setUser
@@ -107,12 +158,20 @@ export function App() {
           vkUser.first_name
       });
 
+loadPredictions(
+  vkUser.id
+);
+
     } catch (e) {
 
       console.log(
         'USER FALLBACK:',
         e
       );
+
+loadPredictions(
+  999999
+);
 
       setUser({
         id: 999999,
