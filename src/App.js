@@ -20,7 +20,7 @@ import {
   Select
 } from '@vkontakte/vkui';
 
-export default function App() {
+export function App() {
 
   const [
     matches,
