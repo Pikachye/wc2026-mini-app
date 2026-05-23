@@ -11,12 +11,21 @@ export default async function handler(
     const response =
       await fetch(
 
-        `https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec?action=${action}`
+        `https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec?action=${action}`,
 
+        {
+          method: 'GET',
+          redirect: 'follow'
+        }
       );
 
     const text =
       await response.text();
+
+    console.log(
+      'RAW RESPONSE:',
+      text
+    );
 
     try {
 
