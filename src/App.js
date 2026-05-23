@@ -528,6 +528,36 @@ export function App() {
                         }}
                       >
                         {match[3]}
+
+<div
+  style={{
+    marginTop: 4,
+    fontWeight: 600
+  }}
+>
+
+  {
+    match[8] ===
+    'scheduled'
+    &&
+    '⏳ Скоро'
+  }
+
+  {
+    match[8] ===
+    'live'
+    &&
+    '🔴 LIVE'
+  }
+
+  {
+    match[8] ===
+    'finished'
+    &&
+    '✅ Завершён'
+  }
+
+</div>
                       </div>
 
                       <div
@@ -539,7 +569,13 @@ export function App() {
                       >
 
                         <Input
-                          type="number"
+
+  			  disabled={
+    			    match[8] !==
+    			    'scheduled'
+  			  }
+
+  			  type="number"
                           placeholder="0"
 
                           value={
@@ -568,7 +604,13 @@ export function App() {
                         />
 
                         <Input
-                          type="number"
+
+  			  disabled={
+    			    match[8] !==
+    			    'scheduled'
+  			  }
+
+  			  type="number"
                           placeholder="0"
 
                           value={
@@ -599,7 +641,13 @@ export function App() {
                       </div>
 
                       <Button
-                        size="m"
+
+  			disabled={
+    			  match[8] !==
+    			  'scheduled'
+  			}
+
+  			size="m"
                         stretched
 
                         onClick={() =>
