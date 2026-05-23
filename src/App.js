@@ -22,27 +22,38 @@ import {
 
 export function App() {
 
-  const [matches, setMatches] =
-    useState([]);
+  const [
+    matches,
+    setMatches
+  ] = useState([]);
 
-  const [leaders, setLeaders] =
-    useState([]);
+  const [
+    leaders,
+    setLeaders
+  ] = useState([]);
 
-  const [predictions,
-    setPredictions] =
-    useState({});
+  const [
+    predictions,
+    setPredictions
+  ] = useState({});
 
-  const [activeTab,
-    setActiveTab] =
-    useState('matches');
+  const [
+    user,
+    setUser
+  ] = useState(null);
 
-  const [user,
-    setUser] =
-    useState({
+  const [
+    activeTab,
+    setActiveTab
+  ] = useState(
+    'leaderboard'
+  );
 
-      id: 999999,
-      first_name: 'Player'
-    });
+  const ADMIN_ID = 471037;
+
+  const isAdmin =
+    Number(user?.id) ===
+    ADMIN_ID;
 
   useEffect(() => {
 
@@ -50,13 +61,30 @@ export function App() {
 
   }, []);
 
-  async function init() {
+  const init = async () => {
 
     console.log(
       'INIT START'
     );
 
     try {
+
+      await bridge.send(
+        'VKWebAppInit'
+      );
+
+      const timeout =
+        new Promise(
+          (_, reject) =>
+
+            setTimeout(
+              () =>
+                reject(
+                  'VK TIMEOUT'
+                ),
+              3000
+            )
+        );
 
       const vkUser =
         await Promise.race([
@@ -65,16 +93,7 @@ export function App() {
             'VKWebAppGetUserInfo'
           ),
 
-          new Promise(
-            (_, reject) =>
-              setTimeout(
-                () =>
-                  reject(
-                    'VK TIMEOUT'
-                  ),
-                3000
-              )
-          )
+          timeout
         ]);
 
       console.log(
@@ -82,7 +101,11 @@ export function App() {
         vkUser
       );
 
-      setUser(vkUser);
+      setUser({
+        id: vkUser.id,
+        name:
+          vkUser.first_name
+      });
 
     } catch (e) {
 
@@ -90,246 +113,253 @@ export function App() {
         'USER FALLBACK:',
         e
       );
+
+      setUser({
+        id: 999999,
+        name: 'Player'
+      });
     }
 
-    loadMatches();
-    loadLeaderboard();
-  }
+    setTimeout(() => {
 
-  async function loadMatches() {
+  loadMatches();
+  loadLeaderboard();
 
-    try {
+}, 1000);
+  };
 
-      const response =
-        await fetch(
-          '/api/data?action=matches'
+  const loadMatches =
+    async () => {
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/data?action=matches'
+          );
+
+        console.log(
+          'MATCHES RESPONSE:',
+          response
         );
 
-      console.log(
-        'MATCHES RESPONSE:',
-        response
-      );
+        const data =
+          await response.json();
 
-      const data =
-        await response.json();
-
-      console.log(
-        'MATCHES DATA:',
-        data
-      );
-
-      setMatches(data);
-
-    } catch (e) {
-
-      console.log(
-        'MATCHES ERROR:',
-        e
-      );
-    }
-  }
-
-  async function loadLeaderboard() {
-
-    try {
-
-      const response =
-        await fetch(
-          '/api/data?action=leaderboard'
+        console.log(
+          'MATCHES DATA:',
+          data
         );
 
-      const data =
-        await response.json();
+        if (
+          Array.isArray(data)
+        ) {
 
-      console.log(
-        'LEADERBOARD:',
-        data
-      );
+          setMatches(
+            data.slice(1)
+          );
+        }
 
-      setLeaders(data);
+      } catch (e) {
 
-    } catch (e) {
+        console.log(
+          'MATCHES ERROR:',
+          e
+        );
+      }
+    };
 
-      console.log(
-        'LEADERBOARD ERROR:',
-        e
-      );
-    }
-  }
+  const loadLeaderboard =
+    async () => {
 
-  async function savePrediction(
-    match
-  ) {
+      try {
 
-    try {
+        const response =
+          await fetch(
+            '/api/data?action=leaderboard'
+          );
 
-      const pred =
-        predictions[
-          match[0]
-        ];
+        const data =
+          await response.json();
 
-      if (!pred) {
+        console.log(
+          'LEADERBOARD:',
+          data
+        );
+
+        if (
+          Array.isArray(data)
+        ) {
+
+          setLeaders(
+            data.slice(1)
+          );
+        }
+
+      } catch (e) {
+
+        console.log(
+          'LEADERBOARD ERROR:',
+          e
+        );
+      }
+    };
+
+  const savePrediction =
+    async (match) => {
+
+      try {
+
+        const prediction =
+          predictions[
+            match[0]
+          ];
+
+        if (
+          !prediction
+        ) {
+
+          alert(
+            'Введите прогноз'
+          );
+
+          return;
+        }
+
+        const response =
+          await fetch(
+            '/api/save',
+            {
+              method: 'POST',
+
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
+
+              body:
+                JSON.stringify({
+
+                  vk_id:
+                    user?.id,
+
+                  user_name:
+                    user?.name,
+
+                  match_id:
+                    match[0],
+
+                  pred1:
+                    prediction.pred1,
+
+                  pred2:
+                    prediction.pred2
+                })
+            }
+          );
+
+        console.log(
+          'POST RESPONSE:',
+          response
+        );
+
+        const data =
+          await response.json();
+
+        console.log(
+          'POST DATA:',
+          data
+        );
+
+        if (data.error) {
+
+          alert(
+            data.error
+          );
+
+          return;
+        }
 
         alert(
-          'Введите прогноз'
+          'Прогноз сохранён'
         );
 
-        return;
-      }
+        loadLeaderboard();
 
-      const formData =
-        new URLSearchParams();
+      } catch (e) {
 
-      formData.append(
-        'vk_id',
-        user.id
-      );
-
-      formData.append(
-        'user_name',
-        user.first_name
-      );
-
-      formData.append(
-        'match_id',
-        match[0]
-      );
-
-      formData.append(
-        'pred1',
-        pred.pred1 || 0
-      );
-
-      formData.append(
-        'pred2',
-        pred.pred2 || 0
-      );
-
-      const response =
-        await fetch(
-          '/api/save',
-          {
-
-            method: 'POST',
-
-            headers: {
-              'Content-Type':
-                'application/x-www-form-urlencoded'
-            },
-
-            body:
-              formData.toString()
-          }
-        );
-
-      console.log(
-        'POST RESPONSE:',
-        response
-      );
-
-      const data =
-        await response.json();
-
-      console.log(
-        'POST DATA:',
-        data
-      );
-
-      if (data.error) {
+        console.error(e);
 
         alert(
-          data.error
+          'Ошибка сохранения'
         );
-
-        return;
       }
+    };
 
-      alert(
-        'Прогноз сохранён'
-      );
+  const updateMatch =
+    async (match) => {
 
-      loadLeaderboard();
+      try {
 
-    } catch (e) {
+        const response =
+          await fetch(
+            '/api/admin',
+            {
+              method: 'POST',
 
-      console.log(e);
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
 
-      alert(
-        'Ошибка сохранения'
-      );
-    }
-  }
+              body:
+                JSON.stringify({
 
-  async function updateMatch(
-    match
-  ) {
+                  match_id:
+                    match[0],
 
-    try {
+                  score1:
+                    match[6],
 
-      const response =
-        await fetch(
-          '/api/admin',
-          {
+                  score2:
+                    match[7],
 
-            method: 'POST',
+                  status:
+                    match[8]
+                })
+            }
+          );
 
-            headers: {
-              'Content-Type':
-                'application/json'
-            },
+        const data =
+          await response.json();
 
-            body:
-              JSON.stringify({
+        console.log(data);
 
-                match_id:
-                  match[0],
+        if (data.error) {
 
-                score1:
-                  match[6],
+          alert(
+            data.error
+          );
 
-                score2:
-                  match[7],
-
-                status:
-                  match[8]
-              })
-          }
-        );
-
-      const data =
-        await response.json();
-
-      console.log(data);
-
-      if (data.error) {
+          return;
+        }
 
         alert(
-          data.error
+          'Матч обновлён'
         );
-
-        return;
-      }
-
-      alert(
-        'Матч обновлён'
-      );
-
-      setTimeout(() => {
 
         loadMatches();
         loadLeaderboard();
 
-      }, 1000);
+      } catch (e) {
 
-    } catch (e) {
+        console.error(e);
 
-      console.log(e);
-
-      alert(
-        'Ошибка'
-      );
-    }
-  }
+        alert(
+          'Ошибка'
+        );
+      }
+    };
 
   return (
 
@@ -344,6 +374,23 @@ export function App() {
         <Tabs>
 
           <TabsItem
+
+            selected={
+              activeTab ===
+              'leaderboard'
+            }
+
+            onClick={() =>
+              setActiveTab(
+                'leaderboard'
+              )
+            }
+          >
+            🏆 Лидеры
+          </TabsItem>
+
+          <TabsItem
+
             selected={
               activeTab ===
               'matches'
@@ -358,42 +405,34 @@ export function App() {
             Матчи
           </TabsItem>
 
-          <TabsItem
-            selected={
-              activeTab ===
-              'leaders'
-            }
+          {
+            isAdmin && (
 
-            onClick={() =>
-              setActiveTab(
-                'leaders'
-              )
-            }
-          >
-            🏆 Лидеры
-          </TabsItem>
+              <TabsItem
 
-          <TabsItem
-            selected={
-              activeTab ===
-              'admin'
-            }
+                selected={
+                  activeTab ===
+                  'admin'
+                }
 
-            onClick={() =>
-              setActiveTab(
-                'admin'
-              )
-            }
-          >
-            ⚙️ Админ
-          </TabsItem>
+                onClick={() =>
+                  setActiveTab(
+                    'admin'
+                  )
+                }
+              >
+                ⚙️ Админ
+              </TabsItem>
+            )
+          }
 
         </Tabs>
 
         {
           activeTab ===
-          'leaders'
-          && (
+          'leaderboard'
+          &&
+          (
 
             <Group
               header={
@@ -403,39 +442,46 @@ export function App() {
               }
             >
 
-              {leaders.map(
-                (leader, index) => {
+              {
+                leaders.map(
+                  (
+                    leader,
+                    index
+                  ) => {
 
-                  const medals = [
-                    '🥇',
-                    '🥈',
-                    '🥉'
-                  ];
+                    const medals = [
 
-                  return (
+                      '🥇',
+                      '🥈',
+                      '🥉'
+                    ];
 
-                    <Cell
-                      key={index}
+                    return (
 
-                      subtitle={
-                        leader[2] +
-                        ' очков'
-                      }
-                    >
+                      <Cell
+                        key={index}
 
-                      {
-                        medals[index] ||
-                        `#${index + 1}`
-                      }
+                        subtitle={
+                          leader[2] +
+                          ' очков'
+                        }
+                      >
 
-                      {' '}
+                        {
+                          medals[index]
+                          ||
+                          `#${index + 1}`
+                        }
 
-                      {leader[1]}
+                        {' '}
 
-                    </Cell>
-                  );
-                }
-              )}
+                        {leader[1]}
+
+                      </Cell>
+                    );
+                  }
+                )
+              }
 
             </Group>
           )
@@ -444,7 +490,8 @@ export function App() {
         {
           activeTab ===
           'matches'
-          && (
+          &&
+          (
 
             <Group
               header={
@@ -454,208 +501,186 @@ export function App() {
               }
             >
 
-              {matches.map(
-                (match) => (
+              {
+                matches.map(
+                  (match) => (
 
-                  <Div
-                    key={match[0]}
+                    <Div
+                      key={match[0]}
 
-                    style={{
-                      borderBottom:
-                        '1px solid #eee'
-                    }}
-                  >
-
-                    <div
                       style={{
-                        marginBottom: 8,
-                        fontWeight: 600
+                        borderBottom:
+                          '1px solid #eee'
                       }}
                     >
 
-                      {match[4]}
+                      <div
+  style={{
+    marginBottom: 8,
+    fontWeight: 600
+  }}
+>
 
-                      {' '}
+  {match[4]}
 
-                      {
-                        match[8] ===
-                        'finished'
-                        ||
-                        match[8] ===
-                        'live'
-                          ? ` ${match[6]}:${match[7]} `
-                          : ' vs '
-                      }
+  {' '}
 
-                      {match[5]}
+  {
+    match[8] ===
+    'finished'
+    ||
+    match[8] ===
+    'live'
+      ? ` ${match[6]}:${match[7]} `
+      : ' vs '
+  }
 
-                    </div>
+  {match[5]}
 
-                    <div
-                      style={{
-                        marginBottom: 8,
-                        color: '#777'
-                      }}
-                    >
-
-                      {match[3]}
+</div>
 
                       <div
                         style={{
-                          marginTop: 4,
-                          fontWeight: 600
+                          marginBottom: 8,
+                          color: '#777'
+                        }}
+                      >
+                        {match[3]}
+
+<div
+  style={{
+    marginTop: 4,
+    fontWeight: 600
+  }}
+>
+
+  {
+    match[8] ===
+    'scheduled'
+    &&
+    '⏳ Скоро'
+  }
+
+  {
+    match[8] ===
+    'live'
+    &&
+    '🔴 LIVE'
+  }
+
+  {
+    match[8] ===
+    'finished'
+    &&
+    '✅ Завершён'
+  }
+
+</div>
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: 8,
+                          marginBottom: 8
                         }}
                       >
 
-                        {
-                          match[8] ===
-                          'scheduled'
-                          &&
-                          '⏳ Скоро'
-                        }
+                        <Input
 
-                        {
-                          match[8] ===
-                          'live'
-                          &&
-                          '🔴 LIVE'
-                        }
+  			  disabled={
+    			    match[8] !==
+    			    'scheduled'
+  			  }
 
-                        {
-                          match[8] ===
-                          'finished'
-                          &&
-                          '✅ Завершён'
-                        }
+  			  type="number"
+                          placeholder="0"
+
+                          value={
+                            predictions[
+                              match[0]
+                            ]?.pred1 || ''
+                          }
+
+                          onChange={(e) => {
+
+                            setPredictions({
+
+                              ...predictions,
+
+                              [match[0]]: {
+
+                                ...predictions[
+                                  match[0]
+                                ],
+
+                                pred1:
+                                  e.target.value
+                              }
+                            });
+                          }}
+                        />
+
+                        <Input
+
+  			  disabled={
+    			    match[8] !==
+    			    'scheduled'
+  			  }
+
+  			  type="number"
+                          placeholder="0"
+
+                          value={
+                            predictions[
+                              match[0]
+                            ]?.pred2 || ''
+                          }
+
+                          onChange={(e) => {
+
+                            setPredictions({
+
+                              ...predictions,
+
+                              [match[0]]: {
+
+                                ...predictions[
+                                  match[0]
+                                ],
+
+                                pred2:
+                                  e.target.value
+                              }
+                            });
+                          }}
+                        />
 
                       </div>
 
-                    </div>
+                      <Button
 
-                    {
-                      match[8] ===
-                      'scheduled'
-                      ? (
+  			disabled={
+    			  match[8] !==
+    			  'scheduled'
+  			}
 
-                        <>
+  			size="m"
+                        stretched
 
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 8,
-                              marginBottom: 8
-                            }}
-                          >
+                        onClick={() =>
+                          savePrediction(
+                            match
+                          )
+                        }
+                      >
+                        Сохранить прогноз
+                      </Button>
 
-                            <Input
-                              type="number"
-                              placeholder="0"
-
-                              value={
-                                predictions[
-                                  match[0]
-                                ]?.pred1 || ''
-                              }
-
-                              onChange={(e) => {
-
-                                setPredictions({
-
-                                  ...predictions,
-
-                                  [match[0]]: {
-
-                                    ...predictions[
-                                      match[0]
-                                    ],
-
-                                    pred1:
-                                      e.target.value
-                                  }
-                                });
-                              }}
-                            />
-
-                            <Input
-                              type="number"
-                              placeholder="0"
-
-                              value={
-                                predictions[
-                                  match[0]
-                                ]?.pred2 || ''
-                              }
-
-                              onChange={(e) => {
-
-                                setPredictions({
-
-                                  ...predictions,
-
-                                  [match[0]]: {
-
-                                    ...predictions[
-                                      match[0]
-                                    ],
-
-                                    pred2:
-                                      e.target.value
-                                  }
-                                });
-                              }}
-                            />
-
-                          </div>
-
-                          <Button
-                            size="m"
-                            stretched
-
-                            onClick={() =>
-                              savePrediction(
-                                match
-                              )
-                            }
-                          >
-                            Сохранить прогноз
-                          </Button>
-
-                        </>
-
-                      ) : (
-
-                        <div
-                          style={{
-                            marginTop: 8,
-                            fontWeight: 600
-                          }}
-                        >
-
-                          Ваш прогноз:
-
-                          {' '}
-
-                          {
-                            predictions[
-                              match[0]
-                            ]?.pred1 ?? '-'
-                          }
-
-                          :
-
-                          {
-                            predictions[
-                              match[0]
-                            ]?.pred2 ?? '-'
-                          }
-
-                        </div>
-                      )
-                    }
-
-                  </Div>
+                    </Div>
+                  )
                 )
-              )}
+              }
 
             </Group>
           )
@@ -664,7 +689,10 @@ export function App() {
         {
           activeTab ===
           'admin'
-          && (
+          &&
+          isAdmin
+          &&
+          (
 
             <Group
               header={
@@ -674,159 +702,162 @@ export function App() {
               }
             >
 
-              {matches.map(
-                (match) => (
+              {
+                matches.map(
+                  (match) => (
 
-                  <Div
-                    key={match[0]}
+                    <Div
+                      key={match[0]}
 
-                    style={{
-                      borderBottom:
-                        '1px solid #eee'
-                    }}
-                  >
-
-                    <div
                       style={{
-                        marginBottom: 8,
-                        fontWeight: 600
-                      }}
-                    >
-                      {match[4]}
-                      {' vs '}
-                      {match[5]}
-                    </div>
-
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: 8,
-                        marginBottom: 8
+                        borderBottom:
+                          '1px solid #eee'
                       }}
                     >
 
-                      <Input
-                        type="number"
-
-                        value={
-                          match[6]
-                        }
-
-                        onChange={(e) => {
-
-                          const updated =
-                            [...matches];
-
-                          const index =
-                            updated.findIndex(
-                              m =>
-                                m[0] ===
-                                match[0]
-                            );
-
-                          updated[index][6] =
-                            e.target.value;
-
-                          setMatches(
-                            updated
-                          );
+                      <div
+                        style={{
+                          marginBottom: 8,
+                          fontWeight: 600
                         }}
-                      />
-
-                      <Input
-                        type="number"
-
-                        value={
-                          match[7]
-                        }
-
-                        onChange={(e) => {
-
-                          const updated =
-                            [...matches];
-
-                          const index =
-                            updated.findIndex(
-                              m =>
-                                m[0] ===
-                                match[0]
-                            );
-
-                          updated[index][7] =
-                            e.target.value;
-
-                          setMatches(
-                            updated
-                          );
-                        }}
-                      />
-
-                    </div>
-
-                    <Select
-
-                      value={
-                        match[8]
-                      }
-
-                      onChange={(e) => {
-
-                        const updated =
-                          [...matches];
-
-                        const index =
-                          updated.findIndex(
-                            m =>
-                              m[0] ===
-                              match[0]
-                          );
-
-                        updated[index][8] =
-                          e.target.value;
-
-                        setMatches(
-                          updated
-                        );
-                      }}
-                    >
-
-                      <option value="scheduled">
-                        scheduled
-                      </option>
-
-                      <option value="live">
-                        live
-                      </option>
-
-                      <option value="finished">
-                        finished
-                      </option>
-
-                    </Select>
-
-                    <div
-                      style={{
-                        marginTop: 8
-                      }}
-                    >
-
-                      <Button
-                        stretched
-
-                        onClick={() =>
-                          updateMatch(
-                            match
-                          )
-                        }
                       >
-                        Сохранить матч
-                      </Button>
+                        {match[4]}
+                        {' vs '}
+                        {match[5]}
+                      </div>
 
-                    </div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: 8,
+                          marginBottom: 8
+                        }}
+                      >
 
-                  </Div>
+                        <Input
+                          type="number"
+
+                          defaultValue={
+                            match[6]
+                          }
+
+                          onChange={(e) => {
+
+  const updated =
+    [...matches];
+
+  const index =
+    updated.findIndex(
+      m => m[0] === match[0]
+    );
+
+  updated[index][6] =
+    e.target.value;
+
+  setMatches(updated);
+}}
+                        />
+
+                        <Input
+                          type="number"
+
+                          defaultValue={
+                            match[7]
+                          }
+
+                          onChange={(e) => {
+
+                            const updated =
+  [...matches];
+
+const index =
+  updated.findIndex(
+    m => m[0] === match[0]
+  );
+
+updated[index][7] =
+  e.target.value;
+
+setMatches(updated);
+                          }}
+                        />
+
+                      </div>
+
+                      <Select
+
+                        value={
+                          match[8]
+                        }
+
+                        options={[
+
+                          {
+                            label:
+                              'scheduled',
+
+                            value:
+                              'scheduled'
+                          },
+
+                          {
+                            label:
+                              'live',
+
+                            value:
+                              'live'
+                          },
+
+                          {
+                            label:
+                              'finished',
+
+                            value:
+                              'finished'
+                          }
+                        ]}
+
+                        onChange={(e) => {
+
+                          const updated =
+  [...matches];
+
+const index =
+  updated.findIndex(
+    m => m[0] === match[0]
+  );
+
+updated[index][8] =
+  e.target.value;
+
+setMatches(updated);
+                        }}
+                      />
+
+                      <div
+                        style={{
+                          marginTop: 12
+                        }}
+                      >
+
+                        <Button
+                          stretched
+
+                          onClick={() =>
+                            updateMatch(
+                              match
+                            )
+                          }
+                        >
+                          Сохранить матч
+                        </Button>
+
+                      </div>
+
+                    </Div>
+                  )
                 )
-              )}
+              }
 
             </Group>
           )
