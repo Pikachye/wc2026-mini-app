@@ -511,15 +511,29 @@ export function App() {
                     >
 
                       <div
-                        style={{
-                          marginBottom: 8,
-                          fontWeight: 600
-                        }}
-                      >
-                        {match[4]}
-                        {' vs '}
-                        {match[5]}
-                      </div>
+  style={{
+    marginBottom: 8,
+    fontWeight: 600
+  }}
+>
+
+  {match[4]}
+
+  {' '}
+
+  {
+    match[8] ===
+    'finished'
+    ||
+    match[8] ===
+    'live'
+      ? ` ${match[6]}:${match[7]} `
+      : ' vs '
+  }
+
+  {match[5]}
+
+</div>
 
                       <div
                         style={{
