@@ -670,6 +670,12 @@ export function App() {
 
   ) : (
 
+    {
+  predictions[
+    match[0]
+  ]
+  ? (
+
     <div
       style={{
         marginTop: 8,
@@ -684,7 +690,7 @@ export function App() {
       {
         predictions[
           match[0]
-        ]?.pred1 ?? '-'
+        ]?.pred1
       }
 
       :
@@ -692,10 +698,13 @@ export function App() {
       {
         predictions[
           match[0]
-        ]?.pred2 ?? '-'
+        ]?.pred2
       }
 
     </div>
+
+  ) : null
+}
   )
 }
 
