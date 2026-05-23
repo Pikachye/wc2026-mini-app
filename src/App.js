@@ -588,99 +588,126 @@ export function App() {
 
                         <Input
 
-  			  disabled={
-    			    match[8] !==
-    			    'scheduled'
-  			  }
+  			  {
+  match[8] ===
+  'scheduled'
+  ? (
 
-  			  type="number"
-                          placeholder="0"
+    <>
 
-                          value={
-                            predictions[
-                              match[0]
-                            ]?.pred1 || ''
-                          }
+      <div
+        style={{
+          display: 'flex',
+          gap: 8,
+          marginBottom: 8
+        }}
+      >
 
-                          onChange={(e) => {
+        <Input
+          type="number"
+          placeholder="0"
 
-                            setPredictions({
+          value={
+            predictions[
+              match[0]
+            ]?.pred1 || ''
+          }
 
-                              ...predictions,
+          onChange={(e) => {
 
-                              [match[0]]: {
+            setPredictions({
 
-                                ...predictions[
-                                  match[0]
-                                ],
+              ...predictions,
 
-                                pred1:
-                                  e.target.value
-                              }
-                            });
-                          }}
-                        />
+              [match[0]]: {
 
-                        <Input
+                ...predictions[
+                  match[0]
+                ],
 
-  			  disabled={
-    			    match[8] !==
-    			    'scheduled'
-  			  }
-
-  			  type="number"
-                          placeholder="0"
-
-                          value={
-                            predictions[
-                              match[0]
-                            ]?.pred2 || ''
-                          }
-
-                          onChange={(e) => {
-
-                            setPredictions({
-
-                              ...predictions,
-
-                              [match[0]]: {
-
-                                ...predictions[
-                                  match[0]
-                                ],
-
-                                pred2:
-                                  e.target.value
-                              }
-                            });
-                          }}
-                        />
-
-                      </div>
-
-                      <Button
-
-  			disabled={
-    			  match[8] !==
-    			  'scheduled'
-  			}
-
-  			size="m"
-                        stretched
-
-                        onClick={() =>
-                          savePrediction(
-                            match
-                          )
-                        }
-                      >
-                        Сохранить прогноз
-                      </Button>
-
-                    </Div>
-                  )
-                )
+                pred1:
+                  e.target.value
               }
+            });
+          }}
+        />
+
+        <Input
+          type="number"
+          placeholder="0"
+
+          value={
+            predictions[
+              match[0]
+            ]?.pred2 || ''
+          }
+
+          onChange={(e) => {
+
+            setPredictions({
+
+              ...predictions,
+
+              [match[0]]: {
+
+                ...predictions[
+                  match[0]
+                ],
+
+                pred2:
+                  e.target.value
+              }
+            });
+          }}
+        />
+
+      </div>
+
+      <Button
+        size="m"
+        stretched
+
+        onClick={() =>
+          savePrediction(
+            match
+          )
+        }
+      >
+        Сохранить прогноз
+      </Button>
+
+    </>
+
+  ) : (
+
+    <div
+      style={{
+        marginTop: 8,
+        fontWeight: 600
+      }}
+    >
+
+      Ваш прогноз:
+
+      {' '}
+
+      {
+        predictions[
+          match[0]
+        ]?.pred1 ?? '-'
+      }
+
+      :
+
+      {
+        predictions[
+          match[0]
+        ]?.pred2 ?? '-'
+      }
+
+    </div>
+  )
+}
 
             </Group>
           )
