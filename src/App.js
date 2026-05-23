@@ -63,7 +63,7 @@ console.log(
 );
 
 const data =
-  result.data || [];
+  result || [];
 
     console.log(
       'PREDICTIONS:',
