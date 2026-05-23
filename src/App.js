@@ -725,9 +725,19 @@ export function App() {
 
                           onChange={(e) => {
 
-                            match[6] =
-                              e.target.value;
-                          }}
+  const updated =
+    [...matches];
+
+  const index =
+    updated.findIndex(
+      m => m[0] === match[0]
+    );
+
+  updated[index][6] =
+    e.target.value;
+
+  setMatches(updated);
+}}
                         />
 
                         <Input
@@ -739,8 +749,18 @@ export function App() {
 
                           onChange={(e) => {
 
-                            match[7] =
-                              e.target.value;
+                            const updated =
+  [...matches];
+
+const index =
+  updated.findIndex(
+    m => m[0] === match[0]
+  );
+
+updated[index][7] =
+  e.target.value;
+
+setMatches(updated);
                           }}
                         />
 
@@ -781,8 +801,18 @@ export function App() {
 
                         onChange={(e) => {
 
-                          match[8] =
-                            e.target.value;
+                          const updated =
+  [...matches];
+
+const index =
+  updated.findIndex(
+    m => m[0] === match[0]
+  );
+
+updated[index][8] =
+  e.target.value;
+
+setMatches(updated);
                         }}
                       />
 
