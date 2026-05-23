@@ -49,8 +49,18 @@ async function loadPredictions(
         `/api/data?action=predictions&vk_id=${vkId}`
       );
 
+console.log(
+  'PRED RESPONSE',
+  response
+);
+
     const result =
   await response.json();
+
+console.log(
+  'PRED JSON',
+  result
+);
 
 const data =
   result.data || [];
