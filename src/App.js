@@ -89,7 +89,6 @@ export function App() {
 
         const matchesResponse =
           await fetch(
-            API_URL +
             '/api/data?action=matches'
           );
 
@@ -131,7 +130,6 @@ export function App() {
 
         const leaderboardResponse =
           await fetch(
-            API_URL +
             '/api/data?action=leaderboard'
           );
 
