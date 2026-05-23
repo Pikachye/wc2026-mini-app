@@ -578,17 +578,7 @@ export function App() {
 </div>
                       </div>
 
-                      <div
-                        style={{
-                          display: 'flex',
-                          gap: 8,
-                          marginBottom: 8
-                        }}
-                      >
-
-                        <Input
-
-  			  {
+                      {
   match[8] ===
   'scheduled'
   ? (
