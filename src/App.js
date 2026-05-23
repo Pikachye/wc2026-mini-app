@@ -578,104 +578,89 @@ export function App() {
 </div>
                       </div>
 
-                      <div
-                        style={{
-                          display: 'flex',
-                          gap: 8,
-                          marginBottom: 8
-                        }}
-                      >
+                      {
+                  e.target.value
+              }
+            });
+          }}
+        />
 
-                        <Input
+        <Input
+          type="number"
+          placeholder="0"
 
-  			  disabled={
-    			    match[8] !==
-    			    'scheduled'
-  			  }
+          value={
+            predictions[
+              match[0]
+            ]?.pred2 || ''
+          }
 
-  			  type="number"
-                          placeholder="0"
+          onChange={(e) => {
 
-                          value={
-                            predictions[
-                              match[0]
-                            ]?.pred1 || ''
-                          }
+            setPredictions({
 
-                          onChange={(e) => {
+              ...predictions,
 
-                            setPredictions({
+              [match[0]]: {
 
-                              ...predictions,
+                ...predictions[
+                  match[0]
+                ],
 
-                              [match[0]]: {
+                pred2:
+                  e.target.value
+              }
+            });
+          }}
+        />
 
-                                ...predictions[
-                                  match[0]
-                                ],
+      </div>
 
-                                pred1:
-                                  e.target.value
-                              }
-                            });
-                          }}
-                        />
+      <Button
+        size="m"
+        stretched
 
-                        <Input
+        onClick={() =>
+          savePrediction(
+            match
+          )
+        }
+      >
+        Сохранить прогноз
+      </Button>
 
-  			  disabled={
-    			    match[8] !==
-    			    'scheduled'
-  			  }
+    </>
 
-  			  type="number"
-                          placeholder="0"
+  ) : (
 
-                          value={
-                            predictions[
-                              match[0]
-                            ]?.pred2 || ''
-                          }
+    <div
+      style={{
+        marginTop: 8,
+        fontWeight: 600
+      }}
+    >
 
-                          onChange={(e) => {
+      Ваш прогноз:
 
-                            setPredictions({
+      {' '}
 
-                              ...predictions,
+      {
+        predictions[
+          match[0]
+        ]?.pred1 ?? '-'
+      }
 
-                              [match[0]]: {
+      :
 
-                                ...predictions[
-                                  match[0]
-                                ],
+      {
+        predictions[
+          match[0]
+        ]?.pred2 ?? '-'
+      }
 
-                                pred2:
-                                  e.target.value
-                              }
-                            });
-                          }}
-                        />
-
-                      </div>
-
-                      <Button
-
-  			disabled={
-    			  match[8] !==
-    			  'scheduled'
-  			}
-
-  			size="m"
-                        stretched
-
-                        onClick={() =>
-                          savePrediction(
-                            match
-                          )
-                        }
-                      >
-                        Сохранить прогноз
-                      </Button>
+    </div>
+  )
+}
 
                     </Div>
                   )
