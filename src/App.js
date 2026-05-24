@@ -79,12 +79,15 @@ const data =
   String(row[3])
 ] = {
 
-          pred1:
-            row[4],
+  pred1:
+    row[4],
 
-          pred2:
-            row[5]
-        };
+  pred2:
+    row[5],
+
+  points:
+    row[6]
+};
       }
     );
 
@@ -636,19 +639,57 @@ loadPredictions(
     '⏳ Скоро'
   }
 
-  {
-    match[8] ===
-    'live'
-    &&
-    '🔴 LIVE'
-  }
+  {match[8] === 'finished' && (
 
-  {
-    match[8] ===
-    'finished'
-    &&
-    '✅ Завершён'
-  }
+  <div
+    style={{
+      marginTop: 8
+    }}
+  >
+
+    <div
+      style={{
+        color: 'green',
+        fontWeight: 600
+      }}
+    >
+      ✅ Завершён
+    </div>
+
+    {
+      predictions[
+        match[0]
+      ] && (
+
+        <div
+          style={{
+            marginTop: 4,
+            fontWeight: 600
+          }}
+        >
+
+          🏆
+
+          {' '}
+
+          +
+
+          {
+            predictions[
+              match[0]
+            ]?.points || 0
+          }
+
+          {' '}
+
+          очков
+
+        </div>
+      )
+    }
+
+  </div>
+)}
 
 </div>
                       </div>
