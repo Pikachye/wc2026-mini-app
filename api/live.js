@@ -20,34 +20,65 @@ export default async function handler(
       await response.json();
 
     const matches =
-      data.matches.map(
-        (match) => ({
+  data.matches.map(
+    (match) => {
 
-          id:
-            match.id,
+      let status =
+        'scheduled';
 
-          home:
-            match.homeTeam.name,
+      // ещё не начался
+      if (
+        match.status === 'TIMED' ||
+        match.status === 'SCHEDULED'
+      ) {
 
-          away:
-            match.awayTeam.name,
+        status = 'scheduled';
+      }
 
-          score1:
-            match.score.fullTime.home,
+      // live
+      if (
+        match.status === 'IN_PLAY' ||
+        match.status === 'PAUSED'
+      ) {
 
-          score2:
-            match.score.fullTime.away,
+        status = 'live';
+      }
 
-          status:
-            match.status,
+      // завершён
+      if (
+        match.status === 'FINISHED'
+      ) {
 
-          utcDate:
-            match.utcDate,
+        status = 'finished';
+      }
 
-          winner:
-            match.score.winner
-        })
-      );
+      return {
+
+        match_id:
+          String(match.id),
+
+        team1:
+          match.homeTeam.name,
+
+        team2:
+          match.awayTeam.name,
+
+        score1:
+          match.score.fullTime.home,
+
+        score2:
+          match.score.fullTime.away,
+
+        status,
+
+        utcDate:
+          match.utcDate,
+
+        winner:
+          match.score.winner
+      };
+    }
+  );
 
     res.status(200).json(
       matches
