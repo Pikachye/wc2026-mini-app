@@ -618,12 +618,40 @@ loadPredictions(
 </div>
 
                       <div
-                        style={{
-                          marginBottom: 8,
-                          color: '#777'
-                        }}
-                      >
-                        {match[3]}
+  style={{
+    marginBottom: 8,
+    color: '#777'
+  }}
+>
+  {
+    (() => {
+
+      const date =
+        new Date(match[3]);
+
+      const datePart =
+        date.toLocaleDateString(
+          'ru-RU',
+          {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          }
+        );
+
+      const timePart =
+        date.toLocaleTimeString(
+          'ru-RU',
+          {
+            hour: '2-digit',
+            minute: '2-digit'
+          }
+        );
+
+      return `${datePart}, ${timePart}`;
+
+    })()
+  }
 
 <div
   style={{
