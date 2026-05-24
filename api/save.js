@@ -3,77 +3,42 @@ export default async function handler(
   res
 ) {
 
-  if (
-    req.method !== 'POST'
-  ) {
-
-    return res
-      .status(405)
-      .json({
-        error:
-          'Method not allowed'
-      });
-  }
+  const GOOGLE_SCRIPT_URL =
+    'ТВОЙ_APPS_SCRIPT_URL';
 
   try {
 
     const response =
       await fetch(
-
-        'https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec',
-
+        GOOGLE_SCRIPT_URL,
         {
           method: 'POST',
 
           headers: {
             'Content-Type':
-              'application/x-www-form-urlencoded'
+              'application/json'
           },
 
           body:
-            new URLSearchParams(
+            JSON.stringify(
               req.body
-            ),
-
-          redirect: 'follow'
+            )
         }
       );
 
-    const text =
-      await response.text();
+    const data =
+      await response.json();
 
-    console.log(
-      text
+    res.status(200).json(
+      data
     );
-
-    try {
-
-      const data =
-        JSON.parse(text);
-
-      return res
-        .status(200)
-        .json(data);
-
-    } catch {
-
-      return res
-        .status(500)
-        .json({
-
-          error:
-            text
-        });
-    }
 
   } catch (e) {
 
-    return res
-      .status(500)
-      .json({
+    res.status(500).json({
 
-        error:
-          e.toString()
-      });
+      error:
+        e.toString()
+    });
   }
 }
