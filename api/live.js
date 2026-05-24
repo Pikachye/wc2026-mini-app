@@ -19,39 +19,23 @@ export default async function handler(
     const data =
       await response.json();
 
-    const matches =
-      data.matches.map(
-        (match) => ({
+    const matches = [
 
-          id:
-            match.id,
+  {
+    match_id: '537327',
+    team1: 'Germany',
+    team2: 'Brazil',
+    score1: 2,
+    score2: 1,
+    status: 'finished',
+    winner: 'HOME_TEAM'
+  }
 
-          home:
-            match.homeTeam.name,
+];
 
-          away:
-            match.awayTeam.name,
+res.status(200).json(matches);
 
-          score1:
-            match.score.fullTime.home,
-
-          score2:
-            match.score.fullTime.away,
-
-          status:
-            match.status,
-
-          utcDate:
-            match.utcDate,
-
-          winner:
-            match.score.winner
-        })
-      );
-
-    res.status(200).json(
-      matches
-    );
+return;
 
   } catch (e) {
 
