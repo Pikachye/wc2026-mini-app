@@ -113,11 +113,14 @@ const data =
     'leaderboard'
   );
 
-  const ADMIN_ID = 471037;
+  const ADMIN_IDS = [
+  '471037'
+];
 
-  const isAdmin =
-    Number(user?.id) ===
-    ADMIN_ID;
+const isAdmin =
+  ADMIN_IDS.includes(
+    String(user?.id)
+  );
 
   useEffect(() => {
 
