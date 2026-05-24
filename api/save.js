@@ -4,7 +4,7 @@ export default async function handler(
 ) {
 
   const GOOGLE_SCRIPT_URL =
-    'ТВОЙ_APPS_SCRIPT_URL';
+    'https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec';
 
   try {
 
