@@ -11,7 +11,7 @@ export default async function handler(
         {
           headers: {
             'X-Auth-Token':
-              process.env.FOOTBALL_DATA_KEY
+              '74ed6f5eb7f845e296a983abf4efc2f3'
           }
         }
       );
