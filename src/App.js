@@ -729,6 +729,42 @@ loadPredictions(
 
     <>
 
+      {
+        predictions[
+          String(match[0])
+        ] && (
+
+          <div
+            style={{
+              marginBottom: 8,
+              fontSize: 14,
+              color: '#666',
+              fontWeight: 600
+            }}
+          >
+
+            Ваш текущий прогноз:
+
+            {' '}
+
+            {
+              predictions[
+                String(match[0])
+              ]?.pred1
+            }
+
+            :
+
+            {
+              predictions[
+                String(match[0])
+              ]?.pred2
+            }
+
+          </div>
+        )
+      }
+
       <div
         style={{
           display: 'flex',
