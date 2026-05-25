@@ -131,85 +131,71 @@ const isAdmin =
 
   }, []);
 
-  const init = async () => {
-
-    console.log(
-      'INIT START'
-    );
-
-    try {
-
-      await bridge.send(
-        'VKWebAppInit'
-      );
-
-      const timeout =
-        new Promise(
-          (_, reject) =>
-
-            setTimeout(
-              () =>
-                reject(
-                  'VK TIMEOUT'
-                ),
-              3000
-            )
-        );
-
-      const vkUser =
-        await Promise.race([
-
-          bridge.send(
-            'VKWebAppGetUserInfo'
-          ),
-
-          timeout
-        ]);
-
-      console.log(
-        'VK USER:',
-        vkUser
-      );
-
-      setUser({
-        id: vkUser.id,
-        name:
-          vkUser.first_name
-      });
-
-loadPredictions(
-  vkUser.id
-);
-
-    } catch (e) {
+const init = async () => {
 
   console.log(
-    'VK AUTH ERROR:',
-    e
+    'INIT START'
   );
 
-  alert(
-    'Не удалось получить VK ID'
-  );
+  try {
 
+    await bridge.send(
+      'VKWebAppInit'
+    );
 
-loadMatches();
-  loadLeaderboard();
-};
+    const timeout =
+      new Promise(
+        (_, reject) =>
+
+          setTimeout(
+            () =>
+              reject(
+                'VK TIMEOUT'
+              ),
+            3000
+          )
+      );
+
+    const vkUser =
+      await Promise.race([
+
+        bridge.send(
+          'VKWebAppGetUserInfo'
+        ),
+
+        timeout
+      ]);
+
+    console.log(
+      'VK USER:',
+      vkUser
+    );
 
     setUser({
-  id: vkUser.id,
-  name:
-    vkUser.first_name
-});
+      id: vkUser.id,
+      name:
+        vkUser.first_name
+    });
 
-loadPredictions(
-  vkUser.id
-);
+    loadPredictions(
+      vkUser.id
+    );
 
-loadMatches();
-loadLeaderboard();
-  };
+  } catch (e) {
+
+    console.log(
+      'VK AUTH ERROR:',
+      e
+    );
+
+    alert(
+      'Не удалось получить VK ID'
+    );
+  }
+
+  loadMatches();
+  loadLeaderboard();
+};
 
   const loadMatches =
     async () => {
