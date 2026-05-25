@@ -567,6 +567,22 @@ setLeaders(
             🏆 Лидеры
           </TabsItem>
 
+<TabsItem
+
+  selected={
+    activeTab ===
+    'profile'
+  }
+
+  onClick={() =>
+    setActiveTab(
+      'profile'
+    )
+  }
+>
+  😎 Профиль
+</TabsItem>
+
           {
             isAdmin && (
 
@@ -677,6 +693,92 @@ setLeaders(
                   }
                 )
               }
+
+            </Group>
+          )
+        }
+
+        {
+          activeTab ===
+          'profile'
+          &&
+          (
+
+            <Group
+              header={
+                <Header mode="secondary">
+                  😎 Профиль
+                </Header>
+              }
+            >
+
+              <Div>
+
+                <div
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 700,
+                    marginBottom: 16
+                  }}
+                >
+
+                  {user?.name}
+
+                </div>
+
+                <div
+                  style={{
+                    marginBottom: 8
+                  }}
+                >
+                  🏆 Очки:
+
+                  {' '}
+
+                  {
+                    leaders.find(
+                      l =>
+                        String(l[0]) ===
+                        String(user?.id)
+                    )?.[2] || 0
+                  }
+                </div>
+
+                <div
+                  style={{
+                    marginBottom: 8
+                  }}
+                >
+                  ⚽ Прогнозов:
+
+                  {' '}
+
+                  {
+                    Object.keys(
+                      predictions
+                    ).length
+                  }
+                </div>
+
+                <div
+                  style={{
+                    marginBottom: 8
+                  }}
+                >
+                  🎯 Точных счетов:
+
+                  {' '}
+
+                  {
+                    Object.values(
+                      predictions
+                    ).filter(
+                      p => p.points === 3
+                    ).length
+                  }
+                </div>
+
+              </Div>
 
             </Group>
           )
