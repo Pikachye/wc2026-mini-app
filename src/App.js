@@ -127,15 +127,16 @@ const isAdmin =
 
   useEffect(() => {
 
-    init();
+  loadMatches();
+  loadLeaderboard();
 
-  }, []);
+  init();
+
+}, []);
 
 const init = async () => {
 
-  console.log(
-    'INIT START'
-  );
+  console.log('INIT START');
 
   try {
 
@@ -143,33 +144,59 @@ const init = async () => {
       'VKWebAppInit'
     );
 
-    const timeout =
-      new Promise(
-        (_, reject) =>
+    let vkUser = null;
 
+    // 5 попыток получить VK ID
+    for (
+      let i = 0;
+      i < 5;
+      i++
+    ) {
+
+      try {
+
+        vkUser =
+          await bridge.send(
+            'VKWebAppGetUserInfo'
+          );
+
+        console.log(
+          'VK USER:',
+          vkUser
+        );
+
+        // если ID есть
+        if (vkUser?.id) {
+          break;
+        }
+
+      } catch (e) {
+
+        console.log(
+          'RETRY ERROR:',
+          e
+        );
+      }
+
+      // ждём 1 сек
+      await new Promise(
+        resolve =>
           setTimeout(
-            () =>
-              reject(
-                'VK TIMEOUT'
-              ),
-            3000
+            resolve,
+            1000
           )
       );
+    }
 
-    const vkUser =
-      await Promise.race([
+    // если ID так и не получили
+    if (!vkUser?.id) {
 
-        bridge.send(
-          'VKWebAppGetUserInfo'
-        ),
+      alert(
+        'Не удалось получить VK ID'
+      );
 
-        timeout
-      ]);
-
-    console.log(
-      'VK USER:',
-      vkUser
-    );
+      return;
+    }
 
     setUser({
       id: vkUser.id,
@@ -189,13 +216,10 @@ const init = async () => {
     );
 
     alert(
-      'Не удалось получить VK ID'
+      'Ошибка VK авторизации'
     );
   }
-
-  loadMatches();
-  loadLeaderboard();
-};
+};};
 
   const loadMatches =
     async () => {
