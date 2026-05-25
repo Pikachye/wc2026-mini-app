@@ -773,10 +773,46 @@ setLeaders(
                     Object.values(
                       predictions
                     ).filter(
-                      p => p.points === 3
+                      p => p.points === 4
                     ).length
                   }
                 </div>
+
+<div
+  style={{
+    marginBottom: 8
+  }}
+>
+  📊 Угаданных разниц:
+
+  {' '}
+
+  {
+    Object.values(
+      predictions
+    ).filter(
+      p => p.points === 3
+    ).length
+  }
+</div>
+
+<div
+  style={{
+    marginBottom: 8
+  }}
+>
+  ✅ Угаданных исходов:
+
+  {' '}
+
+  {
+    Object.values(
+      predictions
+    ).filter(
+      p => p.points === 2
+    ).length
+  }
+</div>
 
               </Div>
 
