@@ -849,11 +849,15 @@ setLeaders(
           (
 
   <>
-            <Tabs
+            <div
   style={{
+    overflowX: 'auto',
+    whiteSpace: 'nowrap',
     marginBottom: 12
   }}
 >
+
+  <Tabs>
 
   {
     [
@@ -915,6 +919,7 @@ setLeaders(
   }
 
 </Tabs>
+</div>
             <Group
             
               header={
