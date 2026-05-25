@@ -183,27 +183,30 @@ loadPredictions(
 
     } catch (e) {
 
-      console.log(
-        'USER FALLBACK:',
-        e
-      );
+  console.log(
+    'VK AUTH ERROR:',
+    e
+  );
+
+  alert(
+    'Не удалось получить VK ID. Перезапустите приложение.'
+  );
+
+  return;
+}
+
+    setUser({
+  id: vkUser.id,
+  name:
+    vkUser.first_name
+});
 
 loadPredictions(
-  999999
+  vkUser.id
 );
 
-      setUser({
-        id: 999999,
-        name: 'Player'
-      });
-    }
-
-    setTimeout(() => {
-
-  loadMatches();
-  loadLeaderboard();
-
-}, 1000);
+loadMatches();
+loadLeaderboard();
   };
 
   const loadMatches =
