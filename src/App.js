@@ -857,72 +857,108 @@ setLeaders(
   }}
 >
 
-  <Tabs>
+<div
+  style={{
+    display: 'flex',
+    gap: 8,
+    overflowX: 'auto',
+    marginBottom: 12,
+    paddingBottom: 4
+  }}
+>
 
   {
     [
-  't1',
-  't2',
-  't3',
-  'r16',
-  'r8',
-  'qf',
-  'sf',
-  'final'
-].map(
+      't1',
+      't2',
+      't3',
+      'r16',
+      'r8',
+      'qf',
+      'sf',
+      'final'
+    ].map(
       (stage) => (
 
-        <TabsItem
+        <button
           key={stage}
-
-          style={{
-            flexShrink: 0
-          }}
-
-          selected={
-            activeStage ===
-            stage
-          }
 
           onClick={() =>
             setActiveStage(
               stage
             )
           }
+
+          style={{
+
+            border: 'none',
+
+            borderRadius: 999,
+
+            padding:
+              '8px 14px',
+
+            whiteSpace:
+              'nowrap',
+
+            fontSize: 14,
+
+            background:
+
+              activeStage ===
+              stage
+
+                ? '#2688eb'
+
+                : '#e5ebf1',
+
+            color:
+
+              activeStage ===
+              stage
+
+                ? '#fff'
+
+                : '#000',
+
+            cursor: 'pointer'
+          }}
         >
+
           {
-  stage === 't1'
-    ? 'Тур 1'
+            stage === 't1'
+              ? 'Тур 1'
 
-  : stage === 't2'
-    ? 'Тур 2'
+            : stage === 't2'
+              ? 'Тур 2'
 
-  : stage === 't3'
-    ? 'Тур 3'
+            : stage === 't3'
+              ? 'Тур 3'
 
-  : stage === 'r16'
-    ? '1/16'
+            : stage === 'r16'
+              ? '1/16'
 
-  : stage === 'r8'
-    ? '1/8'
+            : stage === 'r8'
+              ? '1/8'
 
-  : stage === 'qf'
-    ? '1/4'
+            : stage === 'qf'
+              ? '1/4'
 
-  : stage === 'sf'
-    ? '1/2'
+            : stage === 'sf'
+              ? '1/2'
 
-  : stage === 'final'
-    ? 'Финал'
+            : stage === 'final'
+              ? 'Финал'
 
-  : stage
-}
-        </TabsItem>
+            : stage
+          }
+
+        </button>
       )
     )
   }
 
-</Tabs>
+</div>
 </div>
             <Group
             
