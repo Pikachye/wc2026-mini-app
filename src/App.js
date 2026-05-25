@@ -117,6 +117,13 @@ const data =
   );
 
   const [
+  activeStage,
+  setActiveStage
+] = useState(
+  'Тур 1'
+);
+
+  const [
   loading,
   setLoading
   ] = useState(true);
@@ -681,7 +688,49 @@ setLeaders(
           &&
           (
 
+  <>
+            <Tabs
+  style={{
+    marginBottom: 12
+  }}
+>
+
+  {
+    [
+      'Тур 1',
+      'Тур 2',
+      'Тур 3',
+      '1/16',
+      '1/8',
+      '1/4',
+      '1/2',
+      'Финал'
+    ].map(
+      (stage) => (
+
+        <TabsItem
+          key={stage}
+
+          selected={
+            activeStage ===
+            stage
+          }
+
+          onClick={() =>
+            setActiveStage(
+              stage
+            )
+          }
+        >
+          {stage}
+        </TabsItem>
+      )
+    )
+  }
+
+</Tabs>
             <Group
+            
               header={
                 <Header mode="secondary">
                   Матчи
@@ -690,7 +739,13 @@ setLeaders(
             >
 
               {
-                matches.map(
+                matches
+  .filter(
+    (match) =>
+      match[1] ===
+      activeStage
+  )
+  .map(
                   (match) => (
 
                     <Div
@@ -1002,6 +1057,9 @@ setLeaders(
               }
 
             </Group>
+
+          </>
+
           )
         }
 
