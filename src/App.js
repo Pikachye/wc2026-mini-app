@@ -753,7 +753,7 @@ setLeaders(
                     marginBottom: 8
                   }}
                 >
-                  🏆 Очки:
+                  ⭐ Очки:
 
                   {' '}
 
