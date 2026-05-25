@@ -191,7 +191,7 @@ loadPredictions(
   alert(
     'Не удалось получить VK ID'
   );
-}
+
 
 loadMatches();
   loadLeaderboard();
