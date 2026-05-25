@@ -113,7 +113,7 @@ const data =
     activeTab,
     setActiveTab
     ] = useState(
-    'leaderboard'
+    'matches'
   );
 
   const [
@@ -548,7 +548,7 @@ const init = async () => {
               )
             }
           >
-            Матчи
+           ⚽ Матчи
           </TabsItem>
 
           {
