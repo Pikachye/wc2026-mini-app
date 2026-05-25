@@ -291,9 +291,18 @@ const init = async () => {
           Array.isArray(data)
         ) {
 
-          setLeaders(
-            data.slice(1)
-          );
+          const sorted =
+  data
+    .slice(1)
+    .sort(
+      (a, b) =>
+        Number(b[2]) -
+        Number(a[2])
+    );
+
+setLeaders(
+  sorted
+);
         }
 
       } catch (e) {
