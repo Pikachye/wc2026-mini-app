@@ -219,7 +219,7 @@ const init = async () => {
       'Ошибка VK авторизации'
     );
   }
-};};
+};
 
   const loadMatches =
     async () => {
