@@ -533,78 +533,89 @@ setLeaders(
           Прогнозы ЧМ-2026
         </PanelHeader>
 
-        <Tabs>
-          
-          <TabsItem
-
-            selected={
-              activeTab ===
-              'matches'
-            }
-
-            onClick={() =>
-              setActiveTab(
-                'matches'
-              )
-            }
-          >
-           ⚽ Матчи
-          </TabsItem>
-
-          <TabsItem
-
-            selected={
-              activeTab ===
-              'leaderboard'
-            }
-
-            onClick={() =>
-              setActiveTab(
-                'leaderboard'
-              )
-            }
-          >
-            🏆 Лидеры
-          </TabsItem>
-
-<TabsItem
-
-  selected={
-    activeTab ===
-    'profile'
-  }
-
-  onClick={() =>
-    setActiveTab(
-      'profile'
-    )
-  }
+        <div
+  style={{
+    display: 'flex',
+    gap: 8,
+    overflowX: 'auto',
+    marginBottom: 16
+  }}
 >
-  😎 Профиль
-</TabsItem>
 
-          {
-            isAdmin && (
+  {
+    [
+      {
+        id: 'matches',
+        label: '⚽ Матчи'
+      },
 
-              <TabsItem
+      {
+        id: 'leaderboard',
+        label: '🏆 Лидеры'
+      },
 
-                selected={
-                  activeTab ===
-                  'admin'
-                }
+      {
+        id: 'profile',
+        label: '😎 Профиль'
+      }
+    ].map(
+      (tab) => (
 
-                onClick={() =>
-                  setActiveTab(
-                    'admin'
-                  )
-                }
-              >
-                ⚙️ Админ
-              </TabsItem>
+        <button
+          key={tab.id}
+
+          onClick={() =>
+            setActiveTab(
+              tab.id
             )
           }
 
-        </Tabs>
+          style={{
+
+            border: 'none',
+
+            borderRadius: 999,
+
+            padding:
+              '10px 16px',
+
+            whiteSpace:
+              'nowrap',
+
+            fontSize: 14,
+
+            fontWeight: 600,
+
+            background:
+
+              activeTab ===
+              tab.id
+
+                ? '#2688eb'
+
+                : '#e5ebf1',
+
+            color:
+
+              activeTab ===
+              tab.id
+
+                ? '#fff'
+
+                : '#000',
+
+            cursor: 'pointer'
+          }}
+        >
+
+          {tab.label}
+
+        </button>
+      )
+    )
+  }
+
+</div>
 
         {
           activeTab ===
