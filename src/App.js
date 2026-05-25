@@ -591,7 +591,7 @@ setLeaders(
               activeTab ===
               tab.id
 
-                ? '#2688eb'
+                ? '#0077FF'
 
                 : '#e5ebf1',
 
@@ -919,7 +919,7 @@ setLeaders(
               activeStage ===
               stage
 
-                ? '#2688eb'
+                ? '#0077FF'
 
                 : '#e5ebf1',
 
