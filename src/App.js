@@ -120,7 +120,7 @@ const data =
   activeStage,
   setActiveStage
 ] = useState(
-  'Тур 1'
+  't1'
 );
 
   const [
@@ -697,15 +697,15 @@ setLeaders(
 
   {
     [
-      'Тур 1',
-      'Тур 2',
-      'Тур 3',
-      '1/16',
-      '1/8',
-      '1/4',
-      '1/2',
-      'Финал'
-    ].map(
+  't1',
+  't2',
+  't3',
+  'r16',
+  'r8',
+  'qf',
+  'sf',
+  'final'
+].map(
       (stage) => (
 
         <TabsItem
@@ -722,7 +722,33 @@ setLeaders(
             )
           }
         >
-          {stage}
+          {
+  stage === 't1'
+    ? 'Тур 1'
+
+  : stage === 't2'
+    ? 'Тур 2'
+
+  : stage === 't3'
+    ? 'Тур 3'
+
+  : stage === 'r16'
+    ? '1/16'
+
+  : stage === 'r8'
+    ? '1/8'
+
+  : stage === 'qf'
+    ? '1/4'
+
+  : stage === 'sf'
+    ? '1/2'
+
+  : stage === 'final'
+    ? 'Финал'
+
+  : stage
+}
         </TabsItem>
       )
     )
