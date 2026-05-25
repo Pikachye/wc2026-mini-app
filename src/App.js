@@ -189,11 +189,13 @@ loadPredictions(
   );
 
   alert(
-    'Не удалось получить VK ID! Перезапустите приложение.'
+    'Не удалось получить VK ID'
   );
-
-  return;
 }
+
+loadMatches();
+  loadLeaderboard();
+};
 
     setUser({
   id: vkUser.id,
