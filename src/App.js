@@ -591,18 +591,18 @@ setLeaders(
               activeTab ===
               tab.id
 
-                ? '#2688EB'
+                ? 'var(--vkui--color_background_accent)'
 
-                : '#F2F3F5',
+                : 'var(--vkui--color_background_secondary)',
 
             color:
 
               activeTab ===
               tab.id
 
-                ? '#FFFFFF'
+                ? 'var(--vkui--color_text_contrast)'
 
-                : '#6D7885',
+                : 'var(--vkui--color_text_secondary)',
 
             cursor: 'pointer'
           }}
@@ -921,18 +921,18 @@ setLeaders(
               activeStage ===
               stage
 
-                ? '#2688EB'
+                ? 'var(--vkui--color_background_accent)'
 
-                : '#F2F3F5',
+                : 'var(--vkui--color_background_secondary)',
 
             color:
 
               activeStage ===
               stage
 
-                ? '#FFFFFF'
+                ? 'var(--vkui--color_text_contrast)'
 
-                : '#6D7885',
+                : 'var(--vkui--color_text_secondary)',
 
             cursor: 'pointer'
           }}
