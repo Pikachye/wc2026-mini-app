@@ -112,9 +112,14 @@ const data =
   const [
     activeTab,
     setActiveTab
-  ] = useState(
+    ] = useState(
     'leaderboard'
   );
+
+  const [
+  loading,
+  setLoading
+  ] = useState(true);
 
   const ADMIN_IDS = [
   '471037'
@@ -251,6 +256,8 @@ const init = async () => {
           setMatches(
             data.slice(1)
           );
+
+          setLoading(false);
         }
 
       } catch (e) {
@@ -454,6 +461,36 @@ const init = async () => {
       }
     };
 
+    if (loading) {
+
+  return (
+
+    <AppRoot>
+
+      <Panel>
+
+        <PanelHeader>
+          Прогнозы ЧМ-2026
+        </PanelHeader>
+
+        <Div
+          style={{
+            paddingTop: 100,
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 600
+          }}
+        >
+
+          ⚽ Загрузка...
+
+        </Div>
+
+      </Panel>
+
+    </AppRoot>
+  );
+}
   return (
 
     <AppRoot>
