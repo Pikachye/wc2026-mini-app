@@ -535,11 +535,16 @@ setLeaders(
 
 <div
   style={{
-    display: 'flex',
-    gap: 8,
-    overflowX: 'auto',
-    marginBottom: 16
-  }}
+  display: 'flex',
+  gap: 8,
+  overflowX: 'auto',
+
+  paddingTop: 12,
+  paddingLeft: 12,
+  paddingRight: 12,
+
+  marginBottom: 16
+}}
 >
 
   {
@@ -870,12 +875,16 @@ setLeaders(
 
 <div
   style={{
-    display: 'flex',
-    gap: 8,
-    overflowX: 'auto',
-    marginBottom: 12,
-    paddingBottom: 4
-  }}
+  display: 'flex',
+  gap: 8,
+  overflowX: 'auto',
+
+  paddingTop: 12,
+  paddingLeft: 12,
+  paddingRight: 12,
+
+  marginBottom: 16
+}}
 >
 
   {
