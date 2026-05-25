@@ -572,40 +572,40 @@ setLeaders(
 
           style={{
 
-            border: 'none',
+  border: 'none',
 
-            borderRadius: 999,
+  borderRadius: 12,
 
-            padding:
-              '10px 16px',
+  padding:
+    '10px 16px',
 
-            whiteSpace:
-              'nowrap',
+  whiteSpace:
+    'nowrap',
 
-            fontSize: 14,
+  fontSize: 14,
 
-            fontWeight: 600,
+  fontWeight: 600,
 
-            background:
+  background:
 
-              activeTab ===
-              tab.id
+    activeTab ===
+    tab.id
 
-                ? '#0077FF'
+      ? '#2688EB'
 
-                : '#e5ebf1',
+      : '#F2F3F5',
 
-            color:
+  color:
 
-              activeTab ===
-              tab.id
+    activeTab ===
+    tab.id
 
-                ? '#fff'
+      ? '#FFFFFF'
 
-                : '#000',
+      : '#6D7885',
 
-            cursor: 'pointer'
-          }}
+  cursor: 'pointer'
+}}
         >
 
           {tab.label}
@@ -902,38 +902,40 @@ setLeaders(
 
           style={{
 
-            border: 'none',
+  border: 'none',
 
-            borderRadius: 999,
+  borderRadius: 12,
 
-            padding:
-              '8px 14px',
+  padding:
+    '10px 16px',
 
-            whiteSpace:
-              'nowrap',
+  whiteSpace:
+    'nowrap',
 
-            fontSize: 14,
+  fontSize: 14,
 
-            background:
+  fontWeight: 600,
 
-              activeStage ===
-              stage
+  background:
 
-                ? '#0077FF'
+    activeTab ===
+    tab.id
 
-                : '#e5ebf1',
+      ? '#2688EB'
 
-            color:
+      : '#F2F3F5',
 
-              activeStage ===
-              stage
+  color:
 
-                ? '#fff'
+    activeTab ===
+    tab.id
 
-                : '#000',
+      ? '#FFFFFF'
 
-            cursor: 'pointer'
-          }}
+      : '#6D7885',
+
+  cursor: 'pointer'
+}}
         >
 
           {
