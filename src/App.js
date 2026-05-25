@@ -533,7 +533,7 @@ setLeaders(
           Прогнозы ЧМ-2026
         </PanelHeader>
 
-        <div
+<div
   style={{
     display: 'flex',
     gap: 8,
@@ -556,7 +556,7 @@ setLeaders(
 
       {
         id: 'profile',
-        label: '😎 Профиль'
+        label: '👤 Профиль'
       }
     ].map(
       (tab) => (
@@ -572,40 +572,40 @@ setLeaders(
 
           style={{
 
-  border: 'none',
+            border: 'none',
 
-  borderRadius: 12,
+            borderRadius: 12,
 
-  padding:
-    '10px 16px',
+            padding:
+              '10px 16px',
 
-  whiteSpace:
-    'nowrap',
+            whiteSpace:
+              'nowrap',
 
-  fontSize: 14,
+            fontSize: 14,
 
-  fontWeight: 600,
+            fontWeight: 600,
 
-  background:
+            background:
 
-    activeTab ===
-    tab.id
+              activeTab ===
+              tab.id
 
-      ? '#2688EB'
+                ? '#2688EB'
 
-      : '#F2F3F5',
+                : '#F2F3F5',
 
-  color:
+            color:
 
-    activeTab ===
-    tab.id
+              activeTab ===
+              tab.id
 
-      ? '#FFFFFF'
+                ? '#FFFFFF'
 
-      : '#6D7885',
+                : '#6D7885',
 
-  cursor: 'pointer'
-}}
+            cursor: 'pointer'
+          }}
         >
 
           {tab.label}
@@ -902,40 +902,40 @@ setLeaders(
 
           style={{
 
-  border: 'none',
+            border: 'none',
 
-  borderRadius: 12,
+            borderRadius: 12,
 
-  padding:
-    '10px 16px',
+            padding:
+              '10px 16px',
 
-  whiteSpace:
-    'nowrap',
+            whiteSpace:
+              'nowrap',
 
-  fontSize: 14,
+            fontSize: 14,
 
-  fontWeight: 600,
+            fontWeight: 600,
 
-  background:
+            background:
 
-    activeTab ===
-    tab.id
+              activeStage ===
+              stage
 
-      ? '#2688EB'
+                ? '#2688EB'
 
-      : '#F2F3F5',
+                : '#F2F3F5',
 
-  color:
+            color:
 
-    activeTab ===
-    tab.id
+              activeStage ===
+              stage
 
-      ? '#FFFFFF'
+                ? '#FFFFFF'
 
-      : '#6D7885',
+                : '#6D7885',
 
-  cursor: 'pointer'
-}}
+            cursor: 'pointer'
+          }}
         >
 
           {
