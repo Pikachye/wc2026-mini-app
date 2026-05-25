@@ -605,13 +605,46 @@ const init = async () => {
                     return (
 
                       <Cell
-                        key={index}
+  key={index}
 
-                        subtitle={
-                          leader[2] +
-                          ' очков'
-                        }
-                      >
+  subtitle={
+    leader[2] +
+    ' очков'
+  }
+
+  style={{
+
+    marginBottom: 8,
+
+    background:
+
+      String(
+        leader[0]
+      ) ===
+      String(
+        user?.id
+      )
+
+        ? 'rgba(76, 175, 80, 0.15)'
+
+        : 'transparent',
+
+    borderRadius: 12,
+
+    border:
+
+      String(
+        leader[0]
+      ) ===
+      String(
+        user?.id
+      )
+
+        ? '2px solid #4CAF50'
+
+        : 'none'
+  }}
+>
 
                         {
                           medals[index]
