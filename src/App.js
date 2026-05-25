@@ -724,6 +724,28 @@ setLeaders(
 
                   {user?.name}
 
+<div
+  style={{
+    marginBottom: 12
+  }}
+>
+
+  🏆 Место:
+
+  {' '}
+
+  {
+
+    leaders.findIndex(
+      l =>
+        String(l[0]) ===
+        String(user?.id)
+    ) + 1
+
+  }
+
+</div>
+
                 </div>
 
                 <div
