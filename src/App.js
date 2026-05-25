@@ -588,57 +588,13 @@ const init = async () => {
               }
             >
 
-<div
-  style={{
-    display: 'flex',
-    justifyContent: 'center',
-    gap: 12,
-    marginBottom: 24
-  }}
->
-
-  {/* 2 место */}
-  {leaders[1] && (
-    <div>
-      🥈
-      <br />
-      {leaders[1][1]}
-      <br />
-      {leaders[1][2]}
-    </div>
-  )}
-
-  {/* 1 место */}
-  {leaders[0] && (
-    <div>
-      🥇
-      <br />
-      {leaders[0][1]}
-      <br />
-      {leaders[0][2]}
-    </div>
-  )}
-
-  {/* 3 место */}
-  {leaders[2] && (
-    <div>
-      🥉
-      <br />
-      {leaders[2][1]}
-      <br />
-      {leaders[2][2]}
-    </div>
-  )}
-
-</div>
-
               {
                 leaders.map(
                   (
                     leader,
                     index
                   ) => {
-                    if (index < 3) return null;
+
                     const medals = [
 
                       '🥇',
