@@ -875,6 +875,10 @@ setLeaders(
         <TabsItem
           key={stage}
 
+          style={{
+            flexShrink: 0
+          }}
+
           selected={
             activeStage ===
             stage
