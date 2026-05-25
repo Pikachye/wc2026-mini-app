@@ -518,6 +518,22 @@ const init = async () => {
         </PanelHeader>
 
         <Tabs>
+          
+          <TabsItem
+
+            selected={
+              activeTab ===
+              'matches'
+            }
+
+            onClick={() =>
+              setActiveTab(
+                'matches'
+              )
+            }
+          >
+           ⚽ Матчи
+          </TabsItem>
 
           <TabsItem
 
@@ -533,22 +549,6 @@ const init = async () => {
             }
           >
             🏆 Лидеры
-          </TabsItem>
-
-          <TabsItem
-
-            selected={
-              activeTab ===
-              'matches'
-            }
-
-            onClick={() =>
-              setActiveTab(
-                'matches'
-              )
-            }
-          >
-           ⚽ Матчи
           </TabsItem>
 
           {
