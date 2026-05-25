@@ -475,14 +475,30 @@ const init = async () => {
 
         <Div
           style={{
-            paddingTop: 100,
-            textAlign: 'center',
-            fontSize: 18,
-            fontWeight: 600
+            paddingTop: 80,
+            textAlign: 'center'
           }}
         >
 
-          ⚽ Загрузка...
+          <img
+            src="/loading.png"
+            alt="loading"
+            style={{
+              width: 160,
+              marginBottom: 24
+            }}
+          />
+
+          <div
+            style={{
+              fontSize: 18,
+              fontWeight: 600
+            }}
+          >
+
+            ⚽ Загрузка...
+
+          </div>
 
         </Div>
 
