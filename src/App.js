@@ -490,9 +490,18 @@ await loadLeaderboard();
           return;
         }
 
-        alert(
-          'Матч обновлён'
-        );
+        setSnackbar(
+
+  <Snackbar
+    onClose={() =>
+      setSnackbar(null)
+    }
+  >
+
+    ✅ Матч обновлен
+
+  </Snackbar>
+);
 
         await loadMatches();
 
