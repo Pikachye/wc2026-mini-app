@@ -134,6 +134,11 @@ const data =
   setSnackbar
 ] = useState(null);
 
+const [
+  savingDots,
+  setSavingDots
+] = useState('');
+
   const ADMIN_IDS = [
   '471037'
 ];
@@ -359,7 +364,20 @@ setLeaders(
           return;
         }
         
-        setSnackbar(
+        const interval =
+  setInterval(() => {
+
+    setSavingDots(
+      prev =>
+
+        prev.length >= 3
+          ? '.'
+          : prev + '.'
+    );
+
+  }, 400);
+
+setSnackbar(
 
   <Snackbar
     onClose={() =>
@@ -367,7 +385,11 @@ setLeaders(
     }
   >
 
-    ⏳ Сохраняем прогноз...
+    {
+
+      `⏳ Сохраняем прогноз${savingDots}`
+
+    }
 
   </Snackbar>
 );
@@ -411,6 +433,10 @@ setLeaders(
 
         const data =
           await response.json();
+
+          clearInterval(
+            interval
+          );
 
         console.log(
           'POST DATA:',
