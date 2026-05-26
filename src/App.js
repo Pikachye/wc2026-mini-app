@@ -358,6 +358,19 @@ setLeaders(
 
           return;
         }
+        
+        setSnackbar(
+
+  <Snackbar
+    onClose={() =>
+      setSnackbar(null)
+    }
+  >
+
+    ⏳ Сохраняем прогноз...
+
+  </Snackbar>
+);
 
         const response =
           await fetch(
@@ -426,11 +439,11 @@ setSnackbar(
   </Snackbar>
 );
 
-loadPredictions(
+await loadPredictions(
   user?.id
 );
 
-loadLeaderboard();
+await loadLeaderboard();
 
       } catch (e) {
 
@@ -1545,6 +1558,7 @@ setMatches(updated);
           )
         }
 
+      {snackbar}
       {snackbar}
 
       </Panel>
