@@ -142,13 +142,20 @@ const isAdmin =
   loadMatches();
   loadLeaderboard();
 
-  loadPredictions(
-  user?.id
-  );
-
   init();
 
 }, []);
+
+useEffect(() => {
+
+  if (user?.id) {
+
+    loadPredictions(
+      user.id
+    );
+  }
+
+}, [user]);
 
 const init = async () => {
 
@@ -408,9 +415,7 @@ await loadPredictions(
   user?.id
 );
 
-loadLeaderboard();
-
-        loadLeaderboard();
+await loadLeaderboard();
 
       } catch (e) {
 
@@ -474,8 +479,13 @@ loadLeaderboard();
           'Матч обновлён'
         );
 
-        loadMatches();
-        loadLeaderboard();
+        await loadMatches();
+
+        await loadLeaderboard();
+
+        await loadPredictions(
+        user?.id
+        );
 
       } catch (e) {
 
