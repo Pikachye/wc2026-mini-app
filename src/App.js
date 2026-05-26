@@ -562,7 +562,15 @@ setLeaders(
       {
         id: 'profile',
         label: '👤 Профиль'
-      }
+      },
+
+      ...(String(user?.id) === '471037'
+    ? [{
+        id: 'admin',
+        label: '⚙️ Админ'
+      }]
+    : [])
+
     ].map(
       (tab) => (
 
