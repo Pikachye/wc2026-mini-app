@@ -426,11 +426,11 @@ setSnackbar(
   </Snackbar>
 );
 
-await loadPredictions(
+loadPredictions(
   user?.id
 );
 
-await loadLeaderboard();
+loadLeaderboard();
 
       } catch (e) {
 
