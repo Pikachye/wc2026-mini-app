@@ -57,6 +57,7 @@ console.log(
 
     const result =
   await response.json();
+  
 
 console.log(
   'PRED JSON',
@@ -130,9 +131,14 @@ const data =
   ] = useState(true);
 
   const [
-  snackbar,
-  setSnackbar
-] = useState(null);
+  snackbarText,
+  setSnackbarText
+] = useState('');
+
+const [
+  snackbarOpen,
+  setSnackbarOpen
+] = useState(false);
 
 const [
   savingDots,
@@ -364,35 +370,29 @@ setLeaders(
           return;
         }
         
-        const interval =
+        let dots = '';
+
+setSnackbarOpen(true);
+
+const interval =
   setInterval(() => {
 
-    setSavingDots(
-      prev =>
+    dots =
+      dots.length >= 3
+        ? '.'
+        : dots + '.';
 
-        prev.length >= 3
-          ? '.'
-          : prev + '.'
+    setSnackbarText(
+      `⏳ Сохраняем прогноз${dots}`
     );
 
   }, 400);
 
-setSnackbar(
-
-  <Snackbar
-    onClose={() =>
-      setSnackbar(null)
-    }
-  >
-
-    {
-
-      `⏳ Сохраняем прогноз${savingDots}`
-
-    }
-
-  </Snackbar>
+setSnackbarText(
+  `⏳ Сохраняем прогноз`
 );
+
+setSnackbarOpen(true);
 
         const response =
           await fetch(
@@ -438,6 +438,10 @@ setSnackbar(
             interval
           );
 
+          setSnackbarText(
+  '✅ Прогноз сохранён'
+);
+
         console.log(
           'POST DATA:',
           data
@@ -452,17 +456,8 @@ setSnackbar(
           return;
         }
 
-setSnackbar(
-
-  <Snackbar
-    onClose={() =>
-      setSnackbar(null)
-    }
-  >
-
-    ✅ Прогноз сохранён
-
-  </Snackbar>
+setSnackbarText(
+  '✅ Прогноз сохранён'
 );
 
 await loadPredictions(
@@ -1584,7 +1579,20 @@ setMatches(updated);
           )
         }
 
-      {snackbar}
+      {
+  snackbarOpen && (
+
+    <Snackbar
+      onClose={() =>
+        setSnackbarOpen(false)
+      }
+    >
+
+      {snackbarText}
+
+    </Snackbar>
+  )
+}
       {snackbar}
 
       </Panel>
