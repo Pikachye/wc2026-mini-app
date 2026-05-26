@@ -142,6 +142,10 @@ const isAdmin =
   loadMatches();
   loadLeaderboard();
 
+  loadPredictions(
+  user?.id
+  );
+
   init();
 
 }, []);
@@ -561,7 +565,7 @@ setLeaders(
 
       {
         id: 'profile',
-        label: '👤 Профиль'
+        label: '😎 Профиль'
       },
 
       ...(String(user?.id) === '471037'

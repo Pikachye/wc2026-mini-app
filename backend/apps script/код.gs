@@ -541,3 +541,198 @@ function updateMatch(data) {
     success: true
   };
 }
+
+function calculatePoints(realHome, realAway, predHome, predAway) {
+
+  if (realHome === predHome && realAway === predAway) {
+    return 4;
+  }
+
+  const realDiff = realHome - realAway;
+  const predDiff = predHome - predAway;
+
+  if (realDiff === predDiff) {
+    return 3;
+  }
+
+  const realResult =
+    realHome > realAway ? 'home' :
+    realHome < realAway ? 'away' : 'draw';
+
+  const predResult =
+    predHome > predAway ? 'home' :
+    predHome < predAway ? 'away' : 'draw';
+
+  if (realResult === predResult) {
+    return 2;
+  }
+
+  return 0;
+}
+
+function processFinishedMatches() {
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  const matchesSheet = ss.getSheetByName('matches');
+  const predictionsSheet = ss.getSheetByName('predictions');
+  const leaderboardSheet = ss.getSheetByName('leaderboard');
+
+  const matches = matchesSheet.getDataRange().getValues();
+  const predictions = predictionsSheet.getDataRange().getValues();
+
+  leaderboardSheet.clear();
+
+  leaderboardSheet.appendRow([
+    'vk_id',
+    'user_name',
+    'points'
+  ]);
+
+  const leaderboard = {};
+
+  for (let i = 1; i < matches.length; i++) {
+
+    const match = matches[i];
+
+    const matchId = match[0];
+    const realHome = Number(match[6]);
+    const realAway = Number(match[7]);
+    const status = match[8];
+
+    if (status !== 'finished') continue;
+
+    for (let j = 1; j < predictions.length; j++) {
+
+      const pred = predictions[j];
+
+      if (String(pred[3]) !== String(matchId)) {
+        continue;
+      }
+
+      const vkId = pred[1];
+      const userName = pred[2];
+
+      const predHome = Number(pred[4]);
+      const predAway = Number(pred[5]);
+
+      const points = calculatePoints(
+        realHome,
+        realAway,
+        predHome,
+        predAway
+      );
+
+      predictionsSheet
+        .getRange(j + 1, 7)
+        .setValue(points);
+
+      if (!leaderboard[vkId]) {
+
+        leaderboard[vkId] = {
+          userName,
+          points: 0
+        };
+
+      }
+
+      leaderboard[vkId].points += points;
+    }
+  }
+
+  const sorted = Object.entries(leaderboard)
+    .sort((a, b) => b[1].points - a[1].points);
+
+  sorted.forEach(([vkId, data]) => {
+
+    leaderboardSheet.appendRow([
+      vkId,
+      data.userName,
+      data.points
+    ]);
+
+  });
+
+  Logger.log('done');
+}
+
+function updateMatchesFromLiveAPI() {
+
+  const ss =
+    SpreadsheetApp.getActiveSpreadsheet();
+
+  const sheet =
+    ss.getSheetByName('matches');
+
+  const rows =
+    sheet.getDataRange().getValues();
+
+  // твой live endpoint
+  const response =
+    UrlFetchApp.fetch(
+      'https://wc2026-mini-app.vercel.app//api/live'
+    );
+
+  const matches =
+    JSON.parse(
+      response.getContentText()
+    );
+
+  matches.forEach((item) => {
+
+    for (
+      let i = 1;
+      i < rows.length;
+      i++
+    ) {
+
+      const row = rows[i];
+
+      const matchId =
+        String(row[0]);
+
+      // ищем матч
+      if (
+        matchId !==
+        String(item.match_id)
+      ) {
+        continue;
+      }
+
+      // score1
+      sheet
+        .getRange(i + 1, 7)
+        .setValue(
+          item.score1 ?? ''
+        );
+
+      // score2
+      sheet
+        .getRange(i + 1, 8)
+        .setValue(
+          item.score2 ?? ''
+        );
+
+      // status
+      sheet
+        .getRange(i + 1, 9)
+        .setValue(
+          item.status
+        );
+
+      // winner
+      sheet
+        .getRange(i + 1, 10)
+        .setValue(
+          item.winner || ''
+        );
+    }
+  });
+
+  // пересчет очков
+  processFinishedMatches();
+
+  Logger.log(
+    'LIVE UPDATED'
+  );
+}
