@@ -86,7 +86,7 @@ const data =
     row[5],
 
   points:
-    row[6]
+  Number(row[6]) || 0
 };
       }
     );
@@ -1116,7 +1116,7 @@ setLeaders(
 
     {
       predictions[
-        match[0]
+        String(match[0])
       ] && (
 
         <div
@@ -1134,7 +1134,7 @@ setLeaders(
 
           {
             predictions[
-              match[0]
+              String(match[0])
             ]?.points || 0
           }
 
