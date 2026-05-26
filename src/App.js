@@ -400,9 +400,15 @@ setLeaders(
           return;
         }
 
-        alert(
-          'Прогноз сохранён'
-        );
+alert(
+  'Прогноз сохранён'
+);
+
+await loadPredictions(
+  user?.id
+);
+
+loadLeaderboard();
 
         loadLeaderboard();
 
