@@ -17,7 +17,8 @@ import {
   Button,
   Tabs,
   TabsItem,
-  Select
+  Select,
+  Snackbar
 } from '@vkontakte/vkui';
 
 export function App() {
@@ -127,6 +128,11 @@ const data =
   loading,
   setLoading
   ] = useState(true);
+
+  const [
+  snackbar,
+  setSnackbar
+] = useState(null);
 
   const ADMIN_IDS = [
   '471037'
@@ -407,8 +413,17 @@ setLeaders(
           return;
         }
 
-alert(
-  'Прогноз сохранён'
+setSnackbar(
+
+  <Snackbar
+    onClose={() =>
+      setSnackbar(null)
+    }
+  >
+
+    ✅ Прогноз сохранён
+
+  </Snackbar>
 );
 
 await loadPredictions(
@@ -1520,6 +1535,8 @@ setMatches(updated);
             </Group>
           )
         }
+
+      {snackbar}
 
       </Panel>
 
