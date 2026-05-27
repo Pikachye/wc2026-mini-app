@@ -554,7 +554,7 @@ await loadLeaderboard();
         >
 
           <img
-            src="/loading.png"
+            src="/loading.gif"
             alt="loading"
             style={{
               width: 160,
