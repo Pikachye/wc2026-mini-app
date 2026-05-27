@@ -578,9 +578,44 @@ const currentMatch =
     currentMatchIndex
   ];
 
-  const isPredicted = (
+const isPredicted = (
   matchId
 ) => {
+
+  const match =
+
+    filteredMatches.find(
+      (m) =>
+
+        String(m[0]) ===
+        String(matchId)
+    );
+
+  // finished матч
+  // автоматически считаем закрытым
+
+  if (
+    match?.[7] === 'finished'
+  ) {
+
+    return true;
+  }
+
+  const prediction =
+
+    predictions[
+      String(matchId)
+    ];
+
+  return (
+
+    prediction &&
+
+    prediction.pred1 !== '' &&
+
+    prediction.pred2 !== ''
+  );
+
 
   const prediction =
 
