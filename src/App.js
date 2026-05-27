@@ -663,8 +663,7 @@ useEffect(() => {
 }, [
 
   activeStage,
-
-  predictionsLoaded
+  Object.keys(predictions).length
 ]);
 
 if (loading) {
