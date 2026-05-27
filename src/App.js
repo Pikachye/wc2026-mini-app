@@ -569,11 +569,28 @@ const currentMatch =
     currentMatchIndex
   ];
 
+  const allPredicted =
+
+  filteredMatches.every(
+    (match) =>
+
+      predictions[
+        match[0]
+      ]
+  );
+
   if (
+
   wizardMode &&
-  filteredMatches.length > 0 &&
-  !currentMatch
+
+  allPredicted
+
 ) {
+
+  setWizardMode(false);
+} 
+
+{
 
   setCurrentMatchIndex(0);
 }
