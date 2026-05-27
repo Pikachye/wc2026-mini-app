@@ -602,8 +602,11 @@ if (loading) {
     objectFit: 'contain',
 
     opacity:
-      videoReady ? 1 : 0
-  }}
+      videoReady ? 1 : 0,
+
+      transition:
+        'opacity 0.3s ease'
+      }}
 >
 
   <source
