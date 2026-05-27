@@ -577,8 +577,8 @@ if (loading) {
 
         style={{
 
-          width: '85%',
-          height: '85%',
+          width: '60%',
+          height: '60%',
 
           objectFit: 'cover'
         }}
