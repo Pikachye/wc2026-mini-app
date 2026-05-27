@@ -237,11 +237,11 @@ const init = async () => {
       vkUser.id
     );
 
-    setTimeout(() => {
+    //setTimeout(() => {
 
-  setLoading(false);
+  //setLoading(false);
 
-}, 5000);
+//}, 5000);
 
   } catch (e) {
 
@@ -577,11 +577,17 @@ if (loading) {
 
   playsInline
 
+  onEnded={() => {
+
+    setLoading(false);
+
+  }}
+
   ref={(video) => {
 
     if (video) {
 
-      video.playbackRate = 0.75;
+      video.playbackRate = 0.8;
     }
   }}
 
