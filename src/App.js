@@ -237,6 +237,12 @@ const init = async () => {
       vkUser.id
     );
 
+    setTimeout(() => {
+
+  setLoading(false);
+
+}, 5000);
+
   } catch (e) {
 
     console.log(
@@ -281,7 +287,7 @@ const init = async () => {
             data.slice(1)
           );
 
-          setLoading(false);
+          //setLoading(false);
         }
 
       } catch (e) {
@@ -534,50 +540,51 @@ await loadLeaderboard();
       }
     };
 
-    if (loading) {
+if (loading) {
 
   return (
 
-    <AppRoot>
+    <div
+      style={{
 
-      <Panel>
+        position: 'fixed',
 
-        <PanelHeader>
-          Прогнозы ЧМ-2026
-        </PanelHeader>
+        top: 0,
+        left: 0,
 
-        <Div
-          style={{
-            paddingTop: 80,
-            textAlign: 'center'
-          }}
-        >
+        width: '100vw',
+        height: '100vh',
 
-          <img
-            src="/loading.gif"
-            alt="loading"
-            style={{
-              width: 160,
-              marginBottom: 24
-            }}
-          />
+        background: '#000',
 
-          <div
-            style={{
-              fontSize: 18,
-              fontWeight: 600
-            }}
-          >
+        display: 'flex',
 
-            ⚽ Загрузка...
+        alignItems: 'center',
 
-          </div>
+        justifyContent: 'center',
 
-        </Div>
+        overflow: 'hidden',
 
-      </Panel>
+        zIndex: 9999
+      }}
+    >
 
-    </AppRoot>
+      <img
+
+        src="/loading.gif"
+
+        alt="loading"
+
+        style={{
+
+          width: '100%',
+          height: '100%',
+
+          objectFit: 'cover'
+        }}
+      />
+
+    </div>
   );
 }
   return (
