@@ -38,6 +38,11 @@ export function App() {
     setPredictions
   ] = useState({});
 
+  const [
+  predictionsLoaded,
+  setPredictionsLoaded
+] = useState(false);
+
 async function loadPredictions(
   vkId
 ) {
@@ -95,6 +100,8 @@ const data =
     setPredictions(
       formatted
     );
+
+    setPredictionsLoaded(true);
 
   } catch (e) {
 
@@ -607,6 +614,10 @@ useEffect(() => {
 
 useEffect(() => {
 
+  if (!predictionsLoaded) {
+    return;
+  }
+
   const nextIndex =
 
     filteredMatches.findIndex(
@@ -626,7 +637,13 @@ useEffect(() => {
 
 }, [
 
-  activeStage
+  activeStage,
+
+  predictionsLoaded,
+
+  filteredMatches,
+
+  predictions
 ]);
 
 if (loading) {
