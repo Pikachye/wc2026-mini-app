@@ -639,11 +639,7 @@ useEffect(() => {
 
   activeStage,
 
-  predictionsLoaded,
-
-  filteredMatches,
-
-  predictions
+  predictionsLoaded
 ]);
 
 if (loading) {
