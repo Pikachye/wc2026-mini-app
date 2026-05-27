@@ -636,7 +636,10 @@ useEffect(() => {
 
 useEffect(() => {
 
-  if (!predictionsLoaded) {
+  if (
+    !predictionsLoaded ||
+    filteredMatches.length === 0
+  ) {
     return;
   }
 
@@ -660,7 +663,8 @@ useEffect(() => {
 }, [
 
   activeStage,
-  predictionsLoaded
+  predictionsLoaded,
+  filteredMatches.length
 ]);
 
 if (loading) {
