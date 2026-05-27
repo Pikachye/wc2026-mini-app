@@ -578,14 +578,34 @@ const currentMatch =
     currentMatchIndex
   ];
 
+  const isPredicted = (
+  matchId
+) => {
+
+  const prediction =
+
+    predictions[
+      String(matchId)
+    ];
+
+  return (
+
+    prediction &&
+
+    prediction.pred1 !== '' &&
+
+    prediction.pred2 !== ''
+  );
+};
+
   const allPredicted =
 
   filteredMatches.every(
     (match) =>
 
-      predictions[
-        String(match[0])
-      ]
+      isPredicted(
+        match[0]
+      )
   );
 
   const firstUnpredictedIndex =
@@ -593,9 +613,9 @@ const currentMatch =
   filteredMatches.findIndex(
     (match) =>
 
-      !predictions[
-        String(match[0])
-      ]
+      !isPredicted(
+        match[0]
+      )
   );
 
 useEffect(() => {
@@ -625,21 +645,11 @@ useEffect(() => {
 
   const nextIndex =
 
-    filteredMatches.findIndex(
-      (match) =>
+(match) =>
 
-        !(
-  predictions[
-    String(match[0])
-  ]?.pred1 !== ''
-
-  &&
-
-  predictions[
-    String(match[0])
-  ]?.pred2 !== ''
-)
-    );
+  !isPredicted(
+    match[0]
+  )
 
   setCurrentMatchIndex(
 
@@ -1656,9 +1666,9 @@ onClick={() => {
 
       currentMatchIndex &&
 
-      !predictions[
-        String(match[0])
-      ]
+      !isPredicted(
+  match[0]
+)
   )
 
     ? 'Далее →'
