@@ -569,20 +569,29 @@ if (loading) {
       }}
     >
 
-      <img
+<video
 
-        src="/loading.gif"
+  autoPlay
 
-        alt="loading"
+  muted
 
-        style={{
+  playsInline
 
-          width: '85%',
-          height: '85%',
+  style={{
 
-          objectFit: 'contain'
-        }}
-      />
+    width: '85%',
+    height: '85%',
+
+    objectFit: 'contain'
+  }}
+>
+
+  <source
+    src="/loading.mp4"
+    type="video/mp4"
+  />
+
+</video>
 
     </div>
   );
