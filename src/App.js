@@ -600,22 +600,9 @@ useEffect(() => {
 
   setWizardMode(true);
 
-  if (
-
-    firstUnpredictedIndex >= 0
-
-  ) {
-
-    setCurrentMatchIndex(
-      firstUnpredictedIndex
-    );
-  }
-
 }, [
 
-  allPredicted,
-
-  firstUnpredictedIndex
+  allPredicted
 ]);
 
 if (loading) {
@@ -1086,7 +1073,29 @@ if (loading) {
 
   setWizardMode(true);
 
-  setCurrentMatchIndex(0);
+  const stageMatches =
+
+    matches.filter(
+      (m) =>
+        m[1] === stage
+    );
+
+  const nextIndex =
+
+    stageMatches.findIndex(
+      (match) =>
+
+        !predictions[
+          String(match[0])
+        ]
+    );
+
+  setCurrentMatchIndex(
+
+    nextIndex >= 0
+      ? nextIndex
+      : 0
+  );
 }}
 
           style={{
