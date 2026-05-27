@@ -579,21 +579,25 @@ const currentMatch =
       ]
   );
 
+  useEffect(() => {
+
   if (
 
-  wizardMode &&
+    wizardMode &&
+
+    allPredicted
+
+  ) {
+
+    setWizardMode(false);
+  }
+
+}, [
+
+  wizardMode,
 
   allPredicted
-
-) {
-
-  setWizardMode(false);
-} 
-
-{
-
-  setCurrentMatchIndex(0);
-}
+]);
 
 if (loading) {
 
