@@ -577,6 +577,14 @@ if (loading) {
 
   playsInline
 
+  ref={(video) => {
+
+    if (video) {
+
+      video.playbackRate = 0.75;
+    }
+  }}
+
   style={{
 
     width: '85%',
