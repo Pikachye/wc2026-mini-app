@@ -1608,31 +1608,34 @@ if (loading) {
 
 onClick={() => {
 
-  const nextIndex =
+const currentId =
+  currentMatch?.[0];
 
-    filteredMatches.findIndex(
+const currentIndex =
 
-      (
-        match,
-        index
-      ) =>
+  filteredMatches.findIndex(
+    (match) =>
 
-        index >
+      match[0] === currentId
+  );
 
-        currentMatchIndex &&
+const nextIndex =
 
-        !(
-  predictions[
-    String(match[0])
-  ]?.pred1 !== ''
+  filteredMatches.findIndex(
 
-  &&
+    (
+      match,
+      index
+    ) =>
 
-  predictions[
-    String(match[0])
-  ]?.pred2 !== ''
-)
-    );
+      index >
+
+      currentIndex &&
+
+      !isPredicted(
+        match[0]
+      )
+  );
 
   if (nextIndex >= 0) {
 
