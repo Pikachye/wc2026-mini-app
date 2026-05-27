@@ -636,20 +636,19 @@ useEffect(() => {
 
 useEffect(() => {
 
-  if (
-
-    !predictionsLoaded) {
-
+  if (!predictionsLoaded) {
     return;
   }
 
   const nextIndex =
 
-(match) =>
+    filteredMatches.findIndex(
+      (match) =>
 
-  !isPredicted(
-    match[0]
-  )
+        !isPredicted(
+          match[0]
+        )
+    );
 
   setCurrentMatchIndex(
 
@@ -658,12 +657,10 @@ useEffect(() => {
       : 0
   );
 
-  
-
 }, [
 
   activeStage,
-  Object.keys(predictions).length
+  predictionsLoaded
 ]);
 
 if (loading) {
@@ -1131,8 +1128,6 @@ if (loading) {
           onClick={() => {
 
   setActiveStage(stage);
-
-  setWizardInitialized(false);
 
   setWizardMode(true);
 
