@@ -130,6 +130,11 @@ const data =
   ] = useState(true);
 
   const [
+  videoReady,
+  setVideoReady
+] = useState(false);
+
+  const [
   snackbar,
   setSnackbar
 ] = useState(null);
@@ -577,6 +582,12 @@ if (loading) {
 
   playsInline
 
+  onCanPlay={() => {
+
+    setVideoReady(true);
+
+  }}
+
   onEnded={() => {
 
     setLoading(false);
@@ -585,10 +596,13 @@ if (loading) {
 
   style={{
 
-    width: '95%',
-    height: '95%',
+    width: '100%',
+    height: '100%',
 
-    objectFit: 'contain'
+    objectFit: 'contain',
+
+    opacity:
+      videoReady ? 1 : 0
   }}
 >
 
