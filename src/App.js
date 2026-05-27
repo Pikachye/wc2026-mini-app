@@ -583,18 +583,10 @@ if (loading) {
 
   }}
 
-  ref={(video) => {
-
-    if (video) {
-
-      video.playbackRate = 0.8;
-    }
-  }}
-
   style={{
 
-    width: '85%',
-    height: '85%',
+    width: '95%',
+    height: '95%',
 
     objectFit: 'contain'
   }}
