@@ -591,31 +591,15 @@ const isPredicted = (
         String(matchId)
     );
 
-  // finished матч
-  // автоматически считаем закрытым
+  // finished матч считаем закрытым
 
   if (
-    match?.[7] === 'finished'
+    match &&
+    String(match[8]) === 'finished'
   ) {
 
     return true;
   }
-
-  const prediction =
-
-    predictions[
-      String(matchId)
-    ];
-
-  return (
-
-    prediction &&
-
-    prediction.pred1 !== '' &&
-
-    prediction.pred2 !== ''
-  );
-
 
   const prediction =
 
