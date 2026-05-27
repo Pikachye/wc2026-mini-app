@@ -124,6 +124,16 @@ const data =
   't1'
 );
 
+const [
+  wizardMode,
+  setWizardMode
+] = useState(true);
+
+const [
+  currentMatchIndex,
+  setCurrentMatchIndex
+] = useState(0);
+
   const [
   loading,
   setLoading
@@ -544,6 +554,29 @@ await loadLeaderboard();
         );
       }
     };
+
+    const filteredMatches =
+
+  matches.filter(
+    (match) =>
+      match[1] ===
+      activeStage
+  );
+
+const currentMatch =
+
+  filteredMatches[
+    currentMatchIndex
+  ];
+
+  if (
+  wizardMode &&
+  filteredMatches.length > 0 &&
+  !currentMatch
+) {
+
+  setCurrentMatchIndex(0);
+}
 
 if (loading) {
 
@@ -1007,11 +1040,14 @@ if (loading) {
         <button
           key={stage}
 
-          onClick={() =>
-            setActiveStage(
-              stage
-            )
-          }
+          onClick={() => {
+
+  setActiveStage(stage);
+
+  setWizardMode(true);
+
+  setCurrentMatchIndex(0);
+}}
 
           style={{
 
@@ -1086,6 +1122,76 @@ if (loading) {
 
 </div>
 </div>
+
+{
+  wizardMode && (
+
+    <Div
+      style={{
+        textAlign: 'center'
+      }}
+    >
+
+      <div
+        style={{
+          marginBottom: 8,
+          fontWeight: 600
+        }}
+      >
+
+        Прогноз {
+
+          currentMatchIndex + 1
+
+        } из {
+
+          filteredMatches.length
+        }
+
+      </div>
+
+      <div
+        style={{
+
+          width: '100%',
+          height: 8,
+
+          background: '#2c2d2e',
+
+          borderRadius: 999
+        }}
+      >
+
+        <div
+          style={{
+
+            width: `${
+              (
+                (
+                  currentMatchIndex + 1
+                ) /
+
+                filteredMatches.length
+              ) * 100
+            }%`,
+
+            height: '100%',
+
+            background: '#2688eb',
+
+            borderRadius: 999,
+
+            transition:
+              '0.3s'
+          }}
+        />
+
+      </div>
+
+    </Div>
+  )
+}
+
             <Group
             
               header={
@@ -1096,13 +1202,15 @@ if (loading) {
             >
 
               {
-                matches
-  .filter(
-    (match) =>
-      match[1] ===
-      activeStage
-  )
-  .map(
+                (
+  wizardMode
+
+    ? [currentMatch]
+
+    : filteredMatches
+)
+.filter(Boolean)
+.map(
                   (match) => (
 
                     <Div
@@ -1368,6 +1476,56 @@ if (loading) {
         Сохранить прогноз
       </Button>
 
+      {
+  wizardMode && (
+
+    <Button
+
+      size="m"
+
+      stretched
+
+      mode="secondary"
+
+      style={{
+        marginTop: 8
+      }}
+
+      onClick={() => {
+
+        if (
+
+          currentMatchIndex <
+          filteredMatches.length - 1
+
+        ) {
+
+          setCurrentMatchIndex(
+            currentMatchIndex + 1
+          );
+
+        } else {
+
+          setWizardMode(false);
+        }
+      }}
+    >
+
+      {
+
+        currentMatchIndex <
+        filteredMatches.length - 1
+
+          ? 'Далее →'
+
+          : 'Открыть список'
+
+      }
+
+    </Button>
+  )
+}
+
     </>
 
   ) : (
@@ -1597,7 +1755,6 @@ setMatches(updated);
           )
         }
 
-      {snackbar}
       {snackbar}
 
       </Panel>
