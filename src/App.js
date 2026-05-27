@@ -595,27 +595,36 @@ useEffect(() => {
 
     setWizardMode(false);
 
-    return;
-  }
+  } else {
 
-  setWizardMode(true);
-
-  if (
-
-    firstUnpredictedIndex >= 0
-
-  ) {
-
-    setCurrentMatchIndex(
-      firstUnpredictedIndex
-    );
+    setWizardMode(true);
   }
 
 }, [
 
-  allPredicted,
+  allPredicted
+]);
 
-  firstUnpredictedIndex,
+useEffect(() => {
+
+  const nextIndex =
+
+    filteredMatches.findIndex(
+      (match) =>
+
+        !predictions[
+          String(match[0])
+        ]
+    );
+
+  setCurrentMatchIndex(
+
+    nextIndex >= 0
+      ? nextIndex
+      : 0
+  );
+
+}, [
 
   activeStage
 ]);
