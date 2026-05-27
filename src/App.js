@@ -591,16 +591,14 @@ const currentMatch =
 
 useEffect(() => {
 
-  if (!wizardMode) {
-    return;
-  }
-
   if (allPredicted) {
 
     setWizardMode(false);
 
     return;
   }
+
+  setWizardMode(true);
 
   if (
 
@@ -614,8 +612,6 @@ useEffect(() => {
   }
 
 }, [
-
-  wizardMode,
 
   allPredicted,
 
