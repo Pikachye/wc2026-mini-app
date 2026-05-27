@@ -600,9 +600,24 @@ useEffect(() => {
 
   setWizardMode(true);
 
+  if (
+
+    firstUnpredictedIndex >= 0
+
+  ) {
+
+    setCurrentMatchIndex(
+      firstUnpredictedIndex
+    );
+  }
+
 }, [
 
-  allPredicted
+  allPredicted,
+
+  firstUnpredictedIndex,
+
+  activeStage
 ]);
 
 if (loading) {
