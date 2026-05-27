@@ -577,10 +577,10 @@ if (loading) {
 
         style={{
 
-          width: '60%',
-          height: '60%',
+          width: '85%',
+          height: '85%',
 
-          objectFit: 'cover'
+          objectFit: 'contain'
         }}
       />
 
