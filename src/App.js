@@ -579,24 +579,47 @@ const currentMatch =
       ]
   );
 
-  useEffect(() => {
+  const firstUnpredictedIndex =
+
+  filteredMatches.findIndex(
+    (match) =>
+
+      !predictions[
+        String(match[0])
+      ]
+  );
+
+useEffect(() => {
+
+  if (!wizardMode) {
+    return;
+  }
+
+  if (allPredicted) {
+
+    setWizardMode(false);
+
+    return;
+  }
 
   if (
 
-    wizardMode &&
-
-    allPredicted
+    firstUnpredictedIndex >= 0
 
   ) {
 
-    setWizardMode(false);
+    setCurrentMatchIndex(
+      firstUnpredictedIndex
+    );
   }
 
 }, [
 
   wizardMode,
 
-  allPredicted
+  allPredicted,
+
+  firstUnpredictedIndex
 ]);
 
 if (loading) {
