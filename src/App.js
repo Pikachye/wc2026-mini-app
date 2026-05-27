@@ -43,10 +43,7 @@ export function App() {
   setPredictionsLoaded
 ] = useState(false);
 
-const [
-  wizardInitialized,
-  setWizardInitialized
-] = useState(false);
+
 
 async function loadPredictions(
   vkId
@@ -621,11 +618,7 @@ useEffect(() => {
 
   if (
 
-    !predictionsLoaded ||
-
-    wizardInitialized
-
-  ) {
+    !predictionsLoaded) {
 
     return;
   }
@@ -635,9 +628,17 @@ useEffect(() => {
     filteredMatches.findIndex(
       (match) =>
 
-        !predictions[
-          String(match[0])
-        ]
+        !(
+  predictions[
+    String(match[0])
+  ]?.pred1 !== ''
+
+  &&
+
+  predictions[
+    String(match[0])
+  ]?.pred2 !== ''
+)
     );
 
   setCurrentMatchIndex(
@@ -647,7 +648,7 @@ useEffect(() => {
       : 0
   );
 
-  setWizardInitialized(true);
+  
 
 }, [
 
@@ -1138,9 +1139,17 @@ if (loading) {
     stageMatches.findIndex(
       (match) =>
 
-        !predictions[
-          String(match[0])
-        ]
+        !(
+  predictions[
+    String(match[0])
+  ]?.pred1 !== ''
+
+  &&
+
+  predictions[
+    String(match[0])
+  ]?.pred2 !== ''
+)
     );
 
   setCurrentMatchIndex(
@@ -1608,9 +1617,17 @@ onClick={() => {
 
         currentMatchIndex &&
 
-        !predictions[
-          String(match[0])
-        ]
+        !(
+  predictions[
+    String(match[0])
+  ]?.pred1 !== ''
+
+  &&
+
+  predictions[
+    String(match[0])
+  ]?.pred2 !== ''
+)
     );
 
   if (nextIndex >= 0) {
