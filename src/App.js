@@ -43,6 +43,11 @@ export function App() {
   setPredictionsLoaded
 ] = useState(false);
 
+const [
+  wizardInitialized,
+  setWizardInitialized
+] = useState(false);
+
 async function loadPredictions(
   vkId
 ) {
@@ -582,7 +587,7 @@ const currentMatch =
     (match) =>
 
       predictions[
-        match[0]
+        String(match[0])
       ]
   );
 
@@ -614,7 +619,14 @@ useEffect(() => {
 
 useEffect(() => {
 
-  if (!predictionsLoaded) {
+  if (
+
+    !predictionsLoaded ||
+
+    wizardInitialized
+
+  ) {
+
     return;
   }
 
@@ -634,6 +646,8 @@ useEffect(() => {
       ? nextIndex
       : 0
   );
+
+  setWizardInitialized(true);
 
 }, [
 
@@ -1108,6 +1122,8 @@ if (loading) {
 
   setActiveStage(stage);
 
+  setWizardInitialized(false);
+
   setWizardMode(true);
 
   const stageMatches =
@@ -1505,7 +1521,7 @@ if (loading) {
 
               ...predictions,
 
-              [match[0]]: {
+              [String(match[0])]: {
 
                 ...predictions[
   String(match[0])
@@ -1534,7 +1550,7 @@ if (loading) {
 
               ...predictions,
 
-              [match[0]]: {
+              [String(match[0])]: {
 
                 ...predictions[
   String(match[0])
@@ -1577,36 +1593,62 @@ if (loading) {
         marginTop: 8
       }}
 
-      onClick={() => {
+onClick={() => {
 
-        if (
+  const nextIndex =
 
-          currentMatchIndex <
-          filteredMatches.length - 1
+    filteredMatches.findIndex(
 
-        ) {
+      (
+        match,
+        index
+      ) =>
 
-          setCurrentMatchIndex(
-            currentMatchIndex + 1
-          );
+        index >
 
-        } else {
+        currentMatchIndex &&
 
-          setWizardMode(false);
-        }
-      }}
+        !predictions[
+          String(match[0])
+        ]
+    );
+
+  if (nextIndex >= 0) {
+
+    setCurrentMatchIndex(
+      nextIndex
+    );
+
+  } else {
+
+    setWizardMode(false);
+  }
+}}
     >
 
       {
 
-        currentMatchIndex <
-        filteredMatches.length - 1
+  filteredMatches.some(
 
-          ? 'Далее →'
+    (
+      match,
+      index
+    ) =>
 
-          : 'Открыть список'
+      index >
 
-      }
+      currentMatchIndex &&
+
+      !predictions[
+        String(match[0])
+      ]
+  )
+
+    ? 'Далее →'
+
+    : 'Открыть список'
+
+}
 
     </Button>
   )
