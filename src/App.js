@@ -15,8 +15,6 @@ import {
   Div,
   Input,
   Button,
-  Tabs,
-  TabsItem,
   Select,
   Snackbar
 } from '@vkontakte/vkui';
@@ -43,8 +41,6 @@ export function App() {
   setPredictionsLoaded
 ] = useState(false);
 
-
-
 async function loadPredictions(
   vkId
 ) {
@@ -57,26 +53,11 @@ async function loadPredictions(
         `/api/data?action=predictions&vk_id=${vkId}`
       );
 
-console.log(
-  'PRED RESPONSE',
-  response
-);
-
     const result =
   await response.json();
 
-console.log(
-  'PRED JSON',
-  result
-);
-
 const data =
   result || [];
-
-    console.log(
-      'PREDICTIONS:',
-      data
-    );
 
     const formatted = {};
 
@@ -199,7 +180,6 @@ const init = async () => {
 
     let vkUser = null;
 
-    // 5 попыток получить VK ID
     for (
       let i = 0;
       i < 5;
@@ -213,12 +193,6 @@ const init = async () => {
             'VKWebAppGetUserInfo'
           );
 
-        console.log(
-          'VK USER:',
-          vkUser
-        );
-
-        // если ID есть
         if (vkUser?.id) {
           break;
         }
@@ -231,7 +205,6 @@ const init = async () => {
         );
       }
 
-      // ждём 1 сек
       await new Promise(
         resolve =>
           setTimeout(
@@ -241,7 +214,6 @@ const init = async () => {
       );
     }
 
-    // если ID так и не получили
     if (!vkUser?.id) {
 
       alert(
@@ -260,12 +232,6 @@ const init = async () => {
     loadPredictions(
       vkUser.id
     );
-
-    //setTimeout(() => {
-
-  //setLoading(false);
-
-//}, 5000);
 
   } catch (e) {
 
@@ -290,18 +256,8 @@ const init = async () => {
             '/api/data?action=matches'
           );
 
-        console.log(
-          'MATCHES RESPONSE:',
-          response
-        );
-
         const data =
           await response.json();
-
-        console.log(
-          'MATCHES DATA:',
-          data
-        );
 
         if (
           Array.isArray(data)
@@ -311,7 +267,6 @@ const init = async () => {
             data.slice(1)
           );
 
-          //setLoading(false);
         }
 
       } catch (e) {
@@ -335,11 +290,6 @@ const init = async () => {
 
         const data =
           await response.json();
-
-        console.log(
-          'LEADERBOARD:',
-          data
-        );
 
         if (
           Array.isArray(data)
@@ -368,6 +318,30 @@ setLeaders(
       }
     };
 
+  // Функция для перехода к следующему непредсказанному матчу
+  const goToNextUnpredicted = () => {
+    const nextIndex = filteredMatches.findIndex(
+      (match, idx) => idx > currentMatchIndex && !isPredicted(match[0])
+    );
+    
+    if (nextIndex >= 0) {
+      setCurrentMatchIndex(nextIndex);
+    } else {
+      // Если нет следующих непредсказанных матчей, выходим из визарда
+      if (allPredicted) {
+        setWizardMode(false);
+      } else {
+        // Ищем первый непредсказанный с начала
+        const firstIndex = filteredMatches.findIndex(
+          (match) => !isPredicted(match[0])
+        );
+        if (firstIndex >= 0) {
+          setCurrentMatchIndex(firstIndex);
+        }
+      }
+    }
+  };
+
   const savePrediction =
     async (match) => {
 
@@ -379,7 +353,9 @@ setLeaders(
 ];
 
         if (
-          !prediction
+          !prediction || 
+          prediction.pred1 === '' ||
+          prediction.pred2 === ''
         ) {
 
           alert(
@@ -434,18 +410,8 @@ setLeaders(
             }
           );
 
-        console.log(
-          'POST RESPONSE:',
-          response
-        );
-
         const data =
           await response.json();
-
-        console.log(
-          'POST DATA:',
-          data
-        );
 
         if (data.error) {
 
@@ -474,6 +440,11 @@ await loadPredictions(
 );
 
 await loadLeaderboard();
+
+// После сохранения - переходим к следующему матчу
+if (wizardMode) {
+  goToNextUnpredicted();
+}
 
       } catch (e) {
 
@@ -521,8 +492,6 @@ await loadLeaderboard();
 
         const data =
           await response.json();
-
-        console.log(data);
 
         if (data.error) {
 
@@ -591,8 +560,6 @@ const isPredicted = (
         String(matchId)
     );
 
-  // finished матч считаем закрытым
-
   if (
     match &&
     String(match[8]) === 'finished'
@@ -643,22 +610,29 @@ useEffect(() => {
 
     setWizardMode(false);
 
-  } else {
+  } else if (firstUnpredictedIndex >= 0 && wizardMode === false) {
 
     setWizardMode(true);
+    setCurrentMatchIndex(firstUnpredictedIndex);
   }
 
 }, [
 
-  allPredicted
+  allPredicted, firstUnpredictedIndex
 ]);
 
+// ИСПРАВЛЕНО: убрал predictions из зависимостей, чтобы не сбрасывало индекс при вводе
 useEffect(() => {
 
   if (
     !predictionsLoaded ||
     filteredMatches.length === 0
   ) {
+    return;
+  }
+
+  // Если мы в режиме визарда и есть текущий матч, который еще не предсказан - не меняем индекс
+  if (wizardMode && currentMatch && !isPredicted(currentMatch[0])) {
     return;
   }
 
@@ -683,7 +657,9 @@ useEffect(() => {
 
   activeStage,
   predictionsLoaded,
-  filteredMatches.length
+  filteredMatches.length,
+  wizardMode,
+  currentMatch
 ]);
 
 if (loading) {
@@ -1331,7 +1307,7 @@ if (loading) {
 }
 
             <Group
-            
+
               header={
                 <Header mode="secondary">
                   Матчи
@@ -1630,46 +1606,7 @@ if (loading) {
       }}
 
 onClick={() => {
-
-const currentId =
-  currentMatch?.[0];
-
-const currentIndex =
-
-  filteredMatches.findIndex(
-    (match) =>
-
-      match[0] === currentId
-  );
-
-const nextIndex =
-
-  filteredMatches.findIndex(
-
-    (
-      match,
-      index
-    ) =>
-
-      index >
-
-      currentIndex &&
-
-      !isPredicted(
-        match[0]
-      )
-  );
-
-  if (nextIndex >= 0) {
-
-    setCurrentMatchIndex(
-      nextIndex
-    );
-
-  } else {
-
-    setWizardMode(false);
-  }
+  goToNextUnpredicted();
 }}
     >
 
@@ -1759,8 +1696,8 @@ const nextIndex =
           &&
           isAdmin
           &&
-          (
 
+          (
             <Group
               header={
                 <Header mode="secondary">
