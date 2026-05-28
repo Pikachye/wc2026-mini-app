@@ -35,6 +35,9 @@ export function App() {
   const [loading, setLoading] = useState(true);
   const [videoReady, setVideoReady] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
+  
+  // ОТДЕЛЬНЫЙ STATE ДЛЯ ВРЕМЕННЫХ ПРОГНОЗОВ (то что вводит пользователь)
+  const [tempPredictions, setTempPredictions] = useState({});
 
   const ADMIN_IDS = ['471037'];
   const isAdmin = ADMIN_IDS.includes(String(user?.id));
@@ -45,6 +48,21 @@ export function App() {
     [matches, activeStage]
   );
 
+  // Функция получения прогноза (сначала из временных, потом из сохраненных)
+  const getPrediction = useCallback((matchId) => {
+    const temp = tempPredictions[String(matchId)];
+    const saved = predictions[String(matchId)];
+    
+    if (temp && (temp.pred1 !== undefined || temp.pred2 !== undefined)) {
+      return {
+        pred1: temp.pred1 !== undefined ? temp.pred1 : saved?.pred1 || '',
+        pred2: temp.pred2 !== undefined ? temp.pred2 : saved?.pred2 || '',
+        points: saved?.points || 0
+      };
+    }
+    return saved || { pred1: '', pred2: '', points: 0 };
+  }, [tempPredictions, predictions]);
+
   const isPredicted = useCallback((matchId) => {
     const match = filteredMatches.find((m) => String(m[0]) === String(matchId));
     
@@ -52,17 +70,12 @@ export function App() {
       return true;
     }
     
-    const prediction = predictions[String(matchId)];
+    const prediction = getPrediction(matchId);
     return prediction && prediction.pred1 !== '' && prediction.pred2 !== '';
-  }, [filteredMatches, predictions]);
+  }, [filteredMatches, getPrediction]);
 
   const allPredicted = useMemo(() => 
     filteredMatches.every((match) => isPredicted(match[0])),
-    [filteredMatches, isPredicted]
-  );
-
-  const firstUnpredictedIndex = useMemo(() => 
-    filteredMatches.findIndex((match) => !isPredicted(match[0])),
     [filteredMatches, isPredicted]
   );
 
@@ -78,8 +91,8 @@ export function App() {
       const formatted = {};
       data.forEach((row) => {
         formatted[String(row[3])] = {
-          pred1: row[4],
-          pred2: row[5],
+          pred1: row[4] || '',
+          pred2: row[5] || '',
           points: Number(row[6]) || 0
         };
       });
@@ -97,9 +110,11 @@ export function App() {
       const data = await response.json();
       if (Array.isArray(data)) {
         setMatches(data.slice(1));
+        setLoading(false);
       }
     } catch (e) {
       console.log('MATCHES ERROR:', e);
+      setLoading(false);
     }
   }, []);
 
@@ -116,6 +131,17 @@ export function App() {
     }
   }, []);
 
+  // Функция обновления временного прогноза
+  const updateTempPrediction = useCallback((matchId, field, value) => {
+    setTempPredictions(prev => ({
+      ...prev,
+      [String(matchId)]: {
+        ...prev[String(matchId)],
+        [field]: value
+      }
+    }));
+  }, []);
+
   // Переход к следующему непредсказанному матчу
   const goToNextUnpredicted = useCallback(() => {
     if (!wizardMode) return;
@@ -128,29 +154,21 @@ export function App() {
       setCurrentMatchIndex(nextIndex);
     } else {
       const firstIndex = filteredMatches.findIndex((match) => !isPredicted(match[0]));
-      if (firstIndex >= 0) {
+      if (firstIndex >= 0 && firstIndex !== currentMatchIndex) {
         setCurrentMatchIndex(firstIndex);
-      } else {
+      } else if (firstIndex === -1) {
         setWizardMode(false);
       }
     }
+    
+    // Очищаем временные прогнозы при переходе
+    setTempPredictions({});
   }, [wizardMode, filteredMatches, currentMatchIndex, isPredicted]);
-
-  // Обновление прогноза в реальном времени (без сохранения)
-  const updateLocalPrediction = useCallback((matchId, field, value) => {
-    setPredictions(prev => ({
-      ...prev,
-      [String(matchId)]: {
-        ...prev[String(matchId)],
-        [field]: value
-      }
-    }));
-  }, []);
 
   // Сохранение прогноза
   const savePrediction = useCallback(async (match) => {
     try {
-      const prediction = predictions[String(match[0])];
+      const prediction = getPrediction(match[0]);
       
       if (!prediction || prediction.pred1 === '' || prediction.pred2 === '') {
         alert('Введите прогноз');
@@ -179,6 +197,7 @@ export function App() {
       
       if (data.error) {
         alert(data.error);
+        setSnackbar(null);
         return;
       }
       
@@ -188,17 +207,27 @@ export function App() {
         </Snackbar>
       );
       
+      // Очищаем временный прогноз для этого матча
+      setTempPredictions(prev => {
+        const newTemp = { ...prev };
+        delete newTemp[String(match[0])];
+        return newTemp;
+      });
+      
       await loadPredictions(user?.id);
       await loadLeaderboard();
       
-      // Переход к следующему матчу ТОЛЬКО после сохранения
-      goToNextUnpredicted();
+      // Переходим к следующему матчу
+      setTimeout(() => {
+        goToNextUnpredicted();
+      }, 100);
       
     } catch (e) {
       console.error(e);
       alert('Ошибка сохранения');
+      setSnackbar(null);
     }
-  }, [predictions, user, loadPredictions, loadLeaderboard, goToNextUnpredicted]);
+  }, [getPrediction, user, loadPredictions, loadLeaderboard, goToNextUnpredicted]);
 
   // Админское обновление матча
   const updateMatch = useCallback(async (match) => {
@@ -239,7 +268,6 @@ export function App() {
 
   // Инициализация VK
   const init = useCallback(async () => {
-    console.log('INIT START');
     try {
       await bridge.send('VKWebAppInit');
       let vkUser = null;
@@ -256,6 +284,7 @@ export function App() {
       
       if (!vkUser?.id) {
         alert('Не удалось получить VK ID');
+        setLoading(false);
         return;
       }
       
@@ -265,6 +294,7 @@ export function App() {
     } catch (e) {
       console.log('VK AUTH ERROR:', e);
       alert('Ошибка VK авторизации');
+      setLoading(false);
     }
   }, [loadPredictions]);
 
@@ -273,43 +303,42 @@ export function App() {
     loadMatches();
     loadLeaderboard();
     init();
-  }, [loadMatches, loadLeaderboard, init]);
+  }, []);
 
   // Эффект для обновления режима визарда
   useEffect(() => {
     if (allPredicted) {
       setWizardMode(false);
-    } else if (firstUnpredictedIndex >= 0 && !wizardMode) {
-      setWizardMode(true);
-      setCurrentMatchIndex(firstUnpredictedIndex);
+    } else {
+      const firstUnpredicted = filteredMatches.findIndex((match) => !isPredicted(match[0]));
+      if (firstUnpredicted >= 0 && !wizardMode) {
+        setWizardMode(true);
+        setCurrentMatchIndex(firstUnpredicted);
+      }
     }
-  }, [allPredicted, firstUnpredictedIndex, wizardMode]);
+  }, [allPredicted, filteredMatches, isPredicted, wizardMode]);
 
-  // Эффект для сброса индекса при смене этапа
+  // Эффект для сброса индекса при смене этапа (ТОЛЬКО при смене этапа!)
   useEffect(() => {
     if (!predictionsLoaded || filteredMatches.length === 0) {
       return;
     }
     
     const firstUnpredicted = filteredMatches.findIndex((match) => !isPredicted(match[0]));
-    setCurrentMatchIndex(firstUnpredicted >= 0 ? firstUnpredicted : 0);
+    const newIndex = firstUnpredicted >= 0 ? firstUnpredicted : 0;
     
-    // Включаем визард при смене этапа, если есть непредсказанные матчи
+    if (newIndex !== currentMatchIndex) {
+      setCurrentMatchIndex(newIndex);
+    }
+    
     if (firstUnpredicted >= 0) {
       setWizardMode(true);
     }
     
-  }, [activeStage, predictionsLoaded]); // Убраны все лишние зависимости!
-
-  // Эффект для загрузки
-  useEffect(() => {
-    if (user?.id && !predictionsLoaded) {
-      loadPredictions(user.id);
-    }
-  }, [user, predictionsLoaded, loadPredictions]);
-
-  // Остальная часть кода (UI) остается такой же, но с использованием updateLocalPrediction
-  // ... (продолжение следует)
+    // Очищаем временные прогнозы при смене этапа
+    setTempPredictions({});
+    
+  }, [activeStage, predictionsLoaded]); // ТОЛЬКО эти зависимости!
 
   if (loading) {
     return (
@@ -433,6 +462,7 @@ export function App() {
                     onClick={() => {
                       setActiveStage(stage);
                       setWizardMode(true);
+                      setTempPredictions({}); // Очищаем временные прогнозы
                     }}
                     style={{
                       border: 'none',
@@ -453,86 +483,95 @@ export function App() {
             </div>
 
             {/* Прогресс-бар */}
-            {wizardMode && (
+            {wizardMode && filteredMatches.length > 0 && (
               <Div style={{ textAlign: 'center' }}>
                 <div style={{ marginBottom: 8, fontWeight: 600 }}>
-                  Прогноз {currentMatchIndex + 1} из {filteredMatches.length}
+                  Прогноз {Math.min(currentMatchIndex + 1, filteredMatches.length)} из {filteredMatches.length}
                 </div>
                 <div style={{ width: '100%', height: 8, background: '#2c2d2e', borderRadius: 999 }}>
-                  <div style={{ width: `${((currentMatchIndex + 1) / filteredMatches.length) * 100}%`, height: '100%', background: '#2688eb', borderRadius: 999, transition: '0.3s' }} />
+                  <div style={{ 
+                    width: `${(Math.min(currentMatchIndex + 1, filteredMatches.length) / filteredMatches.length) * 100}%`, 
+                    height: '100%', 
+                    background: '#2688eb', 
+                    borderRadius: 999, 
+                    transition: '0.3s' 
+                  }} />
                 </div>
               </Div>
             )}
 
             {/* Список матчей */}
             <Group header={<Header mode="secondary">Матчи</Header>}>
-              {(wizardMode ? [currentMatch] : filteredMatches).filter(Boolean).map((match) => (
-                <Div key={match[0]} style={{ borderBottom: '1px solid #eee' }}>
-                  <div style={{ marginBottom: 8, fontWeight: 600 }}>
-                    {match[4]} {match[8] === 'finished' || match[8] === 'live' ? ` ${match[6]}:${match[7]} ` : ' vs '} {match[5]}
-                  </div>
-                  
-                  <div style={{ marginBottom: 8, color: '#777' }}>
-                    {(() => {
-                      const date = new Date(match[3]);
-                      return `${date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}, ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
-                    })()}
-                    
-                    <div style={{ marginTop: 4, fontWeight: 600 }}>
-                      {match[8] === 'scheduled' && '⏳ Скоро'}
-                      {match[8] === 'finished' && (
-                        <div style={{ marginTop: 8 }}>
-                          <div style={{ color: 'green', fontWeight: 600 }}>✅ Завершён</div>
-                          {predictions[String(match[0])] && (
-                            <div style={{ marginTop: 4, fontWeight: 600 }}>🏆 +{predictions[String(match[0])]?.points || 0} очков</div>
-                          )}
-                        </div>
-                      )}
+              {(wizardMode ? (currentMatch ? [currentMatch] : []) : filteredMatches).filter(Boolean).map((match) => {
+                const prediction = getPrediction(match[0]);
+                return (
+                  <Div key={match[0]} style={{ borderBottom: '1px solid #eee' }}>
+                    <div style={{ marginBottom: 8, fontWeight: 600 }}>
+                      {match[4]} {match[8] === 'finished' || match[8] === 'live' ? ` ${match[6]}:${match[7]} ` : ' vs '} {match[5]}
                     </div>
-                  </div>
+                    
+                    <div style={{ marginBottom: 8, color: '#777' }}>
+                      {(() => {
+                        const date = new Date(match[3]);
+                        return `${date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}, ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+                      })()}
+                      
+                      <div style={{ marginTop: 4, fontWeight: 600 }}>
+                        {match[8] === 'scheduled' && '⏳ Скоро'}
+                        {match[8] === 'finished' && (
+                          <div style={{ marginTop: 8 }}>
+                            <div style={{ color: 'green', fontWeight: 600 }}>✅ Завершён</div>
+                            {predictions[String(match[0])] && (
+                              <div style={{ marginTop: 4, fontWeight: 600 }}>🏆 +{predictions[String(match[0])]?.points || 0} очков</div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
-                  {match[8] === 'scheduled' ? (
-                    <>
-                      {predictions[String(match[0])] && (
-                        <div style={{ marginBottom: 8, fontSize: 14, color: '#666', fontWeight: 600 }}>
-                          Ваш текущий прогноз: {predictions[String(match[0])]?.pred1}:{predictions[String(match[0])]?.pred2}
+                    {match[8] === 'scheduled' ? (
+                      <>
+                        {prediction && prediction.pred1 && prediction.pred2 && (
+                          <div style={{ marginBottom: 8, fontSize: 14, color: '#666', fontWeight: 600 }}>
+                            Ваш текущий прогноз: {prediction.pred1}:{prediction.pred2}
+                          </div>
+                        )}
+                        
+                        <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            value={tempPredictions[String(match[0])]?.pred1 !== undefined ? tempPredictions[String(match[0])].pred1 : (predictions[String(match[0])]?.pred1 || '')}
+                            onChange={(e) => updateTempPrediction(match[0], 'pred1', e.target.value)}
+                          />
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            value={tempPredictions[String(match[0])]?.pred2 !== undefined ? tempPredictions[String(match[0])].pred2 : (predictions[String(match[0])]?.pred2 || '')}
+                            onChange={(e) => updateTempPrediction(match[0], 'pred2', e.target.value)}
+                          />
                         </div>
-                      )}
-                      
-                      <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          value={predictions[String(match[0])]?.pred1 || ''}
-                          onChange={(e) => updateLocalPrediction(match[0], 'pred1', e.target.value)}
-                        />
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          value={predictions[String(match[0])]?.pred2 || ''}
-                          onChange={(e) => updateLocalPrediction(match[0], 'pred2', e.target.value)}
-                        />
-                      </div>
-                      
-                      <Button size="m" stretched onClick={() => savePrediction(match)}>
-                        Сохранить прогноз
-                      </Button>
-                      
-                      {wizardMode && (
-                        <Button size="m" stretched mode="secondary" style={{ marginTop: 8 }} onClick={goToNextUnpredicted}>
-                          {filteredMatches.some((match, index) => index > currentMatchIndex && !isPredicted(match[0])) ? 'Далее →' : 'Открыть список'}
+                        
+                        <Button size="m" stretched onClick={() => savePrediction(match)}>
+                          Сохранить прогноз
                         </Button>
-                      )}
-                    </>
-                  ) : (
-                    predictions[String(match[0])] && (
-                      <div style={{ marginTop: 8, fontWeight: 600 }}>
-                        Ваш прогноз: {predictions[String(match[0])]?.pred1}:{predictions[String(match[0])]?.pred2}
-                      </div>
-                    )
-                  )}
-                </Div>
-              ))}
+                        
+                        {wizardMode && (
+                          <Button size="m" stretched mode="secondary" style={{ marginTop: 8 }} onClick={goToNextUnpredicted}>
+                            {filteredMatches.some((m, idx) => idx > currentMatchIndex && !isPredicted(m[0])) ? 'Далее →' : 'Открыть список'}
+                          </Button>
+                        )}
+                      </>
+                    ) : (
+                      prediction && prediction.pred1 && prediction.pred2 && (
+                        <div style={{ marginTop: 8, fontWeight: 600 }}>
+                          Ваш прогноз: {prediction.pred1}:{prediction.pred2}
+                        </div>
+                      )
+                    )}
+                  </Div>
+                );
+              })}
             </Group>
           </>
         )}
