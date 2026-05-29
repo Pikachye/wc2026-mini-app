@@ -1642,20 +1642,20 @@ onClick={() => {
   wizardMode && (
 
     <Button
-      size="m"
-      stretched
-      mode="tertiary"
+  size="m"
+  stretched
+  mode="secondary"
 
-      style={{
-        marginTop: 8
-      }}
+  style={{
+    marginTop: 8
+  }}
 
-      onClick={() =>
-        setWizardMode(false)
-      }
-    >
-      Все матчи тура
-    </Button>
+  onClick={() =>
+    setWizardMode(false)
+  }
+>
+  Все матчи тура
+</Button>
   )
 }
 
