@@ -637,21 +637,7 @@ const isPredicted = (
       )
   );
 
-useEffect(() => {
 
-  if (allPredicted) {
-
-    setWizardMode(false);
-
-  } else {
-
-    setWizardMode(true);
-  }
-
-}, [
-
-  allPredicted
-]);
 
 useEffect(() => {
 
