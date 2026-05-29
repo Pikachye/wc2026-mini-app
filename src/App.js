@@ -579,6 +579,57 @@ const currentMatch =
     currentMatchIndex
   ];
 
+  const teamFlags = {
+  'Алжир': 'Algeria',
+  'Аргентина': 'Argentina',
+  'Австралия': 'Australia',
+  'Австрия': 'Austria',
+  'Бельгия': 'Belgium',
+  'Босния и Герцеговина': 'Bosnia_and_Herzegovina',
+  'Бразилия': 'Brazil',
+  'Канада': 'Canada',
+  'Кабо-Верде': 'Cape_Verde',
+  'Колумбия': 'Colombia',
+  'Хорватия': 'Croatia',
+  'Кюрасао': 'Curacao',
+  'Чехия': 'Czechia',
+  'ДР Конго': 'DR_Congo',
+  'Эквадор': 'Ecuador',
+  'Египет': 'Egypt',
+  'Англия': 'England',
+  'Франция': 'France',
+  'Германия': 'Germany',
+  'Гана': 'Ghana',
+  'Гаити': 'Haiti',
+  'Иран': 'Iran',
+  'Ирак': 'Iraq',
+  "Кот-д'Ивуар": 'Ivory_Coast',
+  'Япония': 'Japan',
+  'Иордания': 'Jordan',
+  'Мексика': 'Mexico',
+  'Марокко': 'Morocco',
+  'Нидерланды': 'Netherlands',
+  'Новая Зеландия': 'New_Zealand',
+  'Норвегия': 'Norway',
+  'Панама': 'Panama',
+  'Парагвай': 'Paraguay',
+  'Португалия': 'Portugal',
+  'Катар': 'Qatar',
+  'Саудовская Аравия': 'Saudi_Arabia',
+  'Шотландия': 'Scotland',
+  'Сенегал': 'Senegal',
+  'ЮАР': 'South_Africa',
+  'Корея': 'South_Korea',
+  'Испания': 'Spain',
+  'Швеция': 'Sweden',
+  'Швейцария': 'Switzerland',
+  'Тунис': 'Tunisia',
+  'Турция': 'Turkey',
+  'Уругвай': 'Uruguay',
+  'США': 'USA',
+  'Узбекистан': 'Uzbekistan'
+};
+
 const isPredicted = (
   matchId
 ) => {
@@ -1339,26 +1390,102 @@ onClick={() => {
 
                       <div
   style={{
-    marginBottom: 8,
-    fontWeight: 600
+    marginBottom: 16,
+    padding: 16,
+    borderRadius: 16,
+    background:
+      'var(--vkui--color_background_secondary)'
   }}
 >
 
-  {match[4]}
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 12
+    }}
+  >
 
-  {' '}
+    <div
+      style={{
+        flex: 1,
+        textAlign: 'center'
+      }}
+    >
 
-  {
-    match[8] ===
-    'finished'
-    ||
-    match[8] ===
-    'live'
-      ? ` ${match[6]}:${match[7]} `
-      : ' vs '
-  }
+      <img
+        src={`/flags/${teamFlags[match[4]]}.svg`}
+        alt={match[4]}
+        style={{
+          width: '100%',
+          maxWidth: 96,
+          height: 64,
+          objectFit: 'contain'
+        }}
+      />
 
-  {match[5]}
+      <div
+        style={{
+          marginTop: 8,
+          fontWeight: 700
+        }}
+      >
+        {match[4]}
+      </div>
+
+    </div>
+
+    <div
+      style={{
+        minWidth: 56,
+        textAlign: 'center',
+        fontSize: 24,
+        fontWeight: 800
+      }}
+    >
+
+      {
+        match[8] === 'finished' ||
+        match[8] === 'live'
+
+          ? `${match[6]}:${match[7]}`
+
+          : 'vs'
+      }
+
+    </div>
+
+    <div
+      style={{
+        flex: 1,
+        textAlign: 'center'
+      }}
+    >
+
+      <img
+        src={`/flags/${teamFlags[match[5]]}.svg`}
+        alt={match[5]}
+        style={{
+          width: '100%',
+          maxWidth: 96,
+          height: 64,
+          objectFit: 'contain'
+        }}
+      />
+
+      <div
+        style={{
+          marginTop: 8,
+          fontWeight: 700
+        }}
+      >
+        {match[5]}
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 
