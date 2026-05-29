@@ -1417,6 +1417,13 @@ onClick={() => {
             }
           );
 
+          const formattedDatePart =
+
+  datePart.charAt(0)
+    .toUpperCase() +
+
+  datePart.slice(1);
+
         const timePart =
           date.toLocaleTimeString(
             'ru-RU',
@@ -1426,7 +1433,7 @@ onClick={() => {
             }
           );
 
-        return `${datePart}. ${timePart} МСК`;
+        return `${formattedDatePart}, ${timePart} МСК`;
 
       })()
     }
