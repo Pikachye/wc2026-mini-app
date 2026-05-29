@@ -1691,8 +1691,8 @@ onClick={() => {
   ) : (
 
   predictions[
-  String(match[0])
-]
+    String(match[0])
+  ]
   ? (
 
     <div
@@ -1708,22 +1708,57 @@ onClick={() => {
 
       {
         predictions[
-  String(match[0])
-]?.pred1
+          String(match[0])
+        ]?.pred1
       }
 
       :
 
       {
         predictions[
-  String(match[0])
-]?.pred2
+          String(match[0])
+        ]?.pred2
+      }
+
+      {
+        match[8] === 'finished' && (
+
+          <div
+            style={{
+              marginTop: 8,
+              color: 'green'
+            }}
+          >
+
+            🏆 +
+
+            {
+              predictions[
+                String(match[0])
+              ]?.points || 0
+            }
+
+            {' '}
+
+            очков
+
+          </div>
+        )
       }
 
     </div>
 
-  ) : null
-)
+  ) : (
+
+    <div
+      style={{
+        marginTop: 8,
+        color: '#777'
+      }}
+    >
+      Прогноз не был сделан
+    </div>
+  ))
 }
 
                     </Div>
