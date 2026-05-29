@@ -144,6 +144,11 @@ const [
   setCurrentMatchIndex
 ] = useState(0);
 
+const [
+  cardAnimationKey,
+  setCardAnimationKey
+] = useState(0);
+
   const [
   loading,
   setLoading
@@ -805,6 +810,24 @@ if (loading) {
 }
   return (
 
+  <>
+
+    <style>
+      {`
+        @keyframes cardFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}
+    </style>
+
     <AppRoot>
 
       <Panel>
@@ -1380,16 +1403,18 @@ onClick={() => {
                   (match) => (
 
                     <Div
-  key={match[0]}
+  key={`${match[0]}-${cardAnimationKey}`}
 
   style={{
-    marginBottom: 12,
-    padding: 16,
-    borderRadius: 16,
-    background:
-      'var(--vkui--color_background_secondary)',
-    textAlign: 'center'
-  }}
+  marginBottom: 12,
+  padding: 16,
+  borderRadius: 16,
+  background:
+    'var(--vkui--color_background_secondary)',
+  textAlign: 'center',
+  animation:
+    'cardFadeIn 0.18s ease'
+}}
 >
 
   <div
@@ -1726,6 +1751,11 @@ onClick={() => {
               setCurrentMatchIndex(
                 currentMatchIndex - 1
               );
+
+setCardAnimationKey(
+  key => key + 1
+);
+
             }
           }}
         >
@@ -1747,6 +1777,10 @@ onClick={() => {
               setCurrentMatchIndex(
                 currentMatchIndex + 1
               );
+
+              setCardAnimationKey(
+  key => key + 1
+);
 
             } else {
 
@@ -1960,5 +1994,6 @@ setMatches(updated);
       </Panel>
 
     </AppRoot>
+      </>
   );
 }
