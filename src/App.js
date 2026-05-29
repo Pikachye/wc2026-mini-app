@@ -3,6 +3,8 @@ import React, {
   useState
 } from 'react';
 
+import { useSwipeable } from 'react-swipeable';
+
 import bridge from '@vkontakte/vk-bridge';
 
 import {
@@ -577,6 +579,37 @@ const currentMatch =
   filteredMatches[
     currentMatchIndex
   ];
+
+  const swipeHandlers = useSwipeable({
+
+  onSwipedLeft: () => {
+
+    if (
+      currentMatchIndex <
+      filteredMatches.length - 1
+    ) {
+
+      setCurrentMatchIndex(
+        currentMatchIndex + 1
+      );
+    }
+  },
+
+  onSwipedRight: () => {
+
+    if (
+      currentMatchIndex > 0
+    ) {
+
+      setCurrentMatchIndex(
+        currentMatchIndex - 1
+      );
+    }
+  },
+
+  preventScrollOnSwipe: true,
+  trackMouse: true
+});
 
 const isPredicted = (
   matchId
@@ -1335,13 +1368,20 @@ onClick={() => {
                   (match) => (
 
                     <Div
-                      key={match[0]}
+  key={match[0]}
 
-                      style={{
-                        borderBottom:
-                          '1px solid #eee'
-                      }}
-                    >
+  {...(
+    wizardMode
+      ? swipeHandlers
+      : {}
+  )}
+
+  style={{
+    borderBottom:
+      '1px solid #eee',
+    touchAction: 'pan-y'
+  }}
+>
 
                       <div
   style={{
@@ -1596,94 +1636,28 @@ onClick={() => {
       >
         Сохранить прогноз
       </Button>
-
       {
   wizardMode && (
 
     <Button
-
       size="m"
-
       stretched
-
       mode="secondary"
 
       style={{
         marginTop: 8
       }}
 
-onClick={() => {
+      onClick={() => {
 
-const currentId =
-  currentMatch?.[0];
+        setWizardMode(false);
 
-const currentIndex =
-
-  filteredMatches.findIndex(
-    (match) =>
-
-      match[0] === currentId
-  );
-
-const nextIndex =
-
-  filteredMatches.findIndex(
-
-    (
-      match,
-      index
-    ) =>
-
-      index >
-
-      currentIndex &&
-
-      !isPredicted(
-        match[0]
-      )
-  );
-
-  if (nextIndex >= 0) {
-
-    setCurrentMatchIndex(
-      nextIndex
-    );
-
-  } else {
-
-    setWizardMode(false);
-  }
-}}
+      }}
     >
-
-      {
-
-  filteredMatches.some(
-
-    (
-      match,
-      index
-    ) =>
-
-      index >
-
-      currentMatchIndex &&
-
-      !isPredicted(
-  match[0]
-)
-  )
-
-    ? 'Далее →'
-
-    : 'Открыть список'
-
-}
-
+      Открыть список тура
     </Button>
   )
 }
-
     </>
 
   ) : (
