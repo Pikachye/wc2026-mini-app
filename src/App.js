@@ -1414,16 +1414,37 @@ onClick={() => {
       }}
     >
 
-      <img
-        src={`/flags/${teamFlags[match[4]]}.svg`}
-        alt={match[4]}
-        style={{
-          width: '100%',
-          maxWidth: 96,
-          height: 64,
-          objectFit: 'contain'
-        }}
-      />
+      <div
+  style={{
+    width: 96,
+    height: 64,
+
+    margin: '0 auto',
+
+    borderRadius: 12,
+
+    overflow: 'hidden',
+
+    background:
+      'var(--vkui--color_background_secondary)',
+
+    border:
+      '1px solid rgba(255,255,255,0.08)'
+  }}
+>
+
+  <img
+    src={`/flags/${teamFlags[match[4]]}.svg`}
+    alt={match[4]}
+
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover'
+    }}
+  />
+
+</div>
 
       <div
         style={{
@@ -1463,16 +1484,37 @@ onClick={() => {
       }}
     >
 
-      <img
-        src={`/flags/${teamFlags[match[5]]}.svg`}
-        alt={match[5]}
-        style={{
-          width: '100%',
-          maxWidth: 96,
-          height: 64,
-          objectFit: 'contain'
-        }}
-      />
+      <div
+  style={{
+    width: 96,
+    height: 64,
+
+    margin: '0 auto',
+
+    borderRadius: 12,
+
+    overflow: 'hidden',
+
+    background:
+      'var(--vkui--color_background_secondary)',
+
+    border:
+      '1px solid rgba(255,255,255,0.08)'
+  }}
+>
+
+  <img
+    src={`/flags/${teamFlags[match[5]]}.svg`}
+    alt={match[5]}
+
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover'
+    }}
+  />
+
+</div>
 
       <div
         style={{
