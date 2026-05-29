@@ -1314,14 +1314,7 @@ onClick={() => {
   )
 }
 
-            <Group
-            
-              header={
-                <Header mode="secondary">
-                  Матчи
-                </Header>
-              }
-            >
+<Group>
 
               {
                 (
@@ -1647,31 +1640,7 @@ onClick={() => {
   )
 }
 
-      {
-        match[8] === 'finished' && (
 
-          <div
-            style={{
-              marginTop: 8,
-              color: 'green'
-            }}
-          >
-
-            🏆 +
-
-            {
-              predictions[
-                String(match[0])
-              ]?.points || 0
-            }
-
-            {' '}
-
-            очков
-
-          </div>
-        )
-      }
 
     </div>
 
