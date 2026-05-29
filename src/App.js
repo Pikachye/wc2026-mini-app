@@ -541,7 +541,7 @@ await loadLeaderboard();
     }
   >
 
-    ✅ Матч обновлен
+    ✅ Матч обновлен!
 
   </Snackbar>
 );
