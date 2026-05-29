@@ -1600,86 +1600,88 @@ onClick={() => {
       {
   wizardMode && (
 
+    <div
+      style={{
+        display: 'flex',
+        gap: 8,
+        marginTop: 8
+      }}
+    >
+
+      <Button
+        size="m"
+        stretched
+        mode="secondary"
+        disabled={
+          currentMatchIndex === 0
+        }
+
+        onClick={() => {
+
+          if (
+            currentMatchIndex > 0
+          ) {
+
+            setCurrentMatchIndex(
+              currentMatchIndex - 1
+            );
+          }
+        }}
+      >
+        ← Назад
+      </Button>
+
+      <Button
+        size="m"
+        stretched
+        mode="secondary"
+
+        onClick={() => {
+
+          if (
+            currentMatchIndex <
+            filteredMatches.length - 1
+          ) {
+
+            setCurrentMatchIndex(
+              currentMatchIndex + 1
+            );
+
+          } else {
+
+            setWizardMode(false);
+          }
+        }}
+      >
+        {
+          currentMatchIndex <
+          filteredMatches.length - 1
+            ? 'Далее →'
+            : 'Открыть список'
+        }
+      </Button>
+
+    </div>
+  )
+}
+
+{
+  wizardMode && (
+
     <Button
-
       size="m"
-
       stretched
-
-      mode="secondary"
+      mode="tertiary"
 
       style={{
         marginTop: 8
       }}
 
-onClick={() => {
-
-const currentId =
-  currentMatch?.[0];
-
-const currentIndex =
-
-  filteredMatches.findIndex(
-    (match) =>
-
-      match[0] === currentId
-  );
-
-const nextIndex =
-
-  filteredMatches.findIndex(
-
-    (
-      match,
-      index
-    ) =>
-
-      index >
-
-      currentIndex &&
-
-      !isPredicted(
-        match[0]
-      )
-  );
-
-  if (nextIndex >= 0) {
-
-    setCurrentMatchIndex(
-      nextIndex
-    );
-
-  } else {
-
-    setWizardMode(false);
-  }
-}}
+      onClick={() =>
+        setWizardMode(false)
+      }
     >
-
-      {
-
-  filteredMatches.some(
-
-    (
-      match,
-      index
-    ) =>
-
-      index >
-
-      currentMatchIndex &&
-
-      !isPredicted(
-  match[0]
-)
-  )
-
-    ? 'Далее →'
-
-    : 'Открыть список'
-
-}
-
+      Все матчи тура
     </Button>
   )
 }
