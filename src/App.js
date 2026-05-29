@@ -649,21 +649,25 @@ useEffect(() => {
   }
 
   const nextIndex =
-
     filteredMatches.findIndex(
       (match) =>
-
-        !isPredicted(
-          match[0]
-        )
+        !isPredicted(match[0])
     );
 
-  setCurrentMatchIndex(
+  if (nextIndex >= 0) {
 
-    nextIndex >= 0
-      ? nextIndex
-      : 0
-  );
+    setWizardMode(true);
+
+    setCurrentMatchIndex(
+      nextIndex
+    );
+
+  } else {
+
+    setWizardMode(false);
+
+    setCurrentMatchIndex(0);
+  }
 
 }, [
 
@@ -1134,43 +1138,35 @@ if (loading) {
         <button
           key={stage}
 
-          onClick={() => {
+onClick={() => {
 
   setActiveStage(stage);
 
-  setWizardMode(true);
-
   const stageMatches =
-
     matches.filter(
-      (m) =>
-        m[1] === stage
+      (m) => m[1] === stage
     );
 
   const nextIndex =
-
     stageMatches.findIndex(
       (match) =>
-
-        !(
-  predictions[
-    String(match[0])
-  ]?.pred1 !== ''
-
-  &&
-
-  predictions[
-    String(match[0])
-  ]?.pred2 !== ''
-)
+        !isPredicted(match[0])
     );
 
-  setCurrentMatchIndex(
+  if (nextIndex >= 0) {
 
-    nextIndex >= 0
-      ? nextIndex
-      : 0
-  );
+    setWizardMode(true);
+
+    setCurrentMatchIndex(
+      nextIndex
+    );
+
+  } else {
+
+    setWizardMode(false);
+
+    setCurrentMatchIndex(0);
+  }
 }}
 
           style={{
