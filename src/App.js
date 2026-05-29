@@ -1597,73 +1597,7 @@ onClick={() => {
         Сохранить прогноз
       </Button>
 
-      {
-  wizardMode && (
 
-    <div
-      style={{
-        display: 'flex',
-        gap: 8,
-        marginTop: 8
-      }}
-    >
-
-      <Button
-        size="m"
-        stretched
-        mode="secondary"
-        disabled={
-          currentMatchIndex === 0
-        }
-
-        onClick={() => {
-
-          if (
-            currentMatchIndex > 0
-          ) {
-
-            setCurrentMatchIndex(
-              currentMatchIndex - 1
-            );
-          }
-        }}
-      >
-        ← Назад
-      </Button>
-
-      <Button
-        size="m"
-        stretched
-        mode="secondary"
-
-        onClick={() => {
-
-          if (
-            currentMatchIndex <
-            filteredMatches.length - 1
-          ) {
-
-            setCurrentMatchIndex(
-              currentMatchIndex + 1
-            );
-
-          } else {
-
-            setWizardMode(false);
-          }
-        }}
-      >
-        {
-          currentMatchIndex <
-          filteredMatches.length - 1
-            ? 'Далее →'
-            : 'Открыть список'
-        }
-      </Button>
-
-    </div>
-  )
-}
 
 {
   wizardMode && (
@@ -1761,6 +1695,57 @@ onClick={() => {
   ))
 }
 
+{
+  wizardMode && (
+
+    <div
+      style={{
+        display: 'flex',
+        gap: 8,
+        marginTop: 12
+      }}
+    >
+
+      <Button
+        size="m"
+        stretched
+        mode="secondary"
+        disabled={currentMatchIndex === 0}
+
+        onClick={() => {
+
+          if (currentMatchIndex > 0) {
+            setCurrentMatchIndex(currentMatchIndex - 1);
+          }
+        }}
+      >
+        ← Назад
+      </Button>
+
+      <Button
+        size="m"
+        stretched
+        mode="secondary"
+
+        onClick={() => {
+
+          if (currentMatchIndex < filteredMatches.length - 1) {
+            setCurrentMatchIndex(currentMatchIndex + 1);
+          } else {
+            setWizardMode(false);
+          }
+        }}
+      >
+        {
+          currentMatchIndex < filteredMatches.length - 1
+            ? 'Далее →'
+            : 'Открыть список'
+        }
+      </Button>
+
+    </div>
+  )
+}
                     </Div>
                   )
                 )
