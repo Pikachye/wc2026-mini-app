@@ -1413,7 +1413,7 @@ onClick={() => {
     'var(--vkui--color_background_secondary)',
   textAlign: 'center',
   animation:
-    'cardFadeIn 0.18s ease'
+    'cardFadeIn 0.58s ease'
 }}
 >
 
@@ -1799,7 +1799,7 @@ setCardAnimationKey(
       </div>
     )
   }
-  
+
 
 </Div>
                   )
