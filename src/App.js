@@ -1380,506 +1380,386 @@ onClick={() => {
                   (match) => (
 
                     <Div
-                      key={match[0]}
+  key={match[0]}
 
-                      style={{
-                        borderBottom:
-                          '1px solid #eee'
-                      }}
-                    >
-
-                      <div
   style={{
-    marginBottom: 16,
+    marginBottom: 12,
     padding: 16,
     borderRadius: 16,
     background:
-      'var(--vkui--color_background_secondary)'
+      'var(--vkui--color_background_secondary)',
+    textAlign: 'center'
   }}
 >
+
+  <div
+    style={{
+      marginBottom: 8,
+      fontSize: 14,
+      color: 'var(--vkui--color_text_secondary)',
+      fontWeight: 600
+    }}
+  >
+    {
+      (() => {
+
+        const date =
+          new Date(match[3]);
+
+        const datePart =
+          date.toLocaleDateString(
+            'ru-RU',
+            {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+              weekday: 'long'
+            }
+          );
+
+        const timePart =
+          date.toLocaleTimeString(
+            'ru-RU',
+            {
+              hour: '2-digit',
+              minute: '2-digit'
+            }
+          );
+
+        return `${datePart}. ${timePart} МСК`;
+
+      })()
+    }
+  </div>
+
+  <div
+    style={{
+      marginBottom: 16,
+      fontWeight: 700,
+      color:
+        match[8] === 'finished'
+          ? 'green'
+          : 'var(--vkui--color_text_secondary)'
+    }}
+  >
+    {
+      match[8] === 'finished'
+        ? '✅ Завершен'
+        : match[8] === 'live'
+          ? '🔴 Идет матч'
+          : '⏳ Не начался'
+    }
+  </div>
 
   <div
     style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: 12
+      gap: 12,
+      marginBottom: 16
     }}
   >
 
-    <div
-      style={{
-        flex: 1,
-        textAlign: 'center'
-      }}
-    >
-
-      <div
-  style={{
-    width: 96,
-    height: 64,
-
-    margin: '0 auto',
-
-    borderRadius: 12,
-
-    overflow: 'hidden',
-
-    background:
-      'var(--vkui--color_background_secondary)',
-
-    border:
-      '1px solid rgba(255,255,255,0.08)'
-  }}
->
-
-  <img
-    src={`/flags/${teamFlags[match[4]]}.svg`}
-    alt={match[4]}
-
-    style={{
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover'
-    }}
-  />
-
-</div>
-
+    <div style={{ flex: 1, textAlign: 'center' }}>
       <div
         style={{
-          marginTop: 8,
-          fontWeight: 700
+          width: 96,
+          height: 64,
+          margin: '0 auto',
+          borderRadius: 12,
+          overflow: 'hidden',
+          background:
+            'var(--vkui--color_background_content)',
+          border:
+            '1px solid rgba(255,255,255,0.08)'
         }}
       >
-        {match[4]}
+        <img
+          src={`/flags/${teamFlags[match[4]]}.svg`}
+          alt={match[4]}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover'
+          }}
+        />
       </div>
 
+      <div style={{ marginTop: 8, fontWeight: 700 }}>
+        {match[4]}
+      </div>
     </div>
 
     <div
       style={{
-        minWidth: 56,
-        textAlign: 'center',
-        fontSize: 24,
+        minWidth: 64,
+        fontSize: 26,
         fontWeight: 800
       }}
     >
-
       {
         match[8] === 'finished' ||
         match[8] === 'live'
-
           ? `${match[6]}:${match[7]}`
-
           : 'vs'
       }
-
     </div>
 
-    <div
-      style={{
-        flex: 1,
-        textAlign: 'center'
-      }}
-    >
-
+    <div style={{ flex: 1, textAlign: 'center' }}>
       <div
-  style={{
-    width: 96,
-    height: 64,
+        style={{
+          width: 96,
+          height: 64,
+          margin: '0 auto',
+          borderRadius: 12,
+          overflow: 'hidden',
+          background:
+            'var(--vkui--color_background_content)',
+          border:
+            '1px solid rgba(255,255,255,0.08)'
+        }}
+      >
+        <img
+          src={`/flags/${teamFlags[match[5]]}.svg`}
+          alt={match[5]}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover'
+          }}
+        />
+      </div>
 
-    margin: '0 auto',
+      <div style={{ marginTop: 8, fontWeight: 700 }}>
+        {match[5]}
+      </div>
+    </div>
 
-    borderRadius: 12,
+  </div>
 
-    overflow: 'hidden',
-
-    background:
-      'var(--vkui--color_background_secondary)',
-
-    border:
-      '1px solid rgba(255,255,255,0.08)'
-  }}
->
-
-  <img
-    src={`/flags/${teamFlags[match[5]]}.svg`}
-    alt={match[5]}
-
-    style={{
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover'
-    }}
-  />
-
-</div>
+  {
+    predictions[
+      String(match[0])
+    ] && (
 
       <div
         style={{
-          marginTop: 8,
+          marginBottom: 12,
           fontWeight: 700
         }}
       >
-        {match[5]}
+        Ваш прогноз: {predictions[String(match[0])]?.pred1}:{predictions[String(match[0])]?.pred2}
+
+        {
+          match[8] === 'finished' && (
+            <>
+              {' '}
+              (+{predictions[String(match[0])]?.points || 0} очков)
+            </>
+          )
+        }
       </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-                      <div
-  style={{
-    marginBottom: 8,
-    color: '#777'
-  }}
->
-  {
-    (() => {
-
-      const date =
-        new Date(match[3]);
-
-      const datePart =
-        date.toLocaleDateString(
-          'ru-RU',
-          {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-          }
-        );
-
-      const timePart =
-        date.toLocaleTimeString(
-          'ru-RU',
-          {
-            hour: '2-digit',
-            minute: '2-digit'
-          }
-        );
-
-      return `${datePart}, ${timePart}`;
-
-    })()
+    )
   }
 
-<div
-  style={{
-    marginTop: 4,
-    fontWeight: 600
-  }}
->
-
   {
-    match[8] ===
-    'scheduled'
-    &&
-    '⏳ Скоро'
+    !predictions[
+      String(match[0])
+    ] &&
+    match[8] !== 'scheduled' && (
+
+      <div
+        style={{
+          marginBottom: 12,
+          color: 'var(--vkui--color_text_secondary)'
+        }}
+      >
+        Прогноз не был сделан
+      </div>
+    )
   }
 
-  {match[8] === 'finished' && (
+  {
+    match[8] === 'scheduled' && (
 
-  <div
-    style={{
-      marginTop: 8
-    }}
-  >
+      <>
 
-    <div
-      style={{
-        color: 'green',
-        fontWeight: 600
-      }}
-    >
-      ✅ Матч завершён
-    </div>
+        <div
+          style={{
+            display: 'flex',
+            gap: 8,
+            marginBottom: 8
+          }}
+        >
 
-    
+          <Input
+            type="number"
+            placeholder="0"
 
-  </div>
-)}
+            value={
+              predictions[
+                String(match[0])
+              ]?.pred1 || ''
+            }
 
-</div>
-                      </div>
+            onChange={(e) => {
 
-                      {
-  match[8] ===
-  'scheduled'
-  ? (
+              setPredictions({
 
-    <>
+                ...predictions,
 
-      {
-        predictions[
-          String(match[0])
-        ] && (
+                [String(match[0])]: {
 
-          <div
-            style={{
-              marginBottom: 8,
-              fontSize: 14,
-              color: '#666',
-              fontWeight: 600
+                  ...predictions[
+                    String(match[0])
+                  ],
+
+                  pred1:
+                    e.target.value
+                }
+              });
             }}
-          >
+          />
 
-            Ваш текущий прогноз:
+          <Input
+            type="number"
+            placeholder="0"
 
-            {' '}
-
-            {
+            value={
               predictions[
                 String(match[0])
-              ]?.pred1
+              ]?.pred2 || ''
             }
 
-            :
+            onChange={(e) => {
 
-            {
-              predictions[
-                String(match[0])
-              ]?.pred2
-            }
+              setPredictions({
 
-          </div>
-        )
-      }
+                ...predictions,
+
+                [String(match[0])]: {
+
+                  ...predictions[
+                    String(match[0])
+                  ],
+
+                  pred2:
+                    e.target.value
+                }
+              });
+            }}
+          />
+
+        </div>
+
+        <Button
+          size="m"
+          stretched
+
+          onClick={() =>
+            savePrediction(
+              match
+            )
+          }
+        >
+          Сохранить прогноз
+        </Button>
+
+      </>
+    )
+  }
+
+  {
+    wizardMode && (
+
+      <Button
+        size="m"
+        stretched
+        mode="secondary"
+
+        style={{
+          marginTop: 8
+        }}
+
+        onClick={() =>
+          setWizardMode(false)
+        }
+      >
+        Все матчи тура
+      </Button>
+    )
+  }
+
+  {
+    wizardMode && (
 
       <div
         style={{
           display: 'flex',
           gap: 8,
-          marginBottom: 8
+          marginTop: 12
         }}
       >
 
-        <Input
-          type="number"
-          placeholder="0"
-
-          value={
-            predictions[
-  String(match[0])
-]?.pred1 || ''
+        <Button
+          size="m"
+          stretched
+          mode="secondary"
+          disabled={
+            currentMatchIndex === 0
           }
 
-          onChange={(e) => {
+          onClick={() => {
 
-            setPredictions({
+            if (
+              currentMatchIndex > 0
+            ) {
 
-              ...predictions,
-
-              [String(match[0])]: {
-
-                ...predictions[
-  String(match[0])
-],
-
-                pred1:
-                  e.target.value
-              }
-            });
+              setCurrentMatchIndex(
+                currentMatchIndex - 1
+              );
+            }
           }}
-        />
+        >
+          ← Назад
+        </Button>
 
-        <Input
-          type="number"
-          placeholder="0"
+        <Button
+          size="m"
+          stretched
+          mode="secondary"
 
-          value={
-            predictions[
-  String(match[0])
-]?.pred2 || ''
+          onClick={() => {
+
+            if (
+              currentMatchIndex <
+              filteredMatches.length - 1
+            ) {
+
+              setCurrentMatchIndex(
+                currentMatchIndex + 1
+              );
+
+            } else {
+
+              setWizardMode(false);
+            }
+          }}
+        >
+          {
+            currentMatchIndex <
+            filteredMatches.length - 1
+              ? 'Далее →'
+              : 'Открыть список'
           }
-
-          onChange={(e) => {
-
-            setPredictions({
-
-              ...predictions,
-
-              [String(match[0])]: {
-
-                ...predictions[
-  String(match[0])
-],
-
-                pred2:
-                  e.target.value
-              }
-            });
-          }}
-        />
+        </Button>
 
       </div>
-
-      <Button
-        size="m"
-        stretched
-
-        onClick={() =>
-          savePrediction(
-            match
-          )
-        }
-      >
-        Сохранить прогноз
-      </Button>
-
-
-
-
-
-    </>
-
-  ) : (
-
-  predictions[
-    String(match[0])
-  ]
-  ? (
-
-    <div
-      style={{
-        marginTop: 8,
-        fontWeight: 600
-      }}
-    >
-
- Ваш прогноз:
-
-{' '}
-
-{
-  predictions[
-    String(match[0])
-  ]?.pred1
-}
-
-:
-
-{
-  predictions[
-    String(match[0])
-  ]?.pred2
-}
-
-{
-  match[8] === 'finished' && (
-
-    <>
-      {' '}
-      (
-
-      +
-
-      {
-        predictions[
-          String(match[0])
-        ]?.points || 0
-      }
-
-      {' '}
-      очков
-      )
-    </>
-  )
-}
-
-
-
-    </div>
-
-  ) : (
-
-    <div
-      style={{
-        marginTop: 8,
-        color: '#777'
-      }}
-    >
-      Прогноз не был сделан
-    </div>
-  ))
-}
-
-{
-  wizardMode && (
-
-    <Button
-  size="m"
-  stretched
-  mode="secondary"
-
-  style={{
-    marginTop: 8
-  }}
-
-  onClick={() =>
-    setWizardMode(false)
+    )
   }
->
-  Все матчи тура
-</Button>
-  )
-}
 
-{
-  wizardMode && (
-
-    <div
-      style={{
-        display: 'flex',
-        gap: 8,
-        marginTop: 12
-      }}
-    >
-
-      <Button
-        size="m"
-        stretched
-        mode="secondary"
-        disabled={currentMatchIndex === 0}
-
-        onClick={() => {
-
-          if (currentMatchIndex > 0) {
-            setCurrentMatchIndex(currentMatchIndex - 1);
-          }
-        }}
-      >
-        ← Назад
-      </Button>
-
-      <Button
-        size="m"
-        stretched
-        mode="secondary"
-
-        onClick={() => {
-
-          if (currentMatchIndex < filteredMatches.length - 1) {
-            setCurrentMatchIndex(currentMatchIndex + 1);
-          } else {
-            setWizardMode(false);
-          }
-        }}
-      >
-        {
-          currentMatchIndex < filteredMatches.length - 1
-            ? 'Далее →'
-            : 'Открыть список'
-        }
-      </Button>
-
-    </div>
-  )
-}
-                    </Div>
+</Div>
                   )
                 )
               }
