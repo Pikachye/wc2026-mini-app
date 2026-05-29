@@ -1563,26 +1563,7 @@ onClick={() => {
 
 
 
-{
-  wizardMode && (
 
-    <Button
-      size="m"
-      stretched
-      mode="tertiary"
-
-      style={{
-        marginTop: 8
-      }}
-
-      onClick={() =>
-        setWizardMode(false)
-      }
-    >
-      Все матчи тура
-    </Button>
-  )
-}
 
     </>
 
@@ -1655,6 +1636,27 @@ onClick={() => {
       Прогноз не был сделан
     </div>
   ))
+}
+
+{
+  wizardMode && (
+
+    <Button
+      size="m"
+      stretched
+      mode="tertiary"
+
+      style={{
+        marginTop: 8
+      }}
+
+      onClick={() =>
+        setWizardMode(false)
+      }
+    >
+      Все матчи тура
+    </Button>
+  )
 }
 
 {
