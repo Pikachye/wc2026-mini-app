@@ -1433,40 +1433,10 @@ onClick={() => {
         fontWeight: 600
       }}
     >
-      ✅ Завершён
+      ✅ Матч завершён
     </div>
 
-    {
-      predictions[
-        String(match[0])
-      ] && (
-
-        <div
-          style={{
-            marginTop: 4,
-            fontWeight: 600
-          }}
-        >
-
-          🏆
-
-          {' '}
-
-          +
-
-          {
-            predictions[
-              String(match[0])
-            ]?.points || 0
-          }
-
-          {' '}
-
-          очков
-
-        </div>
-      )
-    }
+    
 
   </div>
 )}
@@ -1637,23 +1607,45 @@ onClick={() => {
       }}
     >
 
-      Ваш прогноз:
+ Ваш прогноз:
+
+{' '}
+
+{
+  predictions[
+    String(match[0])
+  ]?.pred1
+}
+
+:
+
+{
+  predictions[
+    String(match[0])
+  ]?.pred2
+}
+
+{
+  match[8] === 'finished' && (
+
+    <>
+      {' '}
+      (
+
+      +
+
+      {
+        predictions[
+          String(match[0])
+        ]?.points || 0
+      }
 
       {' '}
-
-      {
-        predictions[
-          String(match[0])
-        ]?.pred1
-      }
-
-      :
-
-      {
-        predictions[
-          String(match[0])
-        ]?.pred2
-      }
+      очков
+      )
+    </>
+  )
+}
 
       {
         match[8] === 'finished' && (
