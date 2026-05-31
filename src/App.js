@@ -1392,7 +1392,7 @@ if (
       }}
     >
       {' '}
-      (+12🏆)
+      (+12 за угаданного чемпиона🏆)
     </span>
   )
 }
@@ -1590,6 +1590,117 @@ if (
       'var(--vkui--color_background_secondary)'
   }}
 >
+
+<div
+  style={{
+    marginTop: 16,
+    padding: 12,
+    borderRadius: 12,
+    background:
+      'var(--vkui--color_background_secondary)'
+  }}
+>
+
+  <div
+    style={{
+      fontWeight: 700,
+      marginBottom: 12
+    }}
+  >
+    📜 История начислений
+  </div>
+
+  {
+    matches
+      .filter(
+        (match) =>
+          match[8] === 'finished' &&
+          predictions[String(match[0])]
+      )
+      .slice()
+      .reverse()
+      .slice(0, 5)
+      .map(
+        (match) => {
+
+          const prediction =
+            predictions[String(match[0])];
+
+          return (
+
+            <div
+              key={match[0]}
+              style={{
+                padding:
+                  '10px 0',
+                borderBottom:
+                  '1px solid rgba(255,255,255,0.08)'
+              }}
+            >
+
+              <div
+                style={{
+                  fontWeight: 600,
+                  marginBottom: 4
+                }}
+              >
+                {match[4]} {match[6]}:{match[7]} {match[5]}
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 12,
+                  fontSize: 13,
+                  color:
+                    'var(--vkui--color_text_secondary)'
+                }}
+              >
+
+                <span>
+                  Ваш прогноз: {prediction.pred1}:{prediction.pred2}
+                </span>
+
+                <span
+                  style={{
+                    fontWeight: 700,
+                    color:
+                      Number(prediction.points) > 0
+                        ? '#4CAF50'
+                        : 'var(--vkui--color_text_secondary)'
+                  }}
+                >
+                  +{prediction.points || 0}
+                </span>
+
+              </div>
+
+            </div>
+          );
+        }
+      )
+  }
+
+  {
+    matches.filter(
+      (match) =>
+        match[8] === 'finished' &&
+        predictions[String(match[0])]
+    ).length === 0 && (
+
+      <div
+        style={{
+          color:
+            'var(--vkui--color_text_secondary)'
+        }}
+      >
+        Пока нет завершённых матчей с начисленными очками
+      </div>
+    )
+  }
+
+</div>
 
   <div
     style={{
