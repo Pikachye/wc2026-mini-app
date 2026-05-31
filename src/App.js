@@ -684,6 +684,39 @@ const isPredicted = (
   );
 };
 
+const hasUnsavedChanges = (
+  matchId
+) => {
+
+  const prediction =
+    predictions[
+      String(matchId)
+    ];
+
+  if (!prediction) {
+    return false;
+  }
+
+  return (
+
+    String(
+      prediction.pred1 ?? ''
+    ) !==
+    String(
+      prediction.originalPred1 ?? ''
+    )
+
+    ||
+
+    String(
+      prediction.pred2 ?? ''
+    ) !==
+    String(
+      prediction.originalPred2 ?? ''
+    )
+  );
+};
+
   const allPredicted =
 
   filteredMatches.every(
@@ -1612,7 +1645,34 @@ style={{
         }}
       >
         Ваш прогноз: {predictions[String(match[0])]?.pred1}:{predictions[String(match[0])]?.pred2}
+{
+  hasUnsavedChanges(
+    match[0]
+  ) && (
 
+    <div
+      style={{
+        marginBottom: 12,
+
+        padding: '8px 12px',
+
+        borderRadius: 12,
+
+        background:
+          'rgba(255,193,7,0.12)',
+
+        border:
+          '1px solid rgba(255,193,7,0.4)',
+
+        color: '#f5c542',
+
+        fontWeight: 600
+      }}
+    >
+      ⚠️ Есть несохранённые изменения
+    </div>
+  )
+}
         {
           match[8] === 'finished' && (
             <>
