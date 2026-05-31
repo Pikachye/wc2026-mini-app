@@ -471,6 +471,22 @@ setSnackbar(
   </Snackbar>
 );
 
+setPredictions(
+  prev => ({
+    ...prev,
+
+    [String(match[0])]: {
+      ...prev[String(match[0])],
+
+      originalPred1:
+        prev[String(match[0])]?.pred1,
+
+      originalPred2:
+        prev[String(match[0])]?.pred2
+    }
+  })
+);
+
 loadLeaderboard();
 
       } catch (e) {
