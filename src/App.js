@@ -1706,17 +1706,28 @@ style={{
         </div>
 
         <Button
-          size="m"
-          stretched
+  size="m"
+  stretched
 
-          onClick={() =>
-            savePrediction(
-              match
-            )
-          }
-        >
-          Сохранить прогноз
-        </Button>
+  onClick={() =>
+    savePrediction(
+      match
+    )
+  }
+>
+  {
+    predictions[
+      String(match[0])
+    ]?.pred1 !== '' &&
+    predictions[
+      String(match[0])
+    ]?.pred2 !== ''
+
+      ? 'Изменить прогноз'
+
+      : 'Сохранить прогноз'
+  }
+</Button>
 
       </>
     )
