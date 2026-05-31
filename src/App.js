@@ -1295,7 +1295,49 @@ if (
 
                         {' '}
 
-                        {leader[1]}
+                        <span>
+  {leader[1]}
+</span>
+
+{
+  leader[3] &&
+  teamFlags[leader[3]] && (
+
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        marginLeft: 8
+      }}
+    >
+
+      <img
+        src={`/flags/${teamFlags[leader[3]]}.svg`}
+        alt={leader[3]}
+        title={leader[3]}
+
+        style={{
+          width: 30,
+          height: 22,
+          objectFit: 'cover',
+          borderRadius: 6
+        }}
+      />
+
+      <span
+        style={{
+          fontSize: 12,
+          color:
+            'var(--vkui--color_text_secondary)'
+        }}
+      >
+        {leader[3]}
+      </span>
+
+    </span>
+  )
+}
 
                       </Cell>
                     );

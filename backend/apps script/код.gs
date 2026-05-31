@@ -46,6 +46,19 @@ if (
   );
 }
 
+if (
+  action ===
+  'winner_prediction'
+) {
+
+  return jsonOutput(
+
+    getWinnerPrediction(
+      e.parameter.vk_id
+    )
+  );
+}
+
   return jsonOutput({
     error:
       'Unknown action'
@@ -78,6 +91,18 @@ if (
   JSON.parse(
     e.postData.contents
   );
+
+  if (
+  data.action ===
+  'save_winner_prediction'
+) {
+
+  return jsonOutput(
+    saveWinnerPrediction(
+      data
+    )
+  );
+}
 
     const result =
       savePrediction(data);
@@ -116,6 +141,35 @@ function getLeaderboard() {
       .getSheetByName(
         'leaderboard'
       );
+
+  const winnersSheet =
+  SpreadsheetApp
+    .openById(SHEET_ID)
+    .getSheetByName(
+      'winner_predictions'
+    );
+
+const winnersRows =
+  winnersSheet
+    ? winnersSheet
+        .getDataRange()
+        .getValues()
+    : [];
+
+const winnersMap = {};
+
+winnersRows.forEach(
+  (row, index) => {
+
+    if (index === 0) {
+      return;
+    }
+
+    winnersMap[
+      String(row[0])
+    ] = row[2];
+  }
+);    
 
   return sheet
     .getDataRange()
@@ -163,6 +217,46 @@ function getPredictions(
       );
     }
   );
+}
+
+function getWinnerPrediction(
+  vkId
+) {
+
+  const sheet =
+    SpreadsheetApp
+      .openById(
+        SHEET_ID
+      )
+      .getSheetByName(
+        'winner_predictions'
+      );
+
+  if (!sheet) {
+    return null;
+  }
+
+  const rows =
+    sheet
+      .getDataRange()
+      .getValues();
+
+  const found =
+    rows.find(
+      (row, index) => {
+
+        if (index === 0) {
+          return false;
+        }
+
+        return (
+          String(row[0]) ===
+          String(vkId)
+        );
+      }
+    );
+
+  return found || null;
 }
 
 function savePrediction(data) {
@@ -240,33 +334,44 @@ function savePrediction(data) {
 
   // UPDATE
 
-  if (existingIndex !== -1) {
+  // UPDATE
 
-    predictionsSheet
-      .getRange(
-        existingIndex + 1,
-        5
-      )
-      .setValue(
-        Number(data.pred1)
-      );
+if (existingIndex !== -1) {
 
-    predictionsSheet
-      .getRange(
-        existingIndex + 1,
-        6
-      )
-      .setValue(
-        Number(data.pred2)
-      );
+  predictionsSheet
+    .getRange(
+      existingIndex + 1,
+      5
+    )
+    .setValue(
+      Number(data.pred1)
+    );
 
-    calculateLeaderboard();
+  predictionsSheet
+    .getRange(
+      existingIndex + 1,
+      6
+    )
+    .setValue(
+      Number(data.pred2)
+    );
 
-    return {
-      success: true,
-      updated: true
-    };
-  }
+  predictionsSheet
+    .getRange(
+      existingIndex + 1,
+      8
+    )
+    .setValue(
+      new Date()
+    );
+
+  calculateLeaderboard();
+
+  return {
+    success: true,
+    updated: true
+  };
+}
 
   // CREATE
 
@@ -295,6 +400,109 @@ function savePrediction(data) {
 
   return {
     success: true
+  };
+}
+
+function saveWinnerPrediction(
+  data
+) {
+
+  const spreadsheet =
+    SpreadsheetApp.openById(
+      SHEET_ID
+    );
+
+  const sheet =
+    spreadsheet.getSheetByName(
+      'winner_predictions'
+    );
+
+  if (!sheet) {
+
+    return {
+      error:
+        'Лист winner_predictions не найден'
+    };
+  }
+
+  const rows =
+    sheet
+      .getDataRange()
+      .getValues();
+
+  const existingIndex =
+    rows.findIndex(
+      (row, index) => {
+
+        if (index === 0) {
+          return false;
+        }
+
+        return (
+          String(row[0]) ===
+          String(data.vk_id)
+        );
+      }
+    );
+
+  const now =
+    new Date();
+
+  const DEADLINE =
+  new Date(
+    '2026-06-11T19:00:00+03:00'
+  );
+
+  if (existingIndex !== -1) {
+
+    if (now > DEADLINE) {
+
+  return {
+    error:
+      'Выбор победителя уже заблокирован'
+  };
+}
+
+    sheet
+      .getRange(
+        existingIndex + 1,
+        3
+      )
+      .setValue(
+        data.winner
+      );
+
+    sheet
+      .getRange(
+        existingIndex + 1,
+        5
+      )
+      .setValue(
+        now
+      );
+
+    return {
+      success: true,
+      updated: true
+    };
+  }
+
+  sheet.appendRow([
+
+    data.vk_id,
+
+    data.user_name,
+
+    data.winner,
+
+    now,
+
+    now
+  ]);
+
+  return {
+    success: true,
+    created: true
   };
 }
 
@@ -333,8 +541,17 @@ function calculateLeaderboard() {
   const scores = {};
 
   predictions
-    .slice(1)
-    .forEach((row, index) => {
+  .slice(1)
+  .forEach((row, index) => {
+
+    // ПРОПУСКАЕМ ПУСТЫЕ СТРОКИ
+
+    if (
+      !row[1] ||
+      !row[2]
+    ) {
+      return;
+    }
 
       const vkId =
         row[1];
@@ -444,7 +661,25 @@ function calculateLeaderboard() {
         points;
     });
 
-  leaderboardSheet.clear();
+  if (
+  Object.keys(scores)
+    .length > 0
+) {
+
+  leaderboardSheet
+    .clearContents();
+
+  leaderboardSheet
+    .appendRow([
+
+      'vk_id',
+
+      'user_name',
+
+      'points'
+    ]);
+
+}
 
   leaderboardSheet.appendRow([
 
