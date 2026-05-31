@@ -48,6 +48,16 @@ const [
   setWinnerDraft
 ] = useState('');
 
+const [
+  winnerDeadlineText,
+  setWinnerDeadlineText
+] = useState('');
+
+const WINNER_DEADLINE =
+  new Date(
+    '2026-06-11T19:00:00+03:00'
+  );
+
   const [
   predictionsLoaded,
   setPredictionsLoaded
@@ -245,6 +255,58 @@ useEffect(() => {
   }
 
 }, [user]);
+
+useEffect(() => {
+
+  const updateTimer = () => {
+
+    const now =
+      new Date();
+
+    const diff =
+      WINNER_DEADLINE - now;
+
+    if (diff <= 0) {
+
+      setWinnerDeadlineText(
+        ''
+      );
+
+      return;
+    }
+
+    const days =
+      Math.floor(
+        diff / 1000 / 60 / 60 / 24
+      );
+
+    const hours =
+      Math.floor(
+        diff / 1000 / 60 / 60
+      ) % 24;
+
+    const minutes =
+      Math.floor(
+        diff / 1000 / 60
+      ) % 60;
+
+    setWinnerDeadlineText(
+      `${days} д. ${hours} ч. ${minutes} мин.`
+    );
+  };
+
+  updateTimer();
+
+  const timer =
+    setInterval(
+      updateTimer,
+      60000
+    );
+
+  return () =>
+    clearInterval(timer);
+
+}, []);
 
 const init = async () => {
 
@@ -1504,6 +1566,16 @@ if (
   }}
 >
 
+<div
+  style={{
+    marginTop: 16,
+    padding: 12,
+    borderRadius: 12,
+    background:
+      'var(--vkui--color_background_secondary)'
+  }}
+>
+
   <div
     style={{
       fontWeight: 700,
@@ -1512,12 +1584,81 @@ if (
   >
     🏆 Победитель ЧМ-2026:
 
-  {' '}
+    {' '}
+
+    {
+      winnerPrediction || 'Не выбран'
+    }
+  </div>
 
   {
-    winnerPrediction || 'Не выбран'
+    new Date() < WINNER_DEADLINE && (
+
+      <>
+
+        <div
+          style={{
+            marginBottom: 8,
+            color:
+              'var(--vkui--color_text_secondary)',
+            fontSize: 14
+          }}
+        >
+          Вы можете выбрать другую страну
+          до дедлайна:
+
+          {' '}
+
+          <b>
+            {
+              winnerDeadlineText
+            }
+          </b>
+        </div>
+
+        <Select
+          value={
+            winnerDraft
+          }
+
+          onChange={(e) =>
+            setWinnerDraft(
+              e.target.value
+            )
+          }
+
+          options={
+            Object.keys(teamFlags)
+              .sort()
+              .map(
+                (team) => ({
+                  label: team,
+                  value: team
+                })
+              )
+          }
+        />
+
+        <Button
+          size="m"
+          stretched
+
+          style={{
+            marginTop: 8
+          }}
+
+          onClick={
+            saveWinnerPrediction
+          }
+        >
+          Изменить страну
+        </Button>
+
+      </>
+    )
   }
-  </div>
+
+</div>
 
   <Select
     value={
