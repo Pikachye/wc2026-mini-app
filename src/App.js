@@ -1943,7 +1943,7 @@ if (changed) {
             currentMatchIndex <
             filteredMatches.length - 1
               ? 'Далее →'
-              : 'Открыть список'
+              : 'Сохранить прогноз'
           }
         </Button>
 
