@@ -1508,7 +1508,13 @@ if (
       marginBottom: 8
     }}
   >
-    🏆 Победитель ЧМ-2026
+    🏆 Победитель ЧМ-2026:
+
+  {' '}
+
+  {
+    winnerPrediction || 'Не выбран'
+  }
   </div>
 
   <Select
@@ -1551,24 +1557,7 @@ if (
 
 </div>
 
-<div
-  style={{
-    marginTop: 16,
-    padding: 12,
-    borderRadius: 12,
-    background:
-      'var(--vkui--color_background_secondary)',
-    fontWeight: 700
-  }}
->
-  🏆 Победитель ЧМ-2026:
 
-  {' '}
-
-  {
-    winnerPrediction || 'Не выбран'
-  }
-</div>
 
               </Div>
 
