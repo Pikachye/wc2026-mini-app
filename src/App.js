@@ -1357,12 +1357,14 @@ if (
 >
 
   <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }}
-  >
+  style={{
+    display: 'grid',
+    gridTemplateColumns: '1fr 80px',
+    alignItems: 'center',
+    gap: 12,
+    width: '100%'
+  }}
+>
 
     <div
   style={{
@@ -1414,30 +1416,31 @@ if (
 
     </div>
 
-    {
-      leader[3] &&
-      teamFlags[leader[3]] && (
+<div
+  style={{
+    width: 80,
+    display: 'flex',
+    justifyContent: 'center'
+  }}
+>
+  {
+    leader[3] &&
+    teamFlags[leader[3]] && (
 
-        <img
-          src={`/flags/${teamFlags[leader[3]]}.svg`}
-          alt={leader[3]}
-          title={leader[3]}
-
-style={{
-  width: 64,
-  height: 44,
-  objectFit: 'cover',
-  borderRadius: 8,
-
-  flexShrink: 0,
-
-  marginLeft: 26,
-
-  display: 'block'
-}}
-        />
-      )
-    }
+      <img
+        src={`/flags/${teamFlags[leader[3]]}.svg`}
+        alt={leader[3]}
+        title={leader[3]}
+        style={{
+          width: 64,
+          height: 44,
+          objectFit: 'cover',
+          borderRadius: 8
+        }}
+      />
+    )
+  }
+</div>
 
   </div>
 
