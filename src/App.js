@@ -1498,6 +1498,65 @@ if (
     padding: 12,
     borderRadius: 12,
     background:
+      'var(--vkui--color_background_secondary)'
+  }}
+>
+
+  <div
+    style={{
+      fontWeight: 700,
+      marginBottom: 8
+    }}
+  >
+    🏆 Победитель ЧМ-2026
+  </div>
+
+  <Select
+    value={
+      winnerDraft
+    }
+
+    onChange={(e) =>
+      setWinnerDraft(
+        e.target.value
+      )
+    }
+
+    options={
+      Object.keys(teamFlags)
+        .sort()
+        .map(
+          (team) => ({
+            label: team,
+            value: team
+          })
+        )
+    }
+  />
+
+  <Button
+    size="m"
+    stretched
+
+    style={{
+      marginTop: 8
+    }}
+
+    onClick={
+      saveWinnerPrediction
+    }
+  >
+    Изменить страну
+  </Button>
+
+</div>
+
+<div
+  style={{
+    marginTop: 16,
+    padding: 12,
+    borderRadius: 12,
+    background:
       'var(--vkui--color_background_secondary)',
     fontWeight: 700
   }}
