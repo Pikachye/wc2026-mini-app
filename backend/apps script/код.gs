@@ -135,45 +135,71 @@ function getMatches() {
 
 function getLeaderboard() {
 
+  const spreadsheet =
+    SpreadsheetApp.openById(
+      SHEET_ID
+    );
+
   const sheet =
-    SpreadsheetApp
-      .openById(SHEET_ID)
-      .getSheetByName(
-        'leaderboard'
-      );
+    spreadsheet.getSheetByName(
+      'leaderboard'
+    );
 
   const winnersSheet =
-  SpreadsheetApp
-    .openById(SHEET_ID)
-    .getSheetByName(
+    spreadsheet.getSheetByName(
       'winner_predictions'
     );
 
-const winnersRows =
-  winnersSheet
-    ? winnersSheet
-        .getDataRange()
-        .getValues()
-    : [];
+  const winnersRows =
+    winnersSheet
+      ? winnersSheet
+          .getDataRange()
+          .getValues()
+      : [];
 
-const winnersMap = {};
+  const winnersMap = {};
 
-winnersRows.forEach(
-  (row, index) => {
+  winnersRows.forEach(
+    (row, index) => {
 
-    if (index === 0) {
-      return;
+      if (index === 0) {
+        return;
+      }
+
+      winnersMap[
+        String(row[0])
+      ] = row[2];
     }
+  );
 
-    winnersMap[
-      String(row[0])
-    ] = row[2];
-  }
-);    
+  const leaderboardRows =
+    sheet
+      .getDataRange()
+      .getValues();
 
-  return sheet
-    .getDataRange()
-    .getValues();
+  return leaderboardRows.map(
+    (row, index) => {
+
+      if (index === 0) {
+
+        return [
+          row[0],
+          row[1],
+          row[2],
+          'winner'
+        ];
+      }
+
+      return [
+        row[0],
+        row[1],
+        row[2],
+        winnersMap[
+          String(row[0])
+        ] || ''
+      ];
+    }
+  );
 }
 
 function getPredictions(

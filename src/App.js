@@ -1582,13 +1582,25 @@ if (
       marginBottom: 8
     }}
   >
-    🏆 Победитель ЧМ-2026:
+🏆 Победитель ЧМ-2026:
 
-    {' '}
+{' '}
 
-    {
-      winnerPrediction || 'Не выбран'
-    }
+{winnerPrediction}
+
+{
+  leaders.find(
+    l =>
+      String(l[0]) ===
+      String(user?.id)
+  )?.[4] === 12 && (
+
+    <>
+      {' '}
+      (+12 очков)
+    </>
+  )
+}
   </div>
 
   {
