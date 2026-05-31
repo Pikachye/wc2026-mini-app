@@ -1287,30 +1287,32 @@ if (
   }}
 >
 
-                        {
-                          medals[index]
-                          ||
-                          `#${index + 1}`
-                        }
+<div
+  style={{
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%'
+  }}
+>
 
-                        {' '}
+  <div>
 
-                        <span>
-  {leader[1]}
-</span>
+    {
+      medals[index]
+      ||
+      `#${index + 1}`
+    }
 
-{
-  leader[3] &&
-  teamFlags[leader[3]] && (
+    {' '}
 
-    <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 6,
-        marginLeft: 8
-      }}
-    >
+    {leader[1]}
+
+  </div>
+
+  {
+    leader[3] &&
+    teamFlags[leader[3]] && (
 
       <img
         src={`/flags/${teamFlags[leader[3]]}.svg`}
@@ -1318,26 +1320,16 @@ if (
         title={leader[3]}
 
         style={{
-          width: 30,
+          width: 32,
           height: 22,
           objectFit: 'cover',
           borderRadius: 6
         }}
       />
+    )
+  }
 
-      <span
-        style={{
-          fontSize: 12,
-          color:
-            'var(--vkui--color_text_secondary)'
-        }}
-      >
-        {leader[3]}
-      </span>
-
-    </span>
-  )
-}
+</div>
 
                       </Cell>
                     );
