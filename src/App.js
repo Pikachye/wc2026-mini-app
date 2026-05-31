@@ -1342,7 +1342,7 @@ if (
 <div
   style={{
     display: 'grid',
-    gridTemplateColumns: '1fr 80px',
+    gridTemplateColumns: '40px 1fr 80px',
     alignItems: 'center',
     gap: 12,
     width: '100%'
@@ -1356,48 +1356,52 @@ if (
   }}
 >
 
+<div
+  style={{
+    fontSize: 28,
+    textAlign: 'center',
+    lineHeight: 1
+  }}
+>
+  {
+    medals[index]
+    ||
+    `#${index + 1}`
+  }
+</div>
+</div>
+<div>
   <div
     style={{
       fontWeight: 600
     }}
   >
-        {
-          medals[index]
-          ||
-          `#${index + 1}`
-        }
+    {leader[1]}
+  </div>
 
-        {' '}
-
-        {leader[1]}
-      </div>
-
-      <div
+  <div
     style={{
       fontSize: 13,
-      color: 'var(--vkui--color_text_secondary)',
+      color:
+        'var(--vkui--color_text_secondary)',
       marginTop: 4
     }}
   >
-        {leader[2]} очков
+    {leader[2]} очков
 
-{
-  Number(leader[4]) === 12 && (
-
-    <span
-      style={{
-        color: '#FFD700',
-        fontWeight: 700
-      }}
-    >
-      {' '}
-      (+12 за угаданного чемпиона🏆)
-    </span>
-  )
-}
-      </div>
-
-    </div>
+    {Number(leader[4]) === 12 && (
+      <span
+        style={{
+          color: '#FFD700',
+          fontWeight: 700
+        }}
+      >
+        {' '}
+        (+12 за угаданного чемпиона🏆)
+      </span>
+    )}
+  </div>
+</div>
 
 <div
   style={{
