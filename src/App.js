@@ -1810,11 +1810,21 @@ onClick={async () => {
       prediction.pred2 === ''
     ) {
 
-      alert(
-        'Введите прогноз'
-      );
+setSnackbar(
 
-      return;
+  <Snackbar
+    onClose={() =>
+      setSnackbar(null)
+    }
+  >
+
+    ⚠️ Введите прогноз перед переходом дальше
+
+  </Snackbar>
+);
+
+return;
+
     }
 
     await savePrediction(
