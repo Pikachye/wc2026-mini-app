@@ -1245,13 +1245,8 @@ if (
 
                     return (
 
-                      <Cell
+<Cell
   key={index}
-
-  subtitle={
-    leader[2] +
-    ' очков'
-  }
 
   style={{
 
@@ -1287,51 +1282,68 @@ if (
   }}
 >
 
-<div
-  style={{
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%'
-  }}
->
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }}
+  >
 
-  <div>
+    <div>
+
+      <div
+        style={{
+          fontWeight: 600
+        }}
+      >
+        {
+          medals[index]
+          ||
+          `#${index + 1}`
+        }
+
+        {' '}
+
+        {leader[1]}
+      </div>
+
+      <div
+        style={{
+          fontSize: 13,
+          color:
+            'var(--vkui--color_text_secondary)',
+          marginTop: 4
+        }}
+      >
+        {leader[2]} очков
+      </div>
+
+    </div>
 
     {
-      medals[index]
-      ||
-      `#${index + 1}`
+      leader[3] &&
+      teamFlags[leader[3]] && (
+
+        <img
+          src={`/flags/${teamFlags[leader[3]]}.svg`}
+          alt={leader[3]}
+          title={leader[3]}
+
+          style={{
+            width: 64,
+            height: 44,
+            objectFit: 'cover',
+            borderRadius: 8,
+            flexShrink: 0
+          }}
+        />
+      )
     }
-
-    {' '}
-
-    {leader[1]}
 
   </div>
 
-  {
-    leader[3] &&
-    teamFlags[leader[3]] && (
-
-      <img
-        src={`/flags/${teamFlags[leader[3]]}.svg`}
-        alt={leader[3]}
-        title={leader[3]}
-
-        style={{
-          width: 32,
-          height: 22,
-          objectFit: 'cover',
-          borderRadius: 6
-        }}
-      />
-    )
-  }
-
-</div>
-
-                      </Cell>
+</Cell>
                     );
                   }
                 )
