@@ -1319,44 +1319,27 @@ if (
 
                     return (
 
-<Cell
+<Div
   key={index}
-
   style={{
-
-    marginBottom: 8,
+    margin: '0 12px 8px 12px',
+    padding: 12,
 
     background:
-
-      String(
-        leader[0]
-      ) ===
-      String(
-        user?.id
-      )
-
+      String(leader[0]) === String(user?.id)
         ? 'rgba(76, 175, 80, 0.15)'
-
-        : 'transparent',
+        : 'var(--vkui--color_background_secondary)',
 
     borderRadius: 12,
 
     border:
-
-      String(
-        leader[0]
-      ) ===
-      String(
-        user?.id
-      )
-
+      String(leader[0]) === String(user?.id)
         ? '2px solid #4CAF50'
-
-        : 'none'
+        : '1px solid transparent'
   }}
 >
 
-  <div
+<div
   style={{
     display: 'grid',
     gridTemplateColumns: '1fr 80px',
@@ -1426,7 +1409,6 @@ if (
   {
     leader[3] &&
     teamFlags[leader[3]] && (
-
       <img
         src={`/flags/${teamFlags[leader[3]]}.svg`}
         alt={leader[3]}
@@ -1444,7 +1426,7 @@ if (
 
   </div>
 
-</Cell>
+</Div>
                     );
                   }
                 )
