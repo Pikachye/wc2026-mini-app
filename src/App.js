@@ -1431,7 +1431,7 @@ style={{
 
   flexShrink: 0,
 
-  marginLeft: 16,
+  marginLeft: 26,
 
   display: 'block'
 }}
