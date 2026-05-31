@@ -1405,13 +1405,33 @@ onClick={() => {
                     <Div
   key={`${match[0]}-${cardAnimationKey}`}
 
-  style={{
+style={{
   marginBottom: 12,
   padding: 16,
   borderRadius: 16,
+
   background:
-    'var(--vkui--color_background_secondary)',
+
+    !wizardMode &&
+    match[8] === 'scheduled' &&
+    !isPredicted(match[0])
+
+      ? 'rgba(255, 193, 7, 0.12)'
+
+      : 'var(--vkui--color_background_secondary)',
+
+  border:
+
+    !wizardMode &&
+    match[8] === 'scheduled' &&
+    !isPredicted(match[0])
+
+      ? '2px solid rgba(255, 193, 7, 0.75)'
+
+      : '1px solid transparent',
+
   textAlign: 'center',
+
   animation:
     'cardFadeIn 0.58s ease'
 }}
