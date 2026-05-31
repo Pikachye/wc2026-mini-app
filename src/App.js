@@ -458,19 +458,6 @@ setLeaders(
           return;
         }
 
-setSnackbar(
-
-  <Snackbar
-    onClose={() =>
-      setSnackbar(null)
-    }
-  >
-
-    ✅ Прогноз сохранён
-
-  </Snackbar>
-);
-
 setPredictions(
   prev => ({
     ...prev,
@@ -485,6 +472,20 @@ setPredictions(
         prev[String(match[0])]?.pred2
     }
   })
+);
+
+setSnackbar(
+
+  <Snackbar
+    key={Date.now()}
+    onClose={() =>
+      setSnackbar(null)
+    }
+  >
+
+    ✅ Прогноз сохранён
+
+  </Snackbar>
 );
 
 loadLeaderboard();
