@@ -172,12 +172,53 @@ function getLeaderboard() {
     }
   );
 
-  const leaderboardRows =
-    sheet
+  const settingsSheet =
+  spreadsheet.getSheetByName(
+    'settings'
+  );
+
+let realWinner = '';
+
+if (settingsSheet) {
+
+  const settingsRows =
+    settingsSheet
       .getDataRange()
       .getValues();
 
-  return leaderboardRows.map(
+  const winnerRow =
+    settingsRows.find(
+      row =>
+        row[0] ===
+        'world_cup_winner'
+    );
+
+  if (winnerRow) {
+
+    realWinner =
+      winnerRow[1];
+  }
+}
+
+  const leaderboardRows =
+  sheet
+    .getDataRange()
+    .getValues()
+    .filter(
+      (row, index) => {
+
+        if (index === 0) {
+          return true;
+        }
+
+        return (
+          String(row[0]) !== 'vk_id' &&
+          String(row[1]) !== 'user_name'
+        );
+      }
+    );
+
+return leaderboardRows.map(
     (row, index) => {
 
       if (index === 0) {
@@ -190,14 +231,34 @@ function getLeaderboard() {
         ];
       }
 
-      return [
-        row[0],
-        row[1],
-        row[2],
-        winnersMap[
-          String(row[0])
-        ] || ''
-      ];
+      const predictedWinner =
+  winnersMap[
+    String(row[0])
+  ] || '';
+
+const bonusPoints =
+
+  predictedWinner &&
+  realWinner &&
+  predictedWinner === realWinner
+
+    ? 12
+
+    : 0;
+
+return [
+
+  row[0],
+
+  row[1],
+
+  Number(row[2]) +
+    bonusPoints,
+
+  predictedWinner,
+
+  bonusPoints
+];
     }
   );
 }

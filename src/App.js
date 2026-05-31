@@ -727,6 +727,8 @@ loadLeaderboard();
               body:
                 JSON.stringify({
 
+                  admin: true,
+
                   match_id:
                     match[0],
 
@@ -756,9 +758,10 @@ loadLeaderboard();
           return;
         }
 
-        setSnackbar(
+setSnackbar(
 
   <Snackbar
+    key={Date.now()}
     onClose={() =>
       setSnackbar(null)
     }
