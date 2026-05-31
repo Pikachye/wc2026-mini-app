@@ -1335,7 +1335,8 @@ if (
             height: 44,
             objectFit: 'cover',
             borderRadius: 8,
-            flexShrink: 0
+            flexShrink: 0,
+            marginLeft: 16
           }}
         />
       )
