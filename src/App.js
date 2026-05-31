@@ -1551,6 +1551,112 @@ if (
                 }
               </div>
 
+              <div
+  style={{
+    marginTop: 16,
+    padding: 12,
+    borderRadius: 12,
+    background:
+      'var(--vkui--color_background_secondary)'
+  }}
+>
+
+  <div
+    style={{
+      fontWeight: 700,
+      marginBottom: 8
+    }}
+  >
+    🏆 Победитель ЧМ-2026:
+
+    {' '}
+
+    {winnerPrediction}
+
+    {
+      leaders.find(
+        l =>
+          String(l[0]) ===
+          String(user?.id)
+      )?.[4] === 12 && (
+
+        <span
+          style={{
+            color: '#FFD700',
+            fontWeight: 700
+          }}
+        >
+          {' '}
+          (+12 очков)
+        </span>
+      )
+    }
+  </div>
+
+  {
+    new Date() < WINNER_DEADLINE && (
+
+      <>
+
+        <div
+          style={{
+            marginBottom: 8,
+            color:
+              'var(--vkui--color_text_secondary)',
+            fontSize: 14
+          }}
+        >
+          Вы можете выбрать другую страну еще:
+
+          {' '}
+
+          <b>
+            {winnerDeadlineText}
+          </b>
+        </div>
+
+        <Select
+          value={winnerDraft}
+
+          onChange={(e) =>
+            setWinnerDraft(
+              e.target.value
+            )
+          }
+
+          options={
+            Object.keys(teamFlags)
+              .sort()
+              .map(
+                (team) => ({
+                  label: team,
+                  value: team
+                })
+              )
+          }
+        />
+
+        <Button
+          size="m"
+          stretched
+
+          style={{
+            marginTop: 8
+          }}
+
+          onClick={
+            saveWinnerPrediction
+          }
+        >
+          Изменить страну
+        </Button>
+
+      </>
+    )
+  }
+
+</div>
+
             </>
           )
         }
