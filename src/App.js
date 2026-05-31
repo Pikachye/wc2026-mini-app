@@ -39,6 +39,16 @@ export function App() {
   ] = useState({});
 
   const [
+  winnerPrediction,
+  setWinnerPrediction
+] = useState(null);
+
+const [
+  winnerDraft,
+  setWinnerDraft
+] = useState('');
+
+  const [
   predictionsLoaded,
   setPredictionsLoaded
 ] = useState(false);
@@ -121,6 +131,39 @@ formatted[
   }
 }
 
+const loadWinnerPrediction =
+  async (vkId) => {
+
+    try {
+
+      const response =
+        await fetch(
+          `/api/data?action=winner_prediction&vk_id=${vkId}`
+        );
+
+      const data =
+        await response.json();
+
+      if (data) {
+
+        setWinnerPrediction(
+          data[2]
+        );
+
+        setWinnerDraft(
+          data[2]
+        );
+      }
+
+    } catch (e) {
+
+      console.log(
+        'WINNER PREDICTION ERROR:',
+        e
+      );
+    }
+  };
+
   const [
     user,
     setUser
@@ -193,6 +236,10 @@ useEffect(() => {
   if (user?.id) {
 
     loadPredictions(
+      user.id
+    );
+
+    loadWinnerPrediction(
       user.id
     );
   }
@@ -500,6 +547,95 @@ loadLeaderboard();
         );
       }
     };
+
+  const saveWinnerPrediction =
+  async () => {
+
+    if (!winnerDraft) {
+
+      setSnackbar(
+
+        <Snackbar
+          key={Date.now()}
+          onClose={() =>
+            setSnackbar(null)
+          }
+        >
+          ⚠️ Выберите страну
+        </Snackbar>
+      );
+
+      return;
+    }
+
+    try {
+
+      const response =
+        await fetch(
+          '/api/save',
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body:
+              JSON.stringify({
+
+                action:
+                  'save_winner_prediction',
+
+                vk_id:
+                  user?.id,
+
+                user_name:
+                  user?.name,
+
+                winner:
+                  winnerDraft
+              })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (data.error) {
+
+        alert(
+          data.error
+        );
+
+        return;
+      }
+
+      setWinnerPrediction(
+        winnerDraft
+      );
+
+      setSnackbar(
+
+        <Snackbar
+          key={Date.now()}
+          onClose={() =>
+            setSnackbar(null)
+          }
+        >
+          ✅ Победитель турнира выбран
+        </Snackbar>
+      );
+
+    } catch (e) {
+
+      console.error(e);
+
+      alert(
+        'Ошибка сохранения победителя'
+      );
+    }
+  };  
 
   const updateMatch =
     async (match) => {
@@ -851,6 +987,109 @@ if (loading) {
     </div>
   );
 }
+
+if (
+  user &&
+  winnerPrediction === null
+) {
+
+  return (
+
+    <AppRoot>
+
+      <Panel>
+
+        <PanelHeader>
+          Прогнозы ЧМ-2026
+        </PanelHeader>
+
+        <Group
+          header={
+            <Header mode="secondary">
+              🏆 Выбор победителя турнира
+            </Header>
+          }
+        >
+
+          <Div
+            style={{
+              textAlign: 'center'
+            }}
+          >
+
+            <div
+              style={{
+                fontSize: 20,
+                fontWeight: 700,
+                marginBottom: 12
+              }}
+            >
+              Кто выиграет ЧМ-2026?
+            </div>
+
+            <div
+              style={{
+                color:
+                  'var(--vkui--color_text_secondary)',
+                marginBottom: 16
+              }}
+            >
+              Если угадаешь победителя турнира,
+              получишь +12 очков в конце ЧМ.
+            </div>
+
+            <Select
+              placeholder="Выберите страну"
+
+              value={
+                winnerDraft
+              }
+
+              onChange={(e) =>
+                setWinnerDraft(
+                  e.target.value
+                )
+              }
+
+              options={
+                Object.keys(teamFlags)
+                  .sort()
+                  .map(
+                    (team) => ({
+                      label: team,
+                      value: team
+                    })
+                  )
+              }
+            />
+
+            <Button
+              size="m"
+              stretched
+
+              style={{
+                marginTop: 16
+              }}
+
+              onClick={
+                saveWinnerPrediction
+              }
+            >
+              Сохранить выбор
+            </Button>
+
+          </Div>
+
+        </Group>
+
+        {snackbar}
+
+      </Panel>
+
+    </AppRoot>
+  );
+}
+
   return (
 
   <>
@@ -2140,7 +2379,7 @@ setMatches(updated);
             </Group>
           )
         }
-        
+
 
       {snackbar}
 
