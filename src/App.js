@@ -1660,6 +1660,7 @@ style={{
 }
 
 {
+  !wizardMode &&
   hasUnsavedChanges(
     match[0]
   ) && (
