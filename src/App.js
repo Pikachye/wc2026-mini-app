@@ -1705,28 +1705,24 @@ style={{
 
         </div>
 
-<Button
-  size="m"
-  stretched
+{
+  !wizardMode && (
 
-  onClick={() =>
-    savePrediction(
-      match
-    )
-  }
->
-  {
-    predictions[String(match[0])] &&
-    predictions[String(match[0])].pred1 !== undefined &&
-    predictions[String(match[0])].pred1 !== '' &&
-    predictions[String(match[0])].pred2 !== undefined &&
-    predictions[String(match[0])].pred2 !== ''
+    <Button
+      size="m"
+      stretched
 
-      ? 'Изменить прогноз'
+      onClick={() =>
+        savePrediction(
+          match
+        )
+      }
+    >
+      ...
+    </Button>
 
-      : 'Сохранить прогноз'
-  }
-</Button>
+  )
+}
 
       </>
     )
@@ -1797,26 +1793,53 @@ setCardAnimationKey(
           stretched
           mode="secondary"
 
-          onClick={() => {
+onClick={async () => {
 
-            if (
-              currentMatchIndex <
-              filteredMatches.length - 1
-            ) {
+  if (
+    match[8] === 'scheduled'
+  ) {
 
-              setCurrentMatchIndex(
-                currentMatchIndex + 1
-              );
+    const prediction =
+      predictions[
+        String(match[0])
+      ];
 
-              setCardAnimationKey(
-  key => key + 1
-);
+    if (
+      !prediction ||
+      prediction.pred1 === '' ||
+      prediction.pred2 === ''
+    ) {
 
-            } else {
+      alert(
+        'Введите прогноз'
+      );
 
-              setWizardMode(false);
-            }
-          }}
+      return;
+    }
+
+    await savePrediction(
+      match
+    );
+  }
+
+  if (
+    currentMatchIndex <
+    filteredMatches.length - 1
+  ) {
+
+    setCurrentMatchIndex(
+      currentMatchIndex + 1
+    );
+
+    setCardAnimationKey(
+      key => key + 1
+    );
+
+  } else {
+
+    setWizardMode(false);
+  }
+}}
         >
           {
             currentMatchIndex <
