@@ -1710,12 +1710,12 @@ style={{
         )
       }
     >
-      {
+{
   predictions[String(match[0])] &&
-  predictions[String(match[0])].pred1 !== undefined &&
-  predictions[String(match[0])].pred1 !== '' &&
-  predictions[String(match[0])].pred2 !== undefined &&
-  predictions[String(match[0])].pred2 !== ''
+  predictions[String(match[0])].originalPred1 !== undefined &&
+  predictions[String(match[0])].originalPred1 !== '' &&
+  predictions[String(match[0])].originalPred2 !== undefined &&
+  predictions[String(match[0])].originalPred2 !== ''
 
     ? 'Изменить прогноз'
 
