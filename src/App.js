@@ -55,7 +55,7 @@ const [
 
 const WINNER_DEADLINE =
   new Date(
-    '2026-05-31T18:00:00+03:00'
+    '2026-06-11T18:00:00+03:00'
   );
 
   const [
