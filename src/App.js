@@ -84,7 +84,7 @@ const data =
     data.forEach(
       (row) => {
 
-        formatted[
+formatted[
   String(row[3])
 ] = {
 
@@ -94,8 +94,14 @@ const data =
   pred2:
     row[5],
 
+  originalPred1:
+    row[4],
+
+  originalPred2:
+    row[5],
+
   points:
-  Number(row[6]) || 0
+    Number(row[6]) || 0
 };
       }
     );
@@ -465,7 +471,11 @@ setSnackbar(
   </Snackbar>
 );
 
-loadLeaderboard();
+await loadPredictions(
+  user?.id
+);
+
+await loadLeaderboard();
 
       } catch (e) {
 
@@ -1822,10 +1832,20 @@ setSnackbar(
 return;
 
     }
+const changed =
+  String(prediction.pred1) !==
+  String(prediction.originalPred1) ||
 
-    await savePrediction(
-      match
-    );
+  String(prediction.pred2) !==
+  String(prediction.originalPred2);
+
+if (changed) {
+
+  await savePrediction(
+    match
+  );
+}
+
   }
 
   if (
