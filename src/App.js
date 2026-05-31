@@ -1367,10 +1367,17 @@ if (
     <div>
 
       <div
-        style={{
-          fontWeight: 600
-        }}
-      >
+  style={{
+    flex: 1,
+    minWidth: 0
+  }}
+>
+
+  <div
+    style={{
+      fontWeight: 600
+    }}
+  >
         {
           medals[index]
           ||
@@ -1383,13 +1390,12 @@ if (
       </div>
 
       <div
-        style={{
-          fontSize: 13,
-          color:
-            'var(--vkui--color_text_secondary)',
-          marginTop: 4
-        }}
-      >
+    style={{
+      fontSize: 13,
+      color: 'var(--vkui--color_text_secondary)',
+      marginTop: 4
+    }}
+  >
         {leader[2]} очков
 
 {
