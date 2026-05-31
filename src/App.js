@@ -1633,18 +1633,32 @@ style={{
 
   </div>
 
-  {
-    predictions[
-      String(match[0])
-    ] && (
+{
+  predictions[String(match[0])]?.originalPred1 !== undefined &&
+  predictions[String(match[0])]?.originalPred1 !== '' &&
+  predictions[String(match[0])]?.originalPred2 !== undefined &&
+  predictions[String(match[0])]?.originalPred2 !== '' && (
 
-      <div
-        style={{
-          marginBottom: 12,
-          fontWeight: 700
-        }}
-      >
-        Ваш прогноз: {predictions[String(match[0])]?.pred1}:{predictions[String(match[0])]?.pred2}
+    <div
+      style={{
+        marginBottom: 12,
+        fontWeight: 700
+      }}
+    >
+      Ваш прогноз: {predictions[String(match[0])]?.originalPred1}:{predictions[String(match[0])]?.originalPred2}
+
+      {
+        match[8] === 'finished' && (
+          <>
+            {' '}
+            (+{predictions[String(match[0])]?.points || 0} очков)
+          </>
+        )
+      }
+    </div>
+  )
+}
+
 {
   hasUnsavedChanges(
     match[0]
@@ -1653,19 +1667,13 @@ style={{
     <div
       style={{
         marginBottom: 12,
-
         padding: '8px 12px',
-
         borderRadius: 12,
-
         background:
           'rgba(255,193,7,0.12)',
-
         border:
           '1px solid rgba(255,193,7,0.4)',
-
         color: '#f5c542',
-
         fontWeight: 600
       }}
     >
@@ -1673,17 +1681,6 @@ style={{
     </div>
   )
 }
-        {
-          match[8] === 'finished' && (
-            <>
-              {' '}
-              (+{predictions[String(match[0])]?.points || 0} очков)
-            </>
-          )
-        }
-      </div>
-    )
-  }
 
   {
     !predictions[
