@@ -263,16 +263,6 @@ const init = async () => {
         vkUser.first_name
     });
 
-    loadPredictions(
-      vkUser.id
-    );
-
-    //setTimeout(() => {
-
-  //setLoading(false);
-
-//}, 5000);
-
   } catch (e) {
 
     console.log(
@@ -475,11 +465,7 @@ setSnackbar(
   </Snackbar>
 );
 
-await loadPredictions(
-  user?.id
-);
-
-await loadLeaderboard();
+loadLeaderboard();
 
       } catch (e) {
 
