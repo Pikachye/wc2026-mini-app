@@ -615,6 +615,8 @@ loadLeaderboard();
         winnerDraft
       );
 
+      loadLeaderboard();
+
       setSnackbar(
 
         <Snackbar
