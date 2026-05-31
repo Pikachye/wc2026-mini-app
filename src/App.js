@@ -1423,14 +1423,18 @@ if (
           alt={leader[3]}
           title={leader[3]}
 
-          style={{
-            width: 64,
-            height: 44,
-            objectFit: 'cover',
-            borderRadius: 8,
-            flexShrink: 0,
-            marginLeft: 16
-          }}
+style={{
+  width: 64,
+  height: 44,
+  objectFit: 'cover',
+  borderRadius: 8,
+
+  flexShrink: 0,
+
+  marginLeft: 16,
+
+  display: 'block'
+}}
         />
       )
     }
