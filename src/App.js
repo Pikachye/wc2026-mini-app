@@ -1595,10 +1595,15 @@ if (
       String(user?.id)
   )?.[4] === 12 && (
 
-    <>
+    <span
+      style={{
+        color: '#FFD700',
+        fontWeight: 700
+      }}
+    >
       {' '}
       (+12 очков)
-    </>
+    </span>
   )
 }
   </div>
