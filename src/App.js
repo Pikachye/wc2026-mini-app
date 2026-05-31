@@ -187,6 +187,13 @@ const loadWinnerPrediction =
   );
 
   const [
+  profileTab,
+  setProfileTab
+] = useState(
+  'stats'
+);
+
+  const [
   activeStage,
   setActiveStage
 ] = useState(
