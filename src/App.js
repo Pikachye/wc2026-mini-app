@@ -1660,43 +1660,6 @@ if (
 
 </div>
 
-  <Select
-    value={
-      winnerDraft
-    }
-
-    onChange={(e) =>
-      setWinnerDraft(
-        e.target.value
-      )
-    }
-
-    options={
-      Object.keys(teamFlags)
-        .sort()
-        .map(
-          (team) => ({
-            label: team,
-            value: team
-          })
-        )
-    }
-  />
-
-  <Button
-    size="m"
-    stretched
-
-    style={{
-      marginTop: 8
-    }}
-
-    onClick={
-      saveWinnerPrediction
-    }
-  >
-    Изменить страну
-  </Button>
 
 </div>
 
