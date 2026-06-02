@@ -4,7 +4,7 @@ export default async function handler(
 ) {
 
   const GOOGLE_SCRIPT_URL =
-    'https://script.google.com/macros/s/AKfycbzHf61ynVErfQCbI0orOiRPxrISSIaiDBI8IqLlFQbHCvN4N67SovfXv1nqLuABCH6v/exec';
+    'https://script.google.com/macros/s/AKfycbzMN7N3F1Qe6gulh9sCPDWiADuFJP-YbuXw5DlakoZDHIH4Nvl4ph0FWUSV0DgxuQaP/exec';
 
   try {
 
