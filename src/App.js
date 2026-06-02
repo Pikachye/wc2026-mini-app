@@ -58,6 +58,7 @@ const WINNER_DEADLINE =
     '2026-06-11T18:00:00+03:00'
   );
 
+
   const [
   predictionsLoaded,
   setPredictionsLoaded
@@ -384,6 +385,24 @@ const init = async () => {
       name:
         vkUser.first_name
     });
+
+  try {
+
+  await bridge.send(
+    'VKWebAppAllowNotifications'
+  );
+
+  console.log(
+    'PUSH NOTIFICATIONS ALLOWED'
+  );
+
+} catch (e) {
+
+  console.log(
+    'PUSH NOTIFICATIONS DENIED:',
+    e
+  );
+}  
 
   } catch (e) {
 
