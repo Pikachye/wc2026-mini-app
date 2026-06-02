@@ -2269,73 +2269,200 @@ style={{
 
       <>
 
-        <div
-          style={{
-            display: 'flex',
-            gap: 8,
-            marginBottom: 8
-          }}
-        >
+<div
+  style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+    marginBottom: 12
+  }}
+>
 
-          <Input
-            type="number"
-            placeholder="0"
+  {/* Команда 1 */}
 
-            value={
-              predictions[
-                String(match[0])
-              ]?.pred1 || ''
-            }
+  <Button
+    mode="secondary"
+    size="m"
 
-            onChange={(e) => {
+    onClick={() => {
 
-              setPredictions({
+      const current =
+        Number(
+          predictions[
+            String(match[0])
+          ]?.pred1 || 0
+        );
 
-                ...predictions,
+      setPredictions({
 
-                [String(match[0])]: {
+        ...predictions,
 
-                  ...predictions[
-                    String(match[0])
-                  ],
+        [String(match[0])]: {
 
-                  pred1:
-                    e.target.value
-                }
-              });
-            }}
-          />
+          ...predictions[
+            String(match[0])
+          ],
 
-          <Input
-            type="number"
-            placeholder="0"
+          pred1:
+            Math.max(
+              0,
+              current - 1
+            )
+        }
+      });
+    }}
+  >
+    −
+  </Button>
 
-            value={
-              predictions[
-                String(match[0])
-              ]?.pred2 || ''
-            }
+  <div
+    style={{
+      minWidth: 32,
+      fontSize: 28,
+      fontWeight: 700,
+      textAlign: 'center'
+    }}
+  >
+    {
+      predictions[
+        String(match[0])
+      ]?.pred1 ?? 0
+    }
+  </div>
 
-            onChange={(e) => {
+  <Button
+    mode="secondary"
+    size="m"
 
-              setPredictions({
+    onClick={() => {
 
-                ...predictions,
+      const current =
+        Number(
+          predictions[
+            String(match[0])
+          ]?.pred1 || 0
+        );
 
-                [String(match[0])]: {
+      setPredictions({
 
-                  ...predictions[
-                    String(match[0])
-                  ],
+        ...predictions,
 
-                  pred2:
-                    e.target.value
-                }
-              });
-            }}
-          />
+        [String(match[0])]: {
 
-        </div>
+          ...predictions[
+            String(match[0])
+          ],
+
+          pred1:
+            Math.min(
+              20,
+              current + 1
+            )
+        }
+      });
+    }}
+  >
+    +
+  </Button>
+
+  <div
+    style={{
+      fontSize: 24,
+      fontWeight: 700
+    }}
+  >
+    :
+  </div>
+
+  {/* Команда 2 */}
+
+  <Button
+    mode="secondary"
+    size="m"
+
+    onClick={() => {
+
+      const current =
+        Number(
+          predictions[
+            String(match[0])
+          ]?.pred2 || 0
+        );
+
+      setPredictions({
+
+        ...predictions,
+
+        [String(match[0])]: {
+
+          ...predictions[
+            String(match[0])
+          ],
+
+          pred2:
+            Math.max(
+              0,
+              current - 1
+            )
+        }
+      });
+    }}
+  >
+    −
+  </Button>
+
+  <div
+    style={{
+      minWidth: 32,
+      fontSize: 28,
+      fontWeight: 700,
+      textAlign: 'center'
+    }}
+  >
+    {
+      predictions[
+        String(match[0])
+      ]?.pred2 ?? 0
+    }
+  </div>
+
+  <Button
+    mode="secondary"
+    size="m"
+
+    onClick={() => {
+
+      const current =
+        Number(
+          predictions[
+            String(match[0])
+          ]?.pred2 || 0
+        );
+
+      setPredictions({
+
+        ...predictions,
+
+        [String(match[0])]: {
+
+          ...predictions[
+            String(match[0])
+          ],
+
+          pred2:
+            Math.min(
+              20,
+              current + 1
+            )
+        }
+      });
+    }}
+  >
+    +
+  </Button>
+
+</div>        
 
 {
   !wizardMode && (
