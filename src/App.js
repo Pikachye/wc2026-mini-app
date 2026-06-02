@@ -2154,62 +2154,18 @@ style={{
       <div style={{ marginTop: 8, fontWeight: 700 }}>
         {match[4]}
       </div>
-      {
+{
   match[8] === 'scheduled' && (
 
     <div
       style={{
         marginTop: 12,
         display: 'flex',
-        justifyContent: 'center',
+        flexDirection: 'column',
         alignItems: 'center',
-        gap: 8
+        gap: 6
       }}
     >
-
-      <Button
-        size="s"
-        mode="secondary"
-        onClick={() => {
-
-          const current =
-            Number(
-              predictions[String(match[0])]
-                ?.pred1 || 0
-            );
-
-          setPredictions({
-            ...predictions,
-
-            [String(match[0])]: {
-
-              ...predictions[String(match[0])],
-
-              pred1:
-                Math.max(
-                  0,
-                  current - 1
-                )
-            }
-          });
-        }}
-      >
-        −
-      </Button>
-
-      <div
-        style={{
-          fontSize: 28,
-          fontWeight: 800,
-          minWidth: 24
-        }}
-      >
-        {
-          predictions[
-            String(match[0])
-          ]?.pred1 ?? 0
-        }
-      </div>
 
       <Button
         size="s"
@@ -2239,6 +2195,51 @@ style={{
         }}
       >
         +
+      </Button>
+
+      <div
+        style={{
+          fontSize: 32,
+          fontWeight: 800,
+          minWidth: 24,
+          lineHeight: 1
+        }}
+      >
+        {
+          predictions[
+            String(match[0])
+          ]?.pred1 ?? 0
+        }
+      </div>
+
+      <Button
+        size="s"
+        mode="secondary"
+        onClick={() => {
+
+          const current =
+            Number(
+              predictions[String(match[0])]
+                ?.pred1 || 0
+            );
+
+          setPredictions({
+            ...predictions,
+
+            [String(match[0])]: {
+
+              ...predictions[String(match[0])],
+
+              pred1:
+                Math.max(
+                  0,
+                  current - 1
+                )
+            }
+          });
+        }}
+      >
+        −
       </Button>
 
     </div>
@@ -2302,55 +2303,11 @@ style={{
       style={{
         marginTop: 12,
         display: 'flex',
-        justifyContent: 'center',
+        flexDirection: 'column',
         alignItems: 'center',
-        gap: 8
+        gap: 6
       }}
     >
-
-      <Button
-        size="s"
-        mode="secondary"
-        onClick={() => {
-
-          const current =
-            Number(
-              predictions[String(match[0])]
-                ?.pred2 || 0
-            );
-
-          setPredictions({
-            ...predictions,
-
-            [String(match[0])]: {
-
-              ...predictions[String(match[0])],
-
-              pred2:
-                Math.max(
-                  0,
-                  current - 1
-                )
-            }
-          });
-        }}
-      >
-        −
-      </Button>
-
-      <div
-        style={{
-          fontSize: 28,
-          fontWeight: 800,
-          minWidth: 24
-        }}
-      >
-        {
-          predictions[
-            String(match[0])
-          ]?.pred2 ?? 0
-        }
-      </div>
 
       <Button
         size="s"
@@ -2380,6 +2337,51 @@ style={{
         }}
       >
         +
+      </Button>
+
+      <div
+        style={{
+          fontSize: 32,
+          fontWeight: 800,
+          minWidth: 24,
+          lineHeight: 1
+        }}
+      >
+        {
+          predictions[
+            String(match[0])
+          ]?.pred2 ?? 0
+        }
+      </div>
+
+      <Button
+        size="s"
+        mode="secondary"
+        onClick={() => {
+
+          const current =
+            Number(
+              predictions[String(match[0])]
+                ?.pred2 || 0
+            );
+
+          setPredictions({
+            ...predictions,
+
+            [String(match[0])]: {
+
+              ...predictions[String(match[0])],
+
+              pred2:
+                Math.max(
+                  0,
+                  current - 1
+                )
+            }
+          });
+        }}
+      >
+        −
       </Button>
 
     </div>
