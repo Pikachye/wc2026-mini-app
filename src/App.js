@@ -735,14 +735,7 @@ const hideNotificationsOffer = () => {
         winnerDraft
       );
 
-      if (
-  localStorage.getItem(
-    'notifications_offer_seen'
-  ) !== 'yes'
-) {
-
-  setNotificationOfferVisible(true);
-}
+setNotificationOfferVisible(true);
 
       loadLeaderboard();
 
