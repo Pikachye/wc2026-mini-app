@@ -2111,16 +2111,22 @@ style={{
   </div>
 
   <div
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: 12,
-      marginBottom: 16
-    }}
-  >
+  style={{
+    display: 'grid',
+    gridTemplateColumns: '1fr 48px 1fr',
+    alignItems: 'start',
+    gap: 8,
+    marginBottom: 16,
+    width: '100%'
+  }}
+>
 
-    <div style={{ flex: 1, textAlign: 'center' }}>
+    <div
+  style={{
+    minWidth: 0,
+    textAlign: 'center'
+  }}
+>
       <div
         style={{
           width: 96,
@@ -2242,7 +2248,7 @@ style={{
 
     <div
       style={{
-        minWidth: 64,
+        minWidth: 48,
         fontSize: 26,
         fontWeight: 800
       }}
@@ -2255,7 +2261,12 @@ style={{
       }
     </div>
 
-    <div style={{ flex: 1, textAlign: 'center' }}>
+    <div
+  style={{
+    minWidth: 0,
+    textAlign: 'center'
+  }}
+>
       <div
         style={{
           width: 96,
