@@ -625,7 +625,7 @@ loadLeaderboard();
       }
     };
 
-const openNotificationsDialog = () => {
+const openNotificationsDialog = async () => {
 
   localStorage.setItem(
     'notifications_offer_seen',
@@ -634,8 +634,28 @@ const openNotificationsDialog = () => {
 
   setNotificationOfferVisible(false);
 
-  window.location.href =
-    VK_COMMUNITY_MESSAGES_URL;
+  try {
+
+    await bridge.send(
+      'VKWebAppOpenLink',
+      {
+        link:
+          VK_COMMUNITY_MESSAGES_URL
+      }
+    );
+
+  } catch (e) {
+
+    console.log(
+      'OPEN VK MESSAGES ERROR:',
+      e
+    );
+
+    window.open(
+      VK_COMMUNITY_MESSAGES_URL,
+      '_blank'
+    );
+  }
 };
 
 const hideNotificationsOffer = () => {
