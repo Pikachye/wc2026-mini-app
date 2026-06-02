@@ -627,13 +627,6 @@ loadLeaderboard();
 
 const openNotificationsDialog = async () => {
 
-  localStorage.setItem(
-    'notifications_offer_seen',
-    'yes'
-  );
-
-  setNotificationOfferVisible(false);
-
   try {
 
     await bridge.send(
@@ -643,6 +636,13 @@ const openNotificationsDialog = async () => {
           VK_COMMUNITY_MESSAGES_URL
       }
     );
+
+    localStorage.setItem(
+      'notifications_offer_seen',
+      'yes'
+    );
+
+    setNotificationOfferVisible(false);
 
   } catch (e) {
 
