@@ -1216,7 +1216,7 @@ if (
 
       {
         id: 'leaderboard',
-        label: '🏆 Лидеры'
+        label: '🏆 Рейтинг'
       },
 
       {
@@ -1296,13 +1296,7 @@ if (
           &&
           (
 
-            <Group
-              header={
-                <Header mode="secondary">
-                  🏆 Лидеры
-                </Header>
-              }
-            >
+            <Group>
 
               {
                 leaders.map(
