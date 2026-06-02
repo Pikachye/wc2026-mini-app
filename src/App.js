@@ -2151,9 +2151,20 @@ style={{
         />
       </div>
 
-      <div style={{ marginTop: 8, fontWeight: 700 }}>
-        {match[4]}
-      </div>
+      <div
+  style={{
+    marginTop: 8,
+    fontWeight: 700,
+    minHeight: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    lineHeight: '20px'
+  }}
+>
+  {match[4]}
+</div>
 {
   match[8] === 'scheduled' && (
 
@@ -2292,9 +2303,20 @@ style={{
         />
       </div>
 
-      <div style={{ marginTop: 8, fontWeight: 700 }}>
-        {match[5]}
-      </div>
+      <div
+  style={{
+    marginTop: 8,
+    fontWeight: 700,
+    minHeight: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    lineHeight: '20px'
+  }}
+>
+  {match[5]}
+</div>
 
 {
   match[8] === 'scheduled' && (
