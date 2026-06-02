@@ -2271,105 +2271,91 @@ style={{
 
 <div
   style={{
-    display: 'flex',
-    justifyContent: 'center',
+    display: 'grid',
+    gridTemplateColumns: '1fr 40px 1fr',
     alignItems: 'center',
-    gap: 16,
+    gap: 8,
     marginBottom: 12
   }}
 >
 
   {/* Команда 1 */}
 
-  <Button
-    mode="secondary"
-    size="m"
-
-    onClick={() => {
-
-      const current =
-        Number(
-          predictions[
-            String(match[0])
-          ]?.pred1 || 0
-        );
-
-      setPredictions({
-
-        ...predictions,
-
-        [String(match[0])]: {
-
-          ...predictions[
-            String(match[0])
-          ],
-
-          pred1:
-            Math.max(
-              0,
-              current - 1
-            )
-        }
-      });
-    }}
-  >
-    −
-  </Button>
-
   <div
     style={{
-      minWidth: 32,
-      fontSize: 28,
-      fontWeight: 700,
-      textAlign: 'center'
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 6
     }}
   >
-    {
-      predictions[
-        String(match[0])
-      ]?.pred1 ?? 0
-    }
+
+    <Button
+      size="s"
+      mode="secondary"
+      onClick={() => {
+
+        const current =
+          Number(
+            predictions[String(match[0])]
+              ?.pred1 || 0
+          );
+
+        setPredictions({
+          ...predictions,
+          [String(match[0])]: {
+            ...predictions[String(match[0])],
+            pred1:
+              Math.min(20, current + 1)
+          }
+        });
+      }}
+    >
+      +
+    </Button>
+
+    <div
+      style={{
+        fontSize: 32,
+        fontWeight: 800,
+        minWidth: 36,
+        textAlign: 'center'
+      }}
+    >
+      {predictions[String(match[0])]?.pred1 ?? 0}
+    </div>
+
+    <Button
+      size="s"
+      mode="secondary"
+      onClick={() => {
+
+        const current =
+          Number(
+            predictions[String(match[0])]
+              ?.pred1 || 0
+          );
+
+        setPredictions({
+          ...predictions,
+          [String(match[0])]: {
+            ...predictions[String(match[0])],
+            pred1:
+              Math.max(0, current - 1)
+          }
+        });
+      }}
+    >
+      −
+    </Button>
+
   </div>
 
-  <Button
-    mode="secondary"
-    size="m"
-
-    onClick={() => {
-
-      const current =
-        Number(
-          predictions[
-            String(match[0])
-          ]?.pred1 || 0
-        );
-
-      setPredictions({
-
-        ...predictions,
-
-        [String(match[0])]: {
-
-          ...predictions[
-            String(match[0])
-          ],
-
-          pred1:
-            Math.min(
-              20,
-              current + 1
-            )
-        }
-      });
-    }}
-  >
-    +
-  </Button>
-
   <div
     style={{
-      fontSize: 24,
-      fontWeight: 700
+      fontSize: 28,
+      fontWeight: 800,
+      textAlign: 'center'
     }}
   >
     :
@@ -2377,90 +2363,75 @@ style={{
 
   {/* Команда 2 */}
 
-  <Button
-    mode="secondary"
-    size="m"
-
-    onClick={() => {
-
-      const current =
-        Number(
-          predictions[
-            String(match[0])
-          ]?.pred2 || 0
-        );
-
-      setPredictions({
-
-        ...predictions,
-
-        [String(match[0])]: {
-
-          ...predictions[
-            String(match[0])
-          ],
-
-          pred2:
-            Math.max(
-              0,
-              current - 1
-            )
-        }
-      });
-    }}
-  >
-    −
-  </Button>
-
   <div
     style={{
-      minWidth: 32,
-      fontSize: 28,
-      fontWeight: 700,
-      textAlign: 'center'
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 6
     }}
   >
-    {
-      predictions[
-        String(match[0])
-      ]?.pred2 ?? 0
-    }
+
+    <Button
+      size="s"
+      mode="secondary"
+      onClick={() => {
+
+        const current =
+          Number(
+            predictions[String(match[0])]
+              ?.pred2 || 0
+          );
+
+        setPredictions({
+          ...predictions,
+          [String(match[0])]: {
+            ...predictions[String(match[0])],
+            pred2:
+              Math.min(20, current + 1)
+          }
+        });
+      }}
+    >
+      +
+    </Button>
+
+    <div
+      style={{
+        fontSize: 32,
+        fontWeight: 800,
+        minWidth: 36,
+        textAlign: 'center'
+      }}
+    >
+      {predictions[String(match[0])]?.pred2 ?? 0}
+    </div>
+
+    <Button
+      size="s"
+      mode="secondary"
+      onClick={() => {
+
+        const current =
+          Number(
+            predictions[String(match[0])]
+              ?.pred2 || 0
+          );
+
+        setPredictions({
+          ...predictions,
+          [String(match[0])]: {
+            ...predictions[String(match[0])],
+            pred2:
+              Math.max(0, current - 1)
+          }
+        });
+      }}
+    >
+      −
+    </Button>
+
   </div>
-
-  <Button
-    mode="secondary"
-    size="m"
-
-    onClick={() => {
-
-      const current =
-        Number(
-          predictions[
-            String(match[0])
-          ]?.pred2 || 0
-        );
-
-      setPredictions({
-
-        ...predictions,
-
-        [String(match[0])]: {
-
-          ...predictions[
-            String(match[0])
-          ],
-
-          pred2:
-            Math.min(
-              20,
-              current + 1
-            )
-        }
-      });
-    }}
-  >
-    +
-  </Button>
 
 </div>        
 
