@@ -1470,7 +1470,7 @@ if (
               setProfileTab('history')
             }
           >
-            История
+            Результаты
           </TabsItem>
 
         </Tabs>
@@ -1654,15 +1654,6 @@ if (
           profileTab === 'history' && (
 
             <>
-
-              <div
-                style={{
-                  fontWeight: 700,
-                  marginBottom: 12
-                }}
-              >
-                📜 История начислений
-              </div>
 
               {
                 matches
