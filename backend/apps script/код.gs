@@ -1,6 +1,8 @@
 const SHEET_ID =
   '14CV_M0dr_fYEuG7Stpe9GsienUxC0awP64L3VNDCvrw';
 
+const VK_GROUP_TOKEN = 'vk1.a.ciwy7l3KCPkFmSKcZuixDiF3BUqP69D_DmuKpNWBFSiJVLeuKCD8jjtXjuLUYyc-dVlRiH2o4CmeqBsOUtx21HonPtajz5W9WYRpmwaTW4XcD5KGnWUjxAtxoVxdOKItUGuZNjwodaRz2NPWyE4dc2rJ-06DzP2nFmcCuEszK2ZJePX-E5z6DCuM-Nj8pp--wOg-BchH3EDOQmbAtvId0w';
+
 function jsonOutput(data) {
 
   return ContentService
@@ -748,34 +750,13 @@ function calculateLeaderboard() {
         points;
     });
 
-  if (
-  Object.keys(scores)
-    .length > 0
-) {
+leaderboardSheet.clearContents();
 
-  leaderboardSheet
-    .clearContents();
-
-  leaderboardSheet
-    .appendRow([
-
-      'vk_id',
-
-      'user_name',
-
-      'points'
-    ]);
-
-}
-
-  leaderboardSheet.appendRow([
-
-    'vk_id',
-
-    'user_name',
-
-    'points'
-  ]);
+leaderboardSheet.appendRow([
+  'vk_id',
+  'user_name',
+  'points'
+]);
 
   Object.entries(scores)
 
@@ -1056,5 +1037,233 @@ function updateMatchesFromLiveAPI() {
 
   Logger.log(
     'LIVE UPDATED'
+  );
+}
+
+function sendDailyMatchReminder() {
+
+  const now = new Date();
+
+  const mskNow = new Date(
+    Utilities.formatDate(
+      now,
+      'Europe/Moscow',
+      'yyyy-MM-dd HH:mm:ss'
+    )
+  );
+
+  const startDate = new Date(
+    mskNow.getFullYear(),
+    mskNow.getMonth(),
+    mskNow.getDate(),
+    16,
+    0,
+    0
+  );
+
+  const endDate = new Date(
+    startDate
+  );
+
+  endDate.setDate(
+    endDate.getDate() + 1
+  );
+
+  const ss =
+    SpreadsheetApp.openById(
+      SHEET_ID
+    );
+
+  const matchesSheet =
+    ss.getSheetByName(
+      'matches'
+    );
+
+  const matches =
+    matchesSheet
+      .getDataRange()
+      .getValues();
+
+  const upcoming =
+    matches
+      .slice(1)
+      .filter(row => {
+
+        const matchDate =
+          new Date(row[3]);
+
+        const status =
+          String(row[8]);
+
+        return (
+          status === 'scheduled' &&
+          matchDate >= startDate &&
+          matchDate < endDate
+        );
+      });
+
+  if (upcoming.length === 0) {
+    return;
+  }
+
+  const text =
+    '⚽ Матчи ближайшего игрового окна:\n\n' +
+
+    upcoming
+      .map(row => {
+
+        const matchDate =
+          new Date(row[3]);
+
+        const time =
+          Utilities.formatDate(
+            matchDate,
+            'Europe/Moscow',
+            'HH:mm'
+          );
+
+        return (
+          time +
+          ' — ' +
+          row[4] +
+          ' vs ' +
+          row[5]
+        );
+      })
+      .join('\n') +
+
+    '\n\nНе забудь сделать прогноз 👀';
+
+  sendVkReminderToAllUsers(text);
+}
+
+function sendVkReminderToAllUsers(text) {
+
+  const ss =
+    SpreadsheetApp.openById(
+      SHEET_ID
+    );
+
+  const leaderboardSheet =
+    ss.getSheetByName(
+      'leaderboard'
+    );
+
+  const users =
+    leaderboardSheet
+      .getDataRange()
+      .getValues()
+      .slice(1);
+
+  users.forEach(row => {
+
+    const vkId =
+  String(
+    Math.trunc(
+      Number(row[0])
+    )
+  );
+
+    if (!vkId) {
+      return;
+    }
+
+    sendVkMessage(
+      vkId,
+      text
+    );
+  });
+}
+
+function sendVkMessage(vkId, text) {
+
+  const url =
+    'https://api.vk.com/method/messages.send';
+
+  const payload = {
+    user_id: vkId,
+    random_id:
+  String(
+    Date.now()
+  ),
+    message: text,
+    access_token: VK_GROUP_TOKEN,
+    v: '5.199'
+  };
+
+  const response =
+    UrlFetchApp.fetch(
+      url,
+      {
+        method: 'post',
+        payload:
+          payload,
+        muteHttpExceptions: true
+      }
+    );
+
+  Logger.log(
+    response.getContentText()
+  );
+}
+
+function createDailyMatchReminderTrigger() {
+
+  ScriptApp
+    .newTrigger(
+      'sendDailyMatchReminder'
+    )
+    .timeBased()
+    .everyDays(1)
+    .atHour(12)
+    .nearMinute(0)
+    .inTimezone(
+      'Europe/Moscow'
+    )
+    .create();
+}
+
+const VK_APP_TOKEN =
+  '1294ec761294ec761294ec76f311d5dcce112941294ec76789b925de25780e057924a4b';
+
+function testVkPushNotification() {
+
+  sendVkPushNotification(
+    '471037',
+    '⚽ Тестовое уведомление Прогнозы ЧМ-2026'
+  );
+}
+
+function sendVkPushNotification(vkId, text) {
+
+  const url =
+    'https://api.vk.com/method/notifications.sendMessage';
+
+  const payload = {
+    user_ids:
+      String(vkId),
+
+    message:
+      text.slice(0, 254),
+
+    access_token:
+      VK_APP_TOKEN,
+
+    v:
+      '5.199'
+  };
+
+  const response =
+    UrlFetchApp.fetch(
+      url,
+      {
+        method: 'post',
+        payload,
+        muteHttpExceptions: true
+      }
+    );
+
+  Logger.log(
+    response.getContentText()
   );
 }

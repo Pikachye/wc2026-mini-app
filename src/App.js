@@ -386,23 +386,40 @@ const init = async () => {
         vkUser.first_name
     });
 
+if (
+  localStorage.getItem(
+    'push_notifications_requested'
+  ) !== 'yes'
+) {
+
   try {
 
-  await bridge.send(
-    'VKWebAppAllowNotifications'
-  );
+    await bridge.send(
+      'VKWebAppAllowNotifications'
+    );
 
-  console.log(
-    'PUSH NOTIFICATIONS ALLOWED'
-  );
+    localStorage.setItem(
+      'push_notifications_requested',
+      'yes'
+    );
 
-} catch (e) {
+    console.log(
+      'PUSH NOTIFICATIONS ALLOWED'
+    );
 
-  console.log(
-    'PUSH NOTIFICATIONS DENIED:',
-    e
-  );
-}  
+  } catch (e) {
+
+    localStorage.setItem(
+      'push_notifications_requested',
+      'yes'
+    );
+
+    console.log(
+      'PUSH NOTIFICATIONS DENIED:',
+      e
+    );
+  }
+} 
 
   } catch (e) {
 
