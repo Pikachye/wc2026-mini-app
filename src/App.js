@@ -58,6 +58,9 @@ const WINNER_DEADLINE =
     '2026-06-11T18:00:00+03:00'
   );
 
+  const VK_COMMUNITY_MESSAGES_URL =
+  'https://vk.me/club72767129';
+
   const [
   predictionsLoaded,
   setPredictionsLoaded
@@ -229,6 +232,11 @@ const [
   snackbar,
   setSnackbar
 ] = useState(null);
+
+const [
+  notificationOfferVisible,
+  setNotificationOfferVisible
+] = useState(false);
 
   const ADMIN_IDS = [
   '471037'
@@ -617,6 +625,29 @@ loadLeaderboard();
       }
     };
 
+const openNotificationsDialog = () => {
+
+  localStorage.setItem(
+    'notifications_offer_seen',
+    'yes'
+  );
+
+  setNotificationOfferVisible(false);
+
+  window.location.href =
+    VK_COMMUNITY_MESSAGES_URL;
+};
+
+const hideNotificationsOffer = () => {
+
+  localStorage.setItem(
+    'notifications_offer_seen',
+    'yes'
+  );
+
+  setNotificationOfferVisible(false);
+};    
+
   const saveWinnerPrediction =
   async () => {
 
@@ -683,6 +714,15 @@ loadLeaderboard();
       setWinnerPrediction(
         winnerDraft
       );
+
+      if (
+  localStorage.getItem(
+    'notifications_offer_seen'
+  ) !== 'yes'
+) {
+
+  setNotificationOfferVisible(true);
+}
 
       loadLeaderboard();
 
@@ -1289,6 +1329,68 @@ if (
 
 </div>
 
+{
+  notificationOfferVisible && (
+
+    <Group>
+
+      <Div
+        style={{
+          textAlign: 'center'
+        }}
+      >
+
+        <div
+          style={{
+            fontSize: 20,
+            fontWeight: 700,
+            marginBottom: 8
+          }}
+        >
+          🔔 Получать напоминания?
+        </div>
+
+        <div
+          style={{
+            color:
+              'var(--vkui--color_text_secondary)',
+            marginBottom: 16
+          }}
+        >
+          Мы будем присылать сообщение о матчах дня
+          каждый день в 12:00 МСК.
+        </div>
+
+        <Button
+          size="m"
+          stretched
+          onClick={
+            openNotificationsDialog
+          }
+        >
+          Разрешить уведомления
+        </Button>
+
+        <Button
+          size="m"
+          mode="secondary"
+          stretched
+          style={{
+            marginTop: 8
+          }}
+          onClick={
+            hideNotificationsOffer
+          }
+        >
+          Не сейчас
+        </Button>
+
+      </Div>
+
+    </Group>
+  )
+}
+
         {
           activeTab ===
           'leaderboard'
@@ -1606,7 +1708,7 @@ if (
             fontSize: 14
           }}
         >
-          Вы можете выбрать другую страну еще:
+          Можно поменять, еще:
 
           {' '}
 
