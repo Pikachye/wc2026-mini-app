@@ -1211,23 +1211,23 @@ if (
     [
       {
         id: 'matches',
-        label: '⚽ Матчи'
+        label: 'Матчи'
       },
 
       {
         id: 'leaderboard',
-        label: '🏆 Рейтинг'
+        label: 'Рейтинг'
       },
 
       {
         id: 'profile',
-        label: '😎 Профиль'
+        label: 'Профиль'
       },
 
       ...(String(user?.id) === '471037'
     ? [{
         id: 'admin',
-        label: '⚙️ Админ'
+        label: '⚙️Админ'
       }]
     : [])
 
@@ -1441,13 +1441,7 @@ if (
   &&
   (
 
-    <Group
-      header={
-        <Header mode="secondary">
-          😎 Профиль
-        </Header>
-      }
-    >
+    <Group>
 
       <Div>
 
