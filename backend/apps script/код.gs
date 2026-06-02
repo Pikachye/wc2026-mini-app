@@ -561,38 +561,41 @@ function saveWinnerPrediction(
         data.winner
       );
 
-    sheet
-      .getRange(
-        existingIndex + 1,
-        5
-      )
-      .setValue(
-        now
-      );
+    sheet.getRange(
+    existingIndex + 1,
+    5
+  )
+  .setValue(
+    now
+  );
 
-    return {
-      success: true,
-      updated: true
-    };
+calculateLeaderboard();
+
+return {
+  success: true,
+  updated: true
+};
   }
 
   sheet.appendRow([
 
-    data.vk_id,
+  data.vk_id,
 
-    data.user_name,
+  data.user_name,
 
-    data.winner,
+  data.winner,
 
-    now,
+  now,
 
-    now
-  ]);
+  now
+]);
 
-  return {
-    success: true,
-    created: true
-  };
+calculateLeaderboard();
+
+return {
+  success: true,
+  created: true
+};
 }
 
 function calculateLeaderboard() {
@@ -750,6 +753,51 @@ function calculateLeaderboard() {
         points;
     });
 
+    const winnerSheet =
+  spreadsheet.getSheetByName(
+    'winner_predictions'
+  );
+
+if (winnerSheet) {
+
+  const winnerRows =
+    winnerSheet
+      .getDataRange()
+      .getValues();
+
+  winnerRows
+    .slice(1)
+    .forEach(row => {
+
+      const vkId =
+        String(
+          Math.trunc(
+            Number(row[0])
+          )
+        );
+
+      const userName =
+        row[1];
+
+      if (
+        !vkId ||
+        vkId === 'NaN'
+      ) {
+        return;
+      }
+
+      if (!scores[vkId]) {
+
+        scores[vkId] = {
+          name:
+            userName,
+          points:
+            0
+        };
+      }
+    });
+}
+
 leaderboardSheet.clearContents();
 
 leaderboardSheet.appendRow([
@@ -875,88 +923,11 @@ function calculatePoints(realHome, realAway, predHome, predAway) {
 
 function processFinishedMatches() {
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  calculateLeaderboard();
 
-  const matchesSheet = ss.getSheetByName('matches');
-  const predictionsSheet = ss.getSheetByName('predictions');
-  const leaderboardSheet = ss.getSheetByName('leaderboard');
-
-  const matches = matchesSheet.getDataRange().getValues();
-  const predictions = predictionsSheet.getDataRange().getValues();
-
-  leaderboardSheet.clear();
-
-  leaderboardSheet.appendRow([
-    'vk_id',
-    'user_name',
-    'points'
-  ]);
-
-  const leaderboard = {};
-
-  for (let i = 1; i < matches.length; i++) {
-
-    const match = matches[i];
-
-    const matchId = match[0];
-    const realHome = Number(match[6]);
-    const realAway = Number(match[7]);
-    const status = match[8];
-
-    if (status !== 'finished') continue;
-
-    for (let j = 1; j < predictions.length; j++) {
-
-      const pred = predictions[j];
-
-      if (String(pred[3]) !== String(matchId)) {
-        continue;
-      }
-
-      const vkId = pred[1];
-      const userName = pred[2];
-
-      const predHome = Number(pred[4]);
-      const predAway = Number(pred[5]);
-
-      const points = calculatePoints(
-        realHome,
-        realAway,
-        predHome,
-        predAway
-      );
-
-      predictionsSheet
-        .getRange(j + 1, 7)
-        .setValue(points);
-
-      if (!leaderboard[vkId]) {
-
-        leaderboard[vkId] = {
-          userName,
-          points: 0
-        };
-
-      }
-
-      leaderboard[vkId].points += points;
-    }
-  }
-
-  const sorted = Object.entries(leaderboard)
-    .sort((a, b) => b[1].points - a[1].points);
-
-  sorted.forEach(([vkId, data]) => {
-
-    leaderboardSheet.appendRow([
-      vkId,
-      data.userName,
-      data.points
-    ]);
-
-  });
-
-  Logger.log('done');
+  Logger.log(
+    'leaderboard recalculated'
+  );
 }
 
 function updateMatchesFromLiveAPI() {
