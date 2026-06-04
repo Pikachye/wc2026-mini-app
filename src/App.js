@@ -240,6 +240,37 @@ const isAdmin =
     String(user?.id)
   );
 
+  const tabButtonStyle = (active) => ({
+  border: 'none',
+  borderRadius: 12,
+  padding: '10px 16px',
+  whiteSpace: 'nowrap',
+  fontSize: 14,
+  fontWeight: 600,
+
+  background:
+    active
+      ? 'var(--vkui--color_background_accent)'
+      : 'var(--vkui--color_background_secondary)',
+
+  color:
+    active
+      ? 'var(--vkui--color_text_contrast)'
+      : 'var(--vkui--color_text_secondary)',
+
+  cursor: 'pointer'
+});
+
+const tabsRowStyle = {
+  display: 'flex',
+  gap: 8,
+  overflowX: 'auto',
+  paddingTop: 12,
+  paddingLeft: 12,
+  paddingRight: 12,
+  marginBottom: 16
+};
+
   useEffect(() => {
 
   loadMatches();
@@ -1243,42 +1274,9 @@ if (
             )
           }
 
-          style={{
-
-            border: 'none',
-
-            borderRadius: 12,
-
-            padding:
-              '10px 16px',
-
-            whiteSpace:
-              'nowrap',
-
-            fontSize: 14,
-
-            fontWeight: 600,
-
-            background:
-
-              activeTab ===
-              tab.id
-
-                ? 'var(--vkui--color_background_accent)'
-
-                : 'var(--vkui--color_background_secondary)',
-
-            color:
-
-              activeTab ===
-              tab.id
-
-                ? 'var(--vkui--color_text_contrast)'
-
-                : 'var(--vkui--color_text_secondary)',
-
-            cursor: 'pointer'
-          }}
+          style={tabButtonStyle(
+  activeTab === tab.id
+)}
         >
 
           {tab.label}
@@ -1445,36 +1443,31 @@ if (
 
       <Div>
 
-        <Tabs
-          style={{
-            marginBottom: 16
-          }}
-        >
+        <div
+  style={tabsRowStyle}
+>
+  <button
+    onClick={() =>
+      setProfileTab('stats')
+    }
+    style={tabButtonStyle(
+      profileTab === 'stats'
+    )}
+  >
+    Статистика
+  </button>
 
-          <TabsItem
-            selected={
-              profileTab === 'stats'
-            }
-            onClick={() =>
-              setProfileTab('stats')
-            }
-          >
-            Статистика
-          </TabsItem>
-
-          <TabsItem
-            selected={
-              profileTab === 'history'
-            }
-            onClick={() =>
-              setProfileTab('history')
-            }
-          >
-            Результаты
-          </TabsItem>
-          
-
-        </Tabs>
+  <button
+    onClick={() =>
+      setProfileTab('history')
+    }
+    style={tabButtonStyle(
+      profileTab === 'history'
+    )}
+  >
+    Результаты
+  </button>
+</div>
 
         {
           profileTab === 'stats' && (
@@ -1832,42 +1825,9 @@ onClick={() => {
   }
 }}
 
-          style={{
-
-            border: 'none',
-
-            borderRadius: 12,
-
-            padding:
-              '10px 16px',
-
-            whiteSpace:
-              'nowrap',
-
-            fontSize: 14,
-
-            fontWeight: 600,
-
-            background:
-
-              activeStage ===
-              stage
-
-                ? 'var(--vkui--color_background_accent)'
-
-                : 'var(--vkui--color_background_secondary)',
-
-            color:
-
-              activeStage ===
-              stage
-
-                ? 'var(--vkui--color_text_contrast)'
-
-                : 'var(--vkui--color_text_secondary)',
-
-            cursor: 'pointer'
-          }}
+          style={tabButtonStyle(
+  activeStage === stage
+)}
         >
 
           {
