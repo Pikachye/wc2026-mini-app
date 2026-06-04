@@ -12,17 +12,16 @@ export default async function handler(req, res) {
     return res.status(200).send('04159491');
   }
 
-  const commands = [
-  'начать',
-  'играть',
-  'хочу играть',
-  'прогнозы'
-];
-
-if (commands.includes(text)) {
+  if (body.type === 'message_new') {
     const msg = body.object.message;
     const text = (msg.text || '').trim().toLowerCase();
 
+    if (
+  text !== 'начать' &&
+  text !== 'хочу играть'
+) {
+  return res.status(200).send('ok');
+}
     await fetch('https://api.vk.com/method/messages.send', {
   method: 'POST',
   headers: {
@@ -34,7 +33,7 @@ if (commands.includes(text)) {
     peer_id: String(msg.peer_id),
     random_id: String(Date.now()),
     message:
-      '⚽ Добро пожаловать в Прогнозы ЧМ-2026!\n\n🏆 Делай прогнозы и соревнуйся с другими участниками.',
+      '⚽ Добро пожаловать в Прогнозы ЧМ-2026!\n\n🏆 Делайте прогнозы и соревнуйтесь с другими участниками.',
     keyboard: JSON.stringify({
       inline: false,
       buttons: [
