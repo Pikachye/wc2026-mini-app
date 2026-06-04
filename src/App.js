@@ -1808,7 +1808,31 @@ if (
                     )
                 }
 
+                
+
                 {
+                  matches.filter(
+                    match =>
+                      match[8] === 'finished' &&
+                      predictions[String(match[0])]
+                  ).length === 0 && (
+
+                    <div
+                      style={{
+                        color:
+                          'var(--vkui--color_text_secondary)'
+                      }}
+                    >
+                      Пока нет завершённых матчей с начисленными очками
+                    </div>
+                  )
+                }
+
+              </>
+            )
+          }
+
+{
   profileTab === 'rules' && (
 
     <>
@@ -1920,28 +1944,6 @@ if (
     </>
   )
 }
-
-                {
-                  matches.filter(
-                    match =>
-                      match[8] === 'finished' &&
-                      predictions[String(match[0])]
-                  ).length === 0 && (
-
-                    <div
-                      style={{
-                        color:
-                          'var(--vkui--color_text_secondary)'
-                      }}
-                    >
-                      Пока нет завершённых матчей с начисленными очками
-                    </div>
-                  )
-                }
-
-              </>
-            )
-          }
 
         </Div>
 
