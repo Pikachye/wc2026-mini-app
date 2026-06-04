@@ -281,6 +281,40 @@ const tabsRowStyle = {
   marginBottom: 16
 };
 
+const pointsText = (points) => {
+
+  const n =
+    Math.abs(
+      Number(points)
+    );
+
+  const n10 =
+    n % 10;
+
+  const n100 =
+    n % 100;
+
+  if (
+    n10 === 1 &&
+    n100 !== 11
+  ) {
+    return 'очко';
+  }
+
+  if (
+    n10 >= 2 &&
+    n10 <= 4 &&
+    (
+      n100 < 12 ||
+      n100 > 14
+    )
+  ) {
+    return 'очка';
+  }
+
+  return 'очков';
+};
+
   useEffect(() => {
 
   loadMatches();
@@ -1454,7 +1488,11 @@ if (
       marginTop: 4
     }}
   >
-    {leader[2]} очков
+    {leader[2]} {
+  pointsText(
+    leader[2]
+  )
+}
 
     {Number(leader[4]) === 12 && (
       <span
@@ -2550,7 +2588,11 @@ style={{
         match[8] === 'finished' && (
           <>
             {' '}
-            (+{predictions[String(match[0])]?.points || 0} очков)
+            (+{predictions[String(match[0])]?.points || 0} {
+  pointsText(
+    predictions[String(match[0])]?.points || 0
+  )
+})
           </>
         )
       }
@@ -2675,7 +2717,11 @@ style={{
                             : 'var(--vkui--color_text_secondary)'
                       }}
                     >
-                      +{item.points || 0}
+                      +{item.points || 0} {
+  pointsText(
+    item.points || 0
+  )
+}
                     </div>
 
                   </div>
