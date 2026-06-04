@@ -1515,31 +1515,42 @@ if (
 
     <>
 
-      <div
-        style={tabsRowStyle}
-      >
-        <button
-          onClick={() =>
-            setProfileTab('stats')
-          }
-          style={tabButtonStyle(
-            profileTab === 'stats'
-          )}
-        >
-          Статистика
-        </button>
+    <div
+  style={tabsRowStyle}
+>
+  <button
+    onClick={() =>
+      setProfileTab('stats')
+    }
+    style={tabButtonStyle(
+      profileTab === 'stats'
+    )}
+  >
+    Статистика
+  </button>
 
-        <button
-          onClick={() =>
-            setProfileTab('history')
-          }
-          style={tabButtonStyle(
-            profileTab === 'history'
-          )}
-        >
-          Результаты
-        </button>
-      </div>
+  <button
+    onClick={() =>
+      setProfileTab('history')
+    }
+    style={tabButtonStyle(
+      profileTab === 'history'
+    )}
+  >
+    Результаты
+  </button>
+
+  <button
+    onClick={() =>
+      setProfileTab('rules')
+    }
+    style={tabButtonStyle(
+      profileTab === 'rules'
+    )}
+  >
+    Правила
+  </button>
+</div>  
 
       <Group>
 
@@ -1796,6 +1807,119 @@ if (
                       }
                     )
                 }
+
+                {
+  profileTab === 'rules' && (
+
+    <>
+
+      <div
+        style={{
+          lineHeight: 1.6
+        }}
+      >
+
+        <div
+          style={{
+            fontWeight: 700,
+            marginBottom: 12
+          }}
+        >
+          🏆 Начисление очков
+        </div>
+
+        <div
+          style={{
+            marginBottom: 8
+          }}
+        >
+          🐙 Точный счёт — 4 очка
+        </div>
+
+        <div
+          style={{
+            marginBottom: 8
+          }}
+        >
+          ⚖️ Угаданная разница — 3 очка
+        </div>
+
+        <div
+          style={{
+            marginBottom: 8
+          }}
+        >
+          🎯 Угаданный исход — 2 очка
+        </div>
+
+        <div
+          style={{
+            marginBottom: 16
+          }}
+        >
+          ❌ Неверный прогноз — 0 очков
+        </div>
+
+        <div
+          style={{
+            fontWeight: 700,
+            marginBottom: 12
+          }}
+        >
+          🏆 Победитель ЧМ-2026
+        </div>
+
+        <div
+          style={{
+            marginBottom: 16
+          }}
+        >
+          Правильно выбранный чемпион турнира:
+          <br />
+          <span
+            style={{
+              color: '#FFD700',
+              fontWeight: 700
+            }}
+          >
+            +12 очков
+          </span>
+        </div>
+
+        <div
+          style={{
+            fontWeight: 700,
+            marginBottom: 12
+          }}
+        >
+          ⏳ Ограничения
+        </div>
+
+        <div
+          style={{
+            marginBottom: 8
+          }}
+        >
+          Прогноз можно менять до начала матча.
+        </div>
+
+        <div
+          style={{
+            marginBottom: 8
+          }}
+        >
+          После начала матча прогноз блокируется.
+        </div>
+
+        <div>
+          Победителя турнира можно менять до начала ЧМ-2026.
+        </div>
+
+      </div>
+
+    </>
+  )
+}
 
                 {
                   matches.filter(
