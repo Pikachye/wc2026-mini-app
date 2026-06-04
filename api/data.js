@@ -12,16 +12,25 @@ export default async function handler(
       req.query.action;
 
     const vkId =
-      req.query.vk_id;
+  req.query.vk_id;
 
-    let url =
-      `${GOOGLE_SCRIPT_URL}?action=${action}`;
+const matchId =
+  req.query.match_id;
 
-    if (vkId) {
+let url =
+  `${GOOGLE_SCRIPT_URL}?action=${action}`;
 
-      url +=
-        `&vk_id=${vkId}`;
-    }
+if (vkId) {
+
+  url +=
+    `&vk_id=${encodeURIComponent(vkId)}`;
+}
+
+if (matchId) {
+
+  url +=
+    `&match_id=${encodeURIComponent(matchId)}`;
+}
 
     const response =
       await fetch(url);
