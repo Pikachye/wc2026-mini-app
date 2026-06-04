@@ -1518,7 +1518,7 @@ if (
               </div>
 
               <div style={{ marginBottom: 8 }}>
-                🎯 Точных счетов: {
+                🐙 Точных счетов: {
                   Object.values(predictions)
                     .filter(p => p.points === 4)
                     .length
@@ -1526,7 +1526,7 @@ if (
               </div>
 
               <div style={{ marginBottom: 8 }}>
-                📊 Угаданных разниц: {
+                ⚖️ Угаданных разниц: {
                   Object.values(predictions)
                     .filter(p => p.points === 3)
                     .length
@@ -1534,7 +1534,7 @@ if (
               </div>
 
               <div style={{ marginBottom: 8 }}>
-                ✅ Угаданных исходов: {
+                🎯 Угаданных исходов: {
                   Object.values(predictions)
                     .filter(p => p.points === 2)
                     .length

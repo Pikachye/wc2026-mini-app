@@ -680,52 +680,47 @@ function calculateLeaderboard() {
         const real2 =
           Number(match[7]);
 
-        // ТОЧНЫЙ СЧЕТ
+        const predResult =
+  pred1 > pred2
+    ? '1'
+    : pred1 < pred2
+    ? '2'
+    : 'X';
 
-        if (
-          pred1 === real1 &&
-          pred2 === real2
-        ) {
+const realResult =
+  real1 > real2
+    ? '1'
+    : real1 < real2
+    ? '2'
+    : 'X';
 
-          points = 4;
-        }
+// ТОЧНЫЙ СЧЁТ
+if (
+  pred1 === real1 &&
+  pred2 === real2
+) {
 
-        // РАЗНИЦА
+  points = 4;
+}
 
-        else if (
-          (pred1 - pred2) ===
-          (real1 - real2)
-        ) {
+// РАЗНИЦА, НО НЕ НИЧЬЯ
+else if (
+  predResult === realResult &&
+  realResult !== 'X' &&
+  (pred1 - pred2) ===
+  (real1 - real2)
+) {
 
-          points = 3;
-        }
+  points = 3;
+}
 
-        // ИСХОД
+// ИСХОД / НИЧЬЯ
+else if (
+  predResult === realResult
+) {
 
-        else {
-
-          const predResult =
-            pred1 > pred2
-              ? '1'
-              : pred1 < pred2
-              ? '2'
-              : 'X';
-
-          const realResult =
-            real1 > real2
-              ? '1'
-              : real1 < real2
-              ? '2'
-              : 'X';
-
-          if (
-            predResult ===
-            realResult
-          ) {
-
-            points = 2;
-          }
-        }
+  points = 2;
+}
       }
 
       // ОБНОВЛЯЕМ POINTS В predictions
