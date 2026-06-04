@@ -1,7 +1,23 @@
 const SHEET_ID =
-  '14CV_M0dr_fYEuG7Stpe9GsienUxC0awP64L3VNDCvrw';
+  PropertiesService
+    .getScriptProperties()
+    .getProperty(
+      'SHEET_ID'
+    );
 
-const VK_GROUP_TOKEN = 'vk1.a.ciwy7l3KCPkFmSKcZuixDiF3BUqP69D_DmuKpNWBFSiJVLeuKCD8jjtXjuLUYyc-dVlRiH2o4CmeqBsOUtx21HonPtajz5W9WYRpmwaTW4XcD5KGnWUjxAtxoVxdOKItUGuZNjwodaRz2NPWyE4dc2rJ-06DzP2nFmcCuEszK2ZJePX-E5z6DCuM-Nj8pp--wOg-BchH3EDOQmbAtvId0w';
+const VK_GROUP_TOKEN =
+  PropertiesService
+    .getScriptProperties()
+    .getProperty(
+      'VK_GROUP_TOKEN'
+    );
+
+const VK_APP_TOKEN =
+  PropertiesService
+    .getScriptProperties()
+    .getProperty(
+      'VK_APP_TOKEN'
+    );
 
 function jsonOutput(data) {
 
@@ -20,6 +36,18 @@ function doGet(e) {
 
   const action =
     e.parameter.action;
+
+  if (
+  action ===
+  'match_predictions'
+) {
+
+  return outputJson(
+    getMatchPredictions(
+      e.parameter.match_id
+    )
+  );
+}
 
   if (action === 'matches') {
 
@@ -1081,20 +1109,20 @@ function sendDailyMatchReminder() {
         const matchDate =
           new Date(row[3]);
 
-        const time =
-          Utilities.formatDate(
-            matchDate,
-            'Europe/Moscow',
-            'HH:mm'
-          );
+        const dateTime =
+  Utilities.formatDate(
+    matchDate,
+    'Europe/Moscow',
+    'dd.MM.yyyy HH:mm'
+  );
 
-        return (
-          time +
-          ' — ' +
-          row[4] +
-          ' vs ' +
-          row[5]
-        );
+return (
+  dateTime +
+  ' — ' +
+  row[4] +
+  ' vs ' +
+  row[5]
+);
       })
       .join('\n') +
 
@@ -1189,9 +1217,6 @@ function createDailyMatchReminderTrigger() {
     .create();
 }
 
-const VK_APP_TOKEN =
-  '1294ec761294ec761294ec76f311d5dcce112941294ec76789b925de25780e057924a4b';
-
 function testVkPushNotification() {
 
   sendVkPushNotification(
@@ -1232,4 +1257,44 @@ function sendVkPushNotification(vkId, text) {
   Logger.log(
     response.getContentText()
   );
+}
+
+function getMatchPredictions(
+  matchId
+) {
+
+  const sheet =
+    SpreadsheetApp
+      .openById(
+        SHEET_ID
+      )
+      .getSheetByName(
+        'predictions'
+      );
+
+  return sheet
+    .getDataRange()
+    .getValues()
+    .slice(1)
+    .filter(
+      row =>
+        String(row[3]) ===
+        String(matchId)
+    )
+    .map(
+      row => ({
+
+        user_name:
+          row[2],
+
+        pred1:
+          row[4],
+
+        pred2:
+          row[5],
+
+        points:
+          Number(row[6]) || 0
+      })
+    );
 }

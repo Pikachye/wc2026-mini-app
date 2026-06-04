@@ -231,6 +231,16 @@ const [
   setSnackbar
 ] = useState(null);
 
+const [
+  openedPredictions,
+  setOpenedPredictions
+] = useState({});
+
+const [
+  matchPredictions,
+  setMatchPredictions
+] = useState({});
+
   const ADMIN_IDS = [
   '471037'
 ];
@@ -517,6 +527,68 @@ setLeaders(
         );
       }
     };
+
+  const toggleMatchPredictions =
+  async (matchId) => {
+
+    const key =
+      String(matchId);
+
+    if (openedPredictions[key]) {
+
+      setOpenedPredictions({
+        ...openedPredictions,
+        [key]: false
+      });
+
+      return;
+    }
+
+    if (!matchPredictions[key]) {
+
+      try {
+
+        const response =
+          await fetch(
+            `/api/data?action=match_predictions&match_id=${key}`
+          );
+
+        const data =
+          await response.json();
+
+        setMatchPredictions({
+          ...matchPredictions,
+          [key]: data || []
+        });
+
+      } catch (e) {
+
+        console.log(
+          'MATCH PREDICTIONS ERROR:',
+          e
+        );
+
+        setSnackbar(
+
+          <Snackbar
+            key={Date.now()}
+            onClose={() =>
+              setSnackbar(null)
+            }
+          >
+            ⚠️ Не удалось загрузить прогнозы
+          </Snackbar>
+        );
+
+        return;
+      }
+    }
+
+    setOpenedPredictions({
+      ...openedPredictions,
+      [key]: true
+    });
+  };
 
   const savePrediction =
     async (match) => {
@@ -2380,6 +2452,139 @@ style={{
           </>
         )
       }
+    </div>
+  )
+}
+
+{
+  match[8] === 'finished' && (
+
+    <div
+      style={{
+        marginBottom: 12
+      }}
+    >
+
+      <Button
+        size="m"
+        mode="secondary"
+        stretched
+        onClick={() =>
+          toggleMatchPredictions(
+            match[0]
+          )
+        }
+      >
+        {
+          openedPredictions[String(match[0])]
+            ? 'Скрыть прогнозы игроков'
+            : '👀 Прогнозы игроков'
+        }
+      </Button>
+
+      {
+        openedPredictions[String(match[0])] && (
+
+          <div
+            style={{
+              marginTop: 12,
+              padding: 12,
+              borderRadius: 12,
+              background:
+                'var(--vkui--color_background_content)',
+              textAlign: 'left'
+            }}
+          >
+
+            {
+              (
+                matchPredictions[String(match[0])]
+                || []
+              ).length === 0 && (
+
+                <div
+                  style={{
+                    color:
+                      'var(--vkui--color_text_secondary)'
+                  }}
+                >
+                  Прогнозов на этот матч нет
+                </div>
+              )
+            }
+
+            {
+              (
+                matchPredictions[String(match[0])]
+                || []
+              ).map(
+                (
+                  item,
+                  index
+                ) => (
+
+                  <div
+                    key={index}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns:
+                        '1fr auto auto',
+                      gap: 8,
+                      alignItems: 'center',
+                      padding:
+                        '8px 0',
+                      borderBottom:
+                        index ===
+                        (
+                          matchPredictions[String(match[0])]
+                          || []
+                        ).length - 1
+                          ? 'none'
+                          : '1px solid rgba(255,255,255,0.08)'
+                    }}
+                  >
+
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        minWidth: 0,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {item.user_name}
+                    </div>
+
+                    <div
+                      style={{
+                        fontWeight: 700
+                      }}
+                    >
+                      {item.pred1}:{item.pred2}
+                    </div>
+
+                    <div
+                      style={{
+                        fontWeight: 700,
+                        color:
+                          Number(item.points) > 0
+                            ? '#4CAF50'
+                            : 'var(--vkui--color_text_secondary)'
+                      }}
+                    >
+                      +{item.points || 0}
+                    </div>
+
+                  </div>
+                )
+              )
+            }
+
+          </div>
+        )
+      }
+
     </div>
   )
 }
