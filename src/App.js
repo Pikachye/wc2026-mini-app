@@ -1439,313 +1439,317 @@ if (
   &&
   (
 
-    <Group>
+    <>
 
-      <Div>
-
-        <div
-  style={tabsRowStyle}
->
-  <button
-    onClick={() =>
-      setProfileTab('stats')
-    }
-    style={tabButtonStyle(
-      profileTab === 'stats'
-    )}
-  >
-    Статистика
-  </button>
-
-  <button
-    onClick={() =>
-      setProfileTab('history')
-    }
-    style={tabButtonStyle(
-      profileTab === 'history'
-    )}
-  >
-    Результаты
-  </button>
-</div>
-
-        {
-          profileTab === 'stats' && (
-
-            <>
-
-              <div
-                style={{
-                  fontSize: 24,
-                  fontWeight: 700,
-                  marginBottom: 16
-                }}
-              >
-                {user?.name}
-              </div>
-
-              <div style={{ marginBottom: 8 }}>
-                🏆 Место: {
-                  leaders.findIndex(
-                    l =>
-                      String(l[0]) ===
-                      String(user?.id)
-                  ) + 1
-                }
-              </div>
-
-              <div style={{ marginBottom: 8 }}>
-                ⭐ Очки: {
-                  leaders.find(
-                    l =>
-                      String(l[0]) ===
-                      String(user?.id)
-                  )?.[2] || 0
-                }
-              </div>
-
-              <div style={{ marginBottom: 8 }}>
-                ⚽ Прогнозов: {
-                  Object.keys(predictions).length
-                }
-              </div>
-
-              <div style={{ marginBottom: 8 }}>
-                🐙 Точных счетов: {
-                  Object.values(predictions)
-                    .filter(p => p.points === 4)
-                    .length
-                }
-              </div>
-
-              <div style={{ marginBottom: 8 }}>
-                ⚖️ Угаданных разниц: {
-                  Object.values(predictions)
-                    .filter(p => p.points === 3)
-                    .length
-                }
-              </div>
-
-              <div style={{ marginBottom: 8 }}>
-                🎯 Угаданных исходов: {
-                  Object.values(predictions)
-                    .filter(p => p.points === 2)
-                    .length
-                }
-              </div>
-
-              <div
-  style={{
-    marginTop: 16,
-    padding: 12,
-    borderRadius: 12,
-    background:
-      'var(--vkui--color_background_secondary)'
-  }}
->
-
-  <div
-    style={{
-      fontWeight: 700,
-      marginBottom: 8
-    }}
-  >
-    🏆 Победитель ЧМ-2026:
-
-    {' '}
-
-    {winnerPrediction}
-
-    {
-      leaders.find(
-        l =>
-          String(l[0]) ===
-          String(user?.id)
-      )?.[4] === 12 && (
-
-        <span
-          style={{
-            color: '#FFD700',
-            fontWeight: 700
-          }}
-        >
-          {' '}
-          (+12 очков)
-        </span>
-      )
-    }
-  </div>
-
-  {
-    new Date() < WINNER_DEADLINE && (
-
-      <>
-
-        <div
-          style={{
-            marginBottom: 8,
-            color:
-              'var(--vkui--color_text_secondary)',
-            fontSize: 14
-          }}
-        >
-          Можно поменять, еще:
-
-          {' '}
-
-          <b>
-            {winnerDeadlineText}
-          </b>
-        </div>
-
-        <Select
-          value={winnerDraft}
-
-          onChange={(e) =>
-            setWinnerDraft(
-              e.target.value
-            )
+      <div
+        style={tabsRowStyle}
+      >
+        <button
+          onClick={() =>
+            setProfileTab('stats')
           }
-
-          options={
-            Object.keys(teamFlags)
-              .sort()
-              .map(
-                (team) => ({
-                  label: team,
-                  value: team
-                })
-              )
-          }
-        />
-
-        <Button
-          size="m"
-          stretched
-
-          style={{
-            marginTop: 8
-          }}
-
-          onClick={
-            saveWinnerPrediction
-          }
+          style={tabButtonStyle(
+            profileTab === 'stats'
+          )}
         >
-          Изменить страну
-        </Button>
+          Статистика
+        </button>
 
-      </>
-    )
-  }
+        <button
+          onClick={() =>
+            setProfileTab('history')
+          }
+          style={tabButtonStyle(
+            profileTab === 'history'
+          )}
+        >
+          Результаты
+        </button>
+      </div>
 
-</div>
+      <Group>
 
-            </>
-          )
-        }
+        <Div>
 
-        {
-          profileTab === 'history' && (
+          {
+            profileTab === 'stats' && (
 
-            <>
+              <>
 
-              {
-                matches
-                  .filter(
-                    match =>
-                      match[8] === 'finished' &&
-                      predictions[String(match[0])]
-                  )
-                  .slice()
-                  .reverse()
-                  .map(
-                    match => {
+                <div
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 700,
+                    marginBottom: 16
+                  }}
+                >
+                  {user?.name}
+                </div>
 
-                      const prediction =
-                        predictions[
-                          String(match[0])
-                        ];
+                <div style={{ marginBottom: 8 }}>
+                  🏆 Место: {
+                    leaders.findIndex(
+                      l =>
+                        String(l[0]) ===
+                        String(user?.id)
+                    ) + 1
+                  }
+                </div>
 
-                      return (
+                <div style={{ marginBottom: 8 }}>
+                  ⭐ Очки: {
+                    leaders.find(
+                      l =>
+                        String(l[0]) ===
+                        String(user?.id)
+                    )?.[2] || 0
+                  }
+                </div>
 
-                        <div
-                          key={match[0]}
-                          style={{
-                            padding: '10px 0',
-                            borderBottom:
-                              '1px solid rgba(255,255,255,0.08)'
-                          }}
-                        >
+                <div style={{ marginBottom: 8 }}>
+                  ⚽ Прогнозов: {
+                    Object.keys(predictions).length
+                  }
+                </div>
 
-                          <div
-                            style={{
-                              fontWeight: 600,
-                              marginBottom: 4
-                            }}
-                          >
-                            {match[4]} {match[6]}:{match[7]} {match[5]}
-                          </div>
+                <div style={{ marginBottom: 8 }}>
+                  🐙 Точных счетов: {
+                    Object.values(predictions)
+                      .filter(p => p.points === 4)
+                      .length
+                  }
+                </div>
 
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              gap: 12,
-                              fontSize: 13,
-                              color:
-                                'var(--vkui--color_text_secondary)'
-                            }}
-                          >
+                <div style={{ marginBottom: 8 }}>
+                  ⚖️ Угаданных разниц: {
+                    Object.values(predictions)
+                      .filter(p => p.points === 3)
+                      .length
+                  }
+                </div>
 
-                            <span>
-                              Ваш прогноз: {prediction.pred1}:{prediction.pred2}
-                            </span>
+                <div style={{ marginBottom: 8 }}>
+                  🎯 Угаданных исходов: {
+                    Object.values(predictions)
+                      .filter(p => p.points === 2)
+                      .length
+                  }
+                </div>
 
-                            <span
-                              style={{
-                                fontWeight: 700,
-                                color:
-                                  Number(prediction.points) > 0
-                                    ? '#4CAF50'
-                                    : 'var(--vkui--color_text_secondary)'
-                              }}
-                            >
-                              +{prediction.points || 0}
-                            </span>
-
-                          </div>
-
-                        </div>
-                      );
-                    }
-                  )
-              }
-
-              {
-                matches.filter(
-                  match =>
-                    match[8] === 'finished' &&
-                    predictions[String(match[0])]
-                ).length === 0 && (
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: 12,
+                    borderRadius: 12,
+                    background:
+                      'var(--vkui--color_background_secondary)'
+                  }}
+                >
 
                   <div
                     style={{
-                      color:
-                        'var(--vkui--color_text_secondary)'
+                      fontWeight: 700,
+                      marginBottom: 8
                     }}
                   >
-                    Пока нет завершённых матчей с начисленными очками
+                    🏆 Победитель ЧМ-2026:
+
+                    {' '}
+
+                    {winnerPrediction}
+
+                    {
+                      leaders.find(
+                        l =>
+                          String(l[0]) ===
+                          String(user?.id)
+                      )?.[4] === 12 && (
+
+                        <span
+                          style={{
+                            color: '#FFD700',
+                            fontWeight: 700
+                          }}
+                        >
+                          {' '}
+                          (+12 очков)
+                        </span>
+                      )
+                    }
                   </div>
-                )
-              }
 
-            </>
-          )
-        }
+                  {
+                    new Date() < WINNER_DEADLINE && (
 
-      </Div>
+                      <>
 
-    </Group>
+                        <div
+                          style={{
+                            marginBottom: 8,
+                            color:
+                              'var(--vkui--color_text_secondary)',
+                            fontSize: 14
+                          }}
+                        >
+                          Можно поменять, еще:
+
+                          {' '}
+
+                          <b>
+                            {winnerDeadlineText}
+                          </b>
+                        </div>
+
+                        <Select
+                          value={winnerDraft}
+
+                          onChange={(e) =>
+                            setWinnerDraft(
+                              e.target.value
+                            )
+                          }
+
+                          options={
+                            Object.keys(teamFlags)
+                              .sort()
+                              .map(
+                                (team) => ({
+                                  label: team,
+                                  value: team
+                                })
+                              )
+                          }
+                        />
+
+                        <Button
+                          size="m"
+                          stretched
+
+                          style={{
+                            marginTop: 8
+                          }}
+
+                          onClick={
+                            saveWinnerPrediction
+                          }
+                        >
+                          Изменить страну
+                        </Button>
+
+                      </>
+                    )
+                  }
+
+                </div>
+
+              </>
+            )
+          }
+
+          {
+            profileTab === 'history' && (
+
+              <>
+
+                {
+                  matches
+                    .filter(
+                      match =>
+                        match[8] === 'finished' &&
+                        predictions[String(match[0])]
+                    )
+                    .slice()
+                    .reverse()
+                    .map(
+                      match => {
+
+                        const prediction =
+                          predictions[
+                            String(match[0])
+                          ];
+
+                        return (
+
+                          <div
+                            key={match[0]}
+                            style={{
+                              padding: '10px 0',
+                              borderBottom:
+                                '1px solid rgba(255,255,255,0.08)'
+                            }}
+                          >
+
+                            <div
+                              style={{
+                                fontWeight: 600,
+                                marginBottom: 4
+                              }}
+                            >
+                              {match[4]} {match[6]}:{match[7]} {match[5]}
+                            </div>
+
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                gap: 12,
+                                fontSize: 13,
+                                color:
+                                  'var(--vkui--color_text_secondary)'
+                              }}
+                            >
+
+                              <span>
+                                Ваш прогноз: {prediction.pred1}:{prediction.pred2}
+                              </span>
+
+                              <span
+                                style={{
+                                  fontWeight: 700,
+                                  color:
+                                    Number(prediction.points) > 0
+                                      ? '#4CAF50'
+                                      : 'var(--vkui--color_text_secondary)'
+                                }}
+                              >
+                                +{prediction.points || 0}
+                              </span>
+
+                            </div>
+
+                          </div>
+                        );
+                      }
+                    )
+                }
+
+                {
+                  matches.filter(
+                    match =>
+                      match[8] === 'finished' &&
+                      predictions[String(match[0])]
+                  ).length === 0 && (
+
+                    <div
+                      style={{
+                        color:
+                          'var(--vkui--color_text_secondary)'
+                      }}
+                    >
+                      Пока нет завершённых матчей с начисленными очками
+                    </div>
+                  )
+                }
+
+              </>
+            )
+          }
+
+        </Div>
+
+      </Group>
+
+    </>
   )
 }
 
