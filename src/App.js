@@ -1878,7 +1878,7 @@ if (
 
         <div
           style={{
-            marginBottom: 16
+            marginBottom: 8
           }}
         >
           ❌ Неверный прогноз — 0 очков
