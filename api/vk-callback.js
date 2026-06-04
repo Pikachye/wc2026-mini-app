@@ -16,22 +16,34 @@ export default async function handler(req, res) {
     const msg = body.object.message;
     const text = (msg.text || '').trim().toLowerCase();
 
-    if (text === 'начать') {
-      await fetch('https://api.vk.com/method/messages.send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          access_token: VK_TOKEN,
-          v: '5.199',
-          peer_id: String(msg.peer_id),
-          random_id: String(Date.now()),
-          message:
-            `Привет! 👋\n\nОткрыть приложение:\n${APP_LINK}`
-        })
-      });
-    }
+    await fetch('https://api.vk.com/method/messages.send', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: new URLSearchParams({
+    access_token: VK_TOKEN,
+    v: '5.199',
+    peer_id: String(msg.peer_id),
+    random_id: String(Date.now()),
+    message:
+      '⚽ Добро пожаловать в Прогнозы ЧМ-2026!\n\n🏆 Делайте прогнозы и соревнуйтесь с другими участниками.',
+    keyboard: JSON.stringify({
+      inline: false,
+      buttons: [
+        [
+          {
+            action: {
+              type: 'open_link',
+              link: APP_LINK,
+              label: '🏆 Открыть приложение'
+            }
+          }
+        ]
+      ]
+    })
+  })
+});
   }
 
   return res.status(200).send('ok');
