@@ -422,10 +422,12 @@ const init = async () => {
     }
 
     setUser({
-      id: vkUser.id,
-      name:
-        vkUser.first_name
-    });
+  id:
+    vkUser.id,
+
+  name:
+    `${vkUser.first_name} ${vkUser.last_name || ''}`.trim()
+});
 
   } catch (e) {
 
