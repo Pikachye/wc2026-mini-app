@@ -12,47 +12,46 @@ export default async function handler(req, res) {
     return res.status(200).send('04159491');
   }
 
-if (body.type === 'message_new') {
-  const msg = body.object.message;
-  const text = (msg.text || '').trim().toLowerCase();
-
   const commands = [
-    'начать',
-    'играть',
-    'хочу играть'
-  ];
+  'начать',
+  'играть',
+  'хочу играть',
+  'прогнозы'
+];
 
-  if (commands.includes(text)) {
+if (commands.includes(text)) {
+    const msg = body.object.message;
+    const text = (msg.text || '').trim().toLowerCase();
+
     await fetch('https://api.vk.com/method/messages.send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({
-        access_token: VK_TOKEN,
-        v: '5.199',
-        peer_id: String(msg.peer_id),
-        random_id: String(Date.now()),
-        message:
-          '⚽ Добро пожаловать в Прогнозы ЧМ-2026!\n\n🏆 Делай прогнозы и соревнуйся с другими участниками.',
-        keyboard: JSON.stringify({
-          inline: false,
-          buttons: [
-            [
-              {
-                action: {
-                  type: 'open_link',
-                  link: APP_LINK,
-                  label: '🏆 Открыть приложение'
-                }
-              }
-            ]
-          ]
-        })
-      })
-    });
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: new URLSearchParams({
+    access_token: VK_TOKEN,
+    v: '5.199',
+    peer_id: String(msg.peer_id),
+    random_id: String(Date.now()),
+    message:
+      '⚽ Добро пожаловать в Прогнозы ЧМ-2026!\n\n🏆 Делай прогнозы и соревнуйся с другими участниками.',
+    keyboard: JSON.stringify({
+      inline: false,
+      buttons: [
+        [
+          {
+            action: {
+              type: 'open_link',
+              link: APP_LINK,
+              label: '🏆 Открыть приложение'
+            }
+          }
+        ]
+      ]
+    })
+  })
+});
   }
-}
 
   return res.status(200).send('ok');
 }
