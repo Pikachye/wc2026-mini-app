@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     peer_id: String(msg.peer_id),
     random_id: String(Date.now()),
     message:
-      '⚽ Добро пожаловать в Прогнозы ЧМ-2026!\n\n🏆 Делайте прогнозы и соревнуйтесь с другими участниками.',
+      '⚽ Добро пожаловать в Прогнозы ЧМ-2026!\n\n🏆 Делай прогнозы и соревнуйся с другими участниками.',
     keyboard: JSON.stringify({
       inline: false,
       buttons: [
