@@ -239,6 +239,11 @@ const [
 ] = useState(null);
 
 const [
+  saving,
+  setSaving
+] = useState(false);
+
+const [
   openedPredictions,
   setOpenedPredictions
 ] = useState({});
@@ -638,6 +643,8 @@ setLeaders(
 
       try {
 
+setSaving(true)        
+
 const prediction =
   predictions[
     String(match[0])
@@ -757,12 +764,16 @@ if (!wizardMode) {
 }
       } catch (e) {
 
-        console.error(e);
+  console.error(e);
 
-        alert(
-          'Ошибка сохранения'
-        );
-      }
+  alert(
+    'Ошибка сохранения'
+  );
+
+} finally {
+
+  setSaving(false);
+}
     };
 
   const saveWinnerPrediction =
@@ -786,6 +797,8 @@ if (!wizardMode) {
     }
 
     try {
+
+setSaving(true);      
 
 setSnackbar(
 
@@ -860,12 +873,16 @@ setSnackbar(
 
     } catch (e) {
 
-      console.error(e);
+  console.error(e);
 
-      alert(
-        'Ошибка сохранения победителя'
-      );
-    }
+  alert(
+    'Ошибка сохранения победителя'
+  );
+
+} finally {
+
+  setSaving(false);
+}
   };  
 
   const updateMatch =
@@ -3155,6 +3172,20 @@ setMatches(updated);
           )
         }
 
+{
+  saving && (
+
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9998,
+        background: 'rgba(0,0,0,0.18)',
+        pointerEvents: 'all'
+      }}
+    />
+  )
+}
 
       {snackbar}
 
