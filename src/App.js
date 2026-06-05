@@ -736,10 +736,24 @@ setPredictions(
 );
 
 
+setSnackbar(
 
+  <Snackbar
+    key={Date.now()}
+    onClose={() =>
+      setSnackbar(null)
+    }
+  >
 
-loadLeaderboard();
+    ✅ Прогноз сохранён
 
+  </Snackbar>
+);
+
+if (!wizardMode) {
+
+  loadLeaderboard();
+}
       } catch (e) {
 
         console.error(e);
@@ -2862,18 +2876,6 @@ style={{
 
 setCardAnimationKey(
   key => key + 1
-);
-
-setSnackbar(
-
-  <Snackbar
-    key={Date.now()}
-    onClose={() =>
-      setSnackbar(null)
-    }
-  >
-    ✅ Прогноз сохранён
-  </Snackbar>
 );
 
             }
