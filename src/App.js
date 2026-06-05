@@ -735,20 +735,20 @@ setPredictions(
   })
 );
 
+if (!wizardMode) {
 
-setSnackbar(
+  setSnackbar(
 
-  <Snackbar
-    key={Date.now()}
-    onClose={() =>
-      setSnackbar(null)
-    }
-  >
-
-    ✅ Прогноз сохранён
-
-  </Snackbar>
-);
+    <Snackbar
+      key={Date.now()}
+      onClose={() =>
+        setSnackbar(null)
+      }
+    >
+      ✅ Прогноз сохранён
+    </Snackbar>
+  );
+}
 
 loadLeaderboard();
 
