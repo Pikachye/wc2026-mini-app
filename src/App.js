@@ -3180,7 +3180,7 @@ setMatches(updated);
         position: 'fixed',
         inset: 0,
         zIndex: 9998,
-        background: 'rgba(0,0,0,0.18)',
+        background: 'transparent',
         pointerEvents: 'all'
       }}
     />
