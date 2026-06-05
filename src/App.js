@@ -2885,33 +2885,16 @@ onClick={async () => {
     match[8] === 'scheduled'
   ) {
 
-    const prediction =
-      predictions[
-        String(match[0])
-      ];
+const prediction =
+  predictions[
+    String(match[0])
+  ] || {
 
-    if (
-      !prediction ||
-      prediction.pred1 === '' ||
-      prediction.pred2 === ''
-    ) {
+    pred1: 0,
 
-setSnackbar(
-
-  <Snackbar
-    onClose={() =>
-      setSnackbar(null)
-    }
-  >
-
-    ⚠️ Введите прогноз перед переходом дальше
-
-  </Snackbar>
-);
-
-return;
-
-    }
+    pred2: 0
+  };
+  
 const changed =
   String(prediction.pred1) !==
   String(prediction.originalPred1) ||
