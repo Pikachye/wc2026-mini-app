@@ -44,6 +44,11 @@ export function App() {
 ] = useState(null);
 
 const [
+  winnerLoaded,
+  setWinnerLoaded
+] = useState(false);
+
+const [
   winnerDraft,
   setWinnerDraft
 ] = useState('');
@@ -172,6 +177,8 @@ const loadWinnerPrediction =
         'WINNER PREDICTION ERROR:',
         e
       );
+      } finally {
+      setWinnerLoaded(true);
     }
   };
 
@@ -1202,6 +1209,7 @@ if (loading) {
 
 if (
   user &&
+  winnerLoaded &&
   winnerPrediction === null
 ) {
 
