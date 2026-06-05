@@ -631,19 +631,16 @@ setLeaders(
 
       try {
 
-                const prediction =
+const prediction =
   predictions[
     String(match[0])
   ] || {
+
     pred1: 0,
+
     pred2: 0
   };
-
-        const prediction =
-          predictions[
-  String(match[0])
-];
-       
+        
         setSnackbar(
 
   <Snackbar
