@@ -636,16 +636,13 @@ setLeaders(
   String(match[0])
 ];
 
-        if (
-          !prediction
-        ) {
-
-          alert(
-            'Введите прогноз'
-          );
-
-          return;
-        }
+        const prediction =
+  predictions[
+    String(match[0])
+  ] || {
+    pred1: 0,
+    pred2: 0
+  };
         
         setSnackbar(
 
@@ -684,10 +681,14 @@ setLeaders(
                     match[0],
 
                   pred1:
-                    prediction.pred1,
+  Number(
+    prediction.pred1 ?? 0
+  ),
 
-                  pred2:
-                    prediction.pred2
+pred2:
+  Number(
+    prediction.pred2 ?? 0
+  )
                 })
             }
           );
@@ -1249,7 +1250,7 @@ if (
               }}
             >
               Если угадаешь победителя турнира,
-              получишь +12 очков в конце ЧМ.
+              получишь +12 очков в конце чемпионата.
             </div>
 
             <Select
