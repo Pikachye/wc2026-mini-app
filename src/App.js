@@ -787,6 +787,18 @@ if (!wizardMode) {
 
     try {
 
+setSnackbar(
+
+  <Snackbar
+    duration={100000}
+    onClose={() =>
+      setSnackbar(null)
+    }
+  >
+    ⏳ Сохраняем выбор...
+  </Snackbar>
+);
+
       const response =
         await fetch(
           '/api/save',
