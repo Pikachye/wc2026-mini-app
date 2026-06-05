@@ -3179,16 +3179,10 @@ setMatches(updated);
       style={{
         position: 'fixed',
         inset: 0,
-
-        background:
-          'rgba(0,0,0,0.35)',
-
-        zIndex: 9998,
-
+        background: 'rgba(0,0,0,0.35)',
+        zIndex: 100,
         pointerEvents: 'all',
-
-        backdropFilter:
-          'blur(2px)'
+        backdropFilter: 'blur(2px)'
       }}
     />
 
