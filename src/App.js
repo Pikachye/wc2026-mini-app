@@ -651,10 +651,11 @@ const prediction =
         setSnackbar(
 
   <Snackbar
-    onClose={() =>
-      setSnackbar(null)
-    }
-  >
+  duration={100000}
+  onClose={() =>
+    setSnackbar(null)
+  }
+>
 
     ⏳ Сохраняем прогноз...
 
