@@ -728,19 +728,44 @@ pred2:
         }
 
 setPredictions(
-  prev => ({
-    ...prev,
+  prev => {
 
-    [String(match[0])]: {
-      ...prev[String(match[0])],
+    const key =
+      String(match[0]);
 
-      originalPred1:
-        prev[String(match[0])]?.pred1,
+    const savedPred1 =
+      Number(
+        prediction.pred1 ?? 0
+      );
 
-      originalPred2:
-        prev[String(match[0])]?.pred2
-    }
-  })
+    const savedPred2 =
+      Number(
+        prediction.pred2 ?? 0
+      );
+
+    return {
+      ...prev,
+
+      [key]: {
+        ...prev[key],
+
+        pred1:
+          savedPred1,
+
+        pred2:
+          savedPred2,
+
+        originalPred1:
+          savedPred1,
+
+        originalPred2:
+          savedPred2,
+
+        points:
+          prev[key]?.points || 0
+      }
+    };
+  }
 );
 
 
