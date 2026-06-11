@@ -23,34 +23,33 @@ export default async function handler(
   data.matches.map(
     (match) => {
 
-      let status =
-        'scheduled';
+      let status = 'scheduled';
 
-      // ещё не начался
-      if (
-        match.status === 'TIMED' ||
-        match.status === 'SCHEDULED'
-      ) {
+const now = new Date();
+const matchStart = new Date(match.utcDate);
 
-        status = 'scheduled';
-      }
+// завершён — НЕ ТРОГАЕМ
+if (match.status === 'FINISHED') {
+  status = 'finished';
+}
 
-      // live
-      if (
-        match.status === 'IN_PLAY' ||
-        match.status === 'PAUSED'
-      ) {
+// если API сам говорит live
+else if (
+  match.status === 'IN_PLAY' ||
+  match.status === 'PAUSED'
+) {
+  status = 'live';
+}
 
-        status = 'live';
-      }
+// если время начала уже наступило — делаем live
+else if (matchStart <= now) {
+  status = 'live';
+}
 
-      // завершён
-      if (
-        match.status === 'FINISHED'
-      ) {
-
-        status = 'finished';
-      }
+// если ещё не начался
+else {
+  status = 'scheduled';
+}
 
       return {
 
