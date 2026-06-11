@@ -26,7 +26,9 @@ export default async function handler(
       let status = 'scheduled';
 
 const now = new Date();
-const matchStart = new Date(match.utcDate);
+const matchStart = new Date(
+  new Date(match.utcDate).getTime() - 3 * 60 * 60 * 1000
+);
 
 // завершён — НЕ ТРОГАЕМ
 if (match.status === 'FINISHED') {
