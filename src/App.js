@@ -2381,15 +2381,21 @@ style={{
             '1px solid rgba(255,255,255,0.08)'
         }}
       >
-        <img
-          src={`/flags/${teamFlags[match[4]]}.svg`}
-          alt={match[4]}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover'
-          }}
-        />
+        {
+  match[4] &&
+  teamFlags[match[4]] && (
+
+    <img
+      src={`/flags/${teamFlags[match[4]]}.svg`}
+      alt={match[4]}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+      }}
+    />
+  )
+}
       </div>
 
       <div
@@ -2404,7 +2410,7 @@ style={{
     lineHeight: '20px'
   }}
 >
-  {match[4]}
+  {match[4] || 'Ожидается'}
 </div>
 {
   match[8] === 'scheduled' && (
@@ -2533,15 +2539,21 @@ style={{
             '1px solid rgba(255,255,255,0.08)'
         }}
       >
-        <img
-          src={`/flags/${teamFlags[match[5]]}.svg`}
-          alt={match[5]}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover'
-          }}
-        />
+        {
+  match[5] &&
+  teamFlags[match[5]] && (
+
+    <img
+      src={`/flags/${teamFlags[match[5]]}.svg`}
+      alt={match[5]}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+      }}
+    />
+  )
+}
       </div>
 
       <div
@@ -2556,7 +2568,7 @@ style={{
     lineHeight: '20px'
   }}
 >
-  {match[5]}
+  {match[5] || 'Ожидается'}
 </div>
 
 {
